@@ -1,0 +1,16 @@
+#product-page{
+    padding: 2rem;
+}
+.custom-hero-card{
+    height: 250px;
+    border: none;
+    border-radius: 1rem;
+}
+.custom-hero-card-image{
+    height: 100%;
+    border: none;
+    border-radius: 1rem;
+}
+.card-container{
+    /* background-color: #e3edf7; */
+}
