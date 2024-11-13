@@ -13,7 +13,7 @@ function AdminLayout() {
                     <Nav.Link as={Link} to="/admin/add" eventKey="/admin/add">Add</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link as={Link} to="/admin/edit" eventKey="/admin/edit">Edit</Nav.Link>
+                    <Nav.Link as={Link} to="/admin/edit/:productId" eventKey="/admin/edit">Edit</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link as={Link} to="/admin/publish" eventKey="/admin/publish">Publish</Nav.Link>

@@ -78,7 +78,10 @@ const editProductDetails = async(req, res) => {
             return res.status(400).json({message: "Product Not Found"});
         }
 
-        return res.status(200).json({message: "Product Information Updated"});
+        return res.status(200).json({
+            message: "Product Information Updated",
+            editData: editedProduct
+        });
     } catch (error) {
         return res.status(500).json({message: "Something Went Wrong!"});
     }
