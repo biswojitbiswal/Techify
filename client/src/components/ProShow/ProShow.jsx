@@ -1,4 +1,5 @@
-import React,{ useState, useEffect } from 'react';
+import React from 'react';
+import Button from 'react-bootstrap/Button';
 import './ProShow.css'
 import { useStore } from '../../Store/ProductStore';
 import { useParams } from 'react-router-dom';
@@ -8,7 +9,7 @@ import { toast } from 'react-toastify';
 function ProShow() {
   const {productId} = useParams()
   const {products} = useStore();
-  const {authorization} = useAuth();
+  const {authorization, setUser} = useAuth();
 
   const product = products.find((prod) => prod._id === productId)
 
@@ -26,12 +27,17 @@ function ProShow() {
 
       if(response.ok){
         toast.success("Item Added To Your Cart");
+        setUser(data)
       } else {
         toast.error(data.extradetails ? data.extradetails : data.message);
       }
     } catch (error) {
       console.log(error);
     }
+  }
+
+  const handleBooking = async() => {
+    toast.success("This Feature Will Be Available In Future.")
   }
   
   return (
@@ -41,20 +47,21 @@ function ProShow() {
             <div className="prod-img">
                 <img src={product.image} alt="Main Image"  id="mainimg" />
             </div>
-            <div className="order">
-                <button onClick={handleAddToCart} className="btn btn-primary"><span><i className="fa-solid fa-cart-shopping"></i></span>ADD TO CART</button>
-                <button className="btn btn-warning"><span><i className="fa-solid fa-fire-flame-curved"></i></span>BUY NOW</button>
-            </div>
+            
         </div>
 
         <div className="details">
-            <p className="fs-4 text-primary">Smart Yoga</p>
-            <h4 className="fs-3">{product.title}</h4>
+            <p className="fs-4">Smart Yoga</p>
+            <h4 className="fs-3 text-primary">{product.title}</h4>
             <h2 className="fs-2">₹{product.price}</h2>
-            <p className="ratings text-primary">3.8<span><i className="fa-solid fa-star"></i></span></p>
+            <p className="ratings text-primary">4.5<span><i className="fa-solid fa-star"></i></span></p>
             <div>
               <p className='fs-4'>Product Details:</p> 
               <p className='fs-5'>{product.description}</p>
+            </div>
+            <div className="order">
+                <Button variant="primary" onClick={handleAddToCart} className="fs-3 me-2 px-4"><span className='me-2'><i className="fa-solid fa-cart-shopping"></i></span>Add To Cart</Button>
+                <Button variant="warning" onClick={handleBooking} className="fs-3 me-4 px-5"><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Button>
             </div>
         </div>
     </section>

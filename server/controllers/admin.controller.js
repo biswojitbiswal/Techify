@@ -130,6 +130,9 @@ const addBlog = async(req, res) => {
     }
 }
 
+const deleteProduct = async(req, res) => {
+    
+}
 
 export {
     addProducts,

@@ -46,24 +46,14 @@
 
 #prod-details .order{
     display: flex;
-    padding: .5rem;
+    /* padding: .5rem; */
     justify-content: space-between;
 }
-#prod-details .order .btn{
-    width: 47%;
-    padding: .75rem 1rem;
-    font-size: 1.25rem;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    font-weight: 600;
-}
-
 
 
 #prod-details .details {
     width: 50%;
-    padding: 1.5rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

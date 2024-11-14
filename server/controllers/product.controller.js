@@ -50,7 +50,37 @@ const addToCart = async(req, res) => {
     }
 }
 
+const removeItemCart = async(req, res) => {
+    try {
+        const {productId} = req.params
+        const userId = req.userId
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            {
+                $pull: {
+                    cart: productId
+                }
+            },
+            {new: true}
+        ).select("-password")
+
+        if(!user){
+            return res.status(404).json({ message: "User not found!" });
+        }
+
+        return res.status(200).json({
+            message: "Item removed from cart", 
+            user 
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
+
 export {
     getAllProducts,
-    addToCart
+    addToCart,
+    removeItemCart,
 }
