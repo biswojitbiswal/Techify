@@ -1,6 +1,6 @@
 import { Product } from "../models/product.model.js";
 import { uploadFileOnCloudinary } from "../utils/cloudinary.utils.js";
-
+import { Blog } from "../models/blog.model.js";
 
 const addProducts = async(req, res) => {
     try {
@@ -87,8 +87,52 @@ const editProductDetails = async(req, res) => {
     }
 }
 
+const addBlog = async(req, res) => {
+    try {
+        const {blogTitle, blogDescription} = req.body;
+
+        if([blogTitle, blogDescription].some((field) => field.trim() === "")){
+            return req.status(400).json({message: "All Fields Are Required"})
+        }
+
+        const blogImage = req.files?.blogImg[0]?.path
+        // console.log(blogImage)
+        if(!blogImage){
+            return res.status(400).json({message: "File Is Required"})
+        }
+
+        const blogImageFile = await uploadFileOnCloudinary(blogImage);
+
+        if(!blogImageFile){
+            return res.status(400).json({message: "File Is Required!"})
+        }
+
+        const blog = await Blog.create({
+            blogTitle,
+            blogDescription,
+            blogImg: blogImageFile.url
+        })
+
+        const addedBlog = await Blog.findById(blog._id)
+
+        if(!addedBlog){
+            return res.status(400).json({message: "Something Went Wrong While Adding Blog"})
+        }
+
+        return res.status(200).json({
+            message: "Blog Added Successfully",
+            blog: addedBlog,
+            blogId: addedBlog._id
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong", error})
+    }
+}
+
 
 export {
     addProducts,
-    editProductDetails
+    editProductDetails,
+    addBlog
 }

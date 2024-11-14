@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './Signup.css'
@@ -16,8 +16,12 @@ function Signup() {
   });
 
 
-  const {setTokenInCookies} = useAuth();
+  const {setTokenInCookies, isLoggedInuser} = useAuth();
   const navigate = useNavigate()
+
+  if(isLoggedInuser){
+    return <Navigate to="/" />
+  }
 
   const handleInputData = (e) => {
     setSignupData({

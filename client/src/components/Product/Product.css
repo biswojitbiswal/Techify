@@ -1,5 +1,9 @@
 #product-page{
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .custom-hero-card{
     height: 250px;

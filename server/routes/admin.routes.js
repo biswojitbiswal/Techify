@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { addProducts, editProductDetails } from "../controllers/admin.controller.js";
+import { addBlog, addProducts, editProductDetails } from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
 import adminVerify from "../middleware/admin.middleware.js"
 
@@ -27,5 +27,16 @@ router.route("/edit/:productId").patch(
         }
     ]),
     editProductDetails);
+
+router.route("/publish/add").post(
+    authVerify, 
+    adminVerify,
+    upload.fields([
+        {
+            name: "blogImg",
+            maxCount: 1,
+        }
+    ]), 
+    addBlog);
 
 export default router

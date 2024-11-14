@@ -12,6 +12,7 @@ export const useAuth = () => {
 export const AuthContextProvider = ({children}) => {
     const [token, setToken] = useState(Cookies.get('accessToekn'));
     const [user, setUser] = useState("");
+    const [isLoading, setIsLoading] = useState(true)
 
     const authorization = `Bearer ${token}`;
 
@@ -30,6 +31,7 @@ export const AuthContextProvider = ({children}) => {
 
     const userAuthentication = async() => {
         try {
+            setIsLoading(true)
             const response = await fetch(`http://localhost:5000/api/yoga/user/getuser`, {
                 method: "GET",
                 headers: {
@@ -42,8 +44,10 @@ export const AuthContextProvider = ({children}) => {
 
             if(response.ok){
                 setUser(data.userData);
+                setIsLoading(false)
             } else {
-                setUser("")
+                setUser("");
+                setIsLoading(false);
             }
         } catch (error) {
             console.log(error)
@@ -55,7 +59,7 @@ export const AuthContextProvider = ({children}) => {
     },[]);
 
     return (
-        <AuthContext.Provider value={{setTokenInCookies, authorization, user, isLoggedInuser, loggedOutUser}}>
+        <AuthContext.Provider value={{setTokenInCookies, authorization, isLoading, user, isLoggedInuser, loggedOutUser}}>
             {children}
         </AuthContext.Provider>
     )

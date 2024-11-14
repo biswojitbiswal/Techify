@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './Signin.css'
@@ -13,8 +13,12 @@ function Signin() {
     password: "",
   })
 
-  const {setTokenInCookies} = useAuth()
+  const {setTokenInCookies, isLoggedInuser} = useAuth()
   const navigate = useNavigate();
+
+  if(isLoggedInuser){
+    return <Navigate to="/" />
+  }
 
   const handleInput = (e) => {
     setSignInData({

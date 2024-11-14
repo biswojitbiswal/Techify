@@ -2,10 +2,21 @@ import React from 'react'
 import Nav from 'react-bootstrap/Nav';
 import { Link, useLocation } from 'react-router-dom'
 import { Outlet } from 'react-router-dom';
+import { useAuth } from '../Store/Auth';
+import Spinner from 'react-bootstrap/Spinner';
+import { Navigate } from 'react-router-dom';
 
 function AdminLayout() {
     const location = useLocation();
     const activeKey = location.pathname;
+    const {user, isLoading} = useAuth()
+
+    if(isLoading){
+        return <Spinner animation="border" />;
+    }
+    if (!user?.isAdmin) {
+        return <Navigate to="/" />;
+    }
     return (
         <>
             <Nav justify variant="tabs" activeKey={activeKey}>
