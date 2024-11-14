@@ -150,9 +150,29 @@ const deleteProduct = async(req, res) => {
     }
 }
 
+const deleteBlog = async(req, res) => {
+    try {
+        const {blogId} = req.params;
+
+        const blog = await Blog.findByIdAndDelete(blogId);
+
+        if(!blog){
+            return res.status(404).json({message: "Blog Not Found"})
+        }
+        return res.status(200).json({
+            message : "Blog Removed",
+            blog,
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
+
 export {
     addProducts,
     editProductDetails,
     addBlog,
-    deleteProduct
+    deleteProduct,
+    deleteBlog,
 }
