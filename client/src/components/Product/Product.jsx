@@ -7,16 +7,40 @@ import './Product.css'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../Store/Auth';
 import { useStore } from '../../Store/ProductStore';
+import { toast } from 'react-toastify';
 
 function Product() {
 
-  const { products } = useStore();
-  const { user, isLoggedInuser } = useAuth();
+  const { products, setProducts } = useStore();
+  const { user, isLoggedInuser, authorization } = useAuth();
   const navigate = useNavigate();
 
   
   if(!isLoggedInuser){
     return <Navigate to="/signin" />
+  }
+
+  const handleDelete = async(productId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/yoga/admin/product/delete/${productId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: authorization
+        }
+      })
+
+      const data = await response.json();
+      // console.log(data);
+
+      if(response.ok){
+        toast.success("Product Removed")
+        setProducts((prevProducts) => prevProducts.filter(product => product._id !== data.product._id))
+      } else {
+        toast.error(data.extraDetails ? data.extraDetails : data.message);
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 
@@ -56,7 +80,13 @@ function Product() {
                             Edit <span><i className="fa-solid fa-pencil"></i></span>
                           </Button>
                         </Link>
-                        <Button variant="danger" className='me-3 fs-5' onClick={(event) => event.stopPropagation()}>Delete<span><i className="fa-solid fa-trash"></i></span></Button>
+
+                        <Button variant="danger" className='me-3 fs-5' onClick={(event) => {
+                          event.stopPropagation();
+                          handleDelete(product._id)
+                        }}>
+                        Delete<span><i className="fa-solid fa-trash"></i></span>
+                        </Button>
                       </>
                     ) : null
                   }

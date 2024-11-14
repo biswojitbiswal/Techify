@@ -44,7 +44,7 @@ export const StoreContextProvider = ({children}) => {
       }, [])
 
     return (
-        <StoreContext.Provider value={{products, updateProduct}}>
+        <StoreContext.Provider value={{products, setProducts, updateProduct}}>
             {children}
         </StoreContext.Provider>
     )

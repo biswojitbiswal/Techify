@@ -131,11 +131,28 @@ const addBlog = async(req, res) => {
 }
 
 const deleteProduct = async(req, res) => {
+    try {
+        const {productId} = req.params
     
+        const product = await Product.findByIdAndDelete(productId)
+        
+        if(!product){
+            return res.status(404).json({message: "Prduct Not Found"});
+        }
+
+        return res.status(200).json({
+            message: "Product Removed",
+            product,
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
 }
 
 export {
     addProducts,
     editProductDetails,
-    addBlog
+    addBlog,
+    deleteProduct
 }

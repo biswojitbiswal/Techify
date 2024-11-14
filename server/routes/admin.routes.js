@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { addBlog, addProducts, editProductDetails } from "../controllers/admin.controller.js";
+import { addBlog, addProducts, editProductDetails, deleteProduct } from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
 import adminVerify from "../middleware/admin.middleware.js"
 
@@ -38,5 +38,7 @@ router.route("/publish/add").post(
         }
     ]), 
     addBlog);
+
+router.route("/product/delete/:productId").delete(authVerify, adminVerify, deleteProduct)
 
 export default router

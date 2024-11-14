@@ -13,7 +13,6 @@ function Blog() {
       });
 
       const data = await response.json();
-      // console.log(data.blogs);
 
       if (response.ok) {
         setBlogs(data.blogs)
@@ -38,7 +37,9 @@ function Blog() {
             {
               blogs.map((blog, index) => {
                 return <Card className='blog-custom-card' key={index}>
-                <Card.Header className='fs-3'>{blog.blogTitle}</Card.Header>
+                <Card.Header className='fs-3'>
+                  
+                </Card.Header>
                 <Card.Body>
                   <blockquote className="blockquote mb-0">
                     <p>{blog.blogDescription}</p>
