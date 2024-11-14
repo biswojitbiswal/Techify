@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import {Product} from "./product.model.js"
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -16,6 +17,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    cart: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+        }
+    ],
     isAdmin: {
         type: Boolean,
         default: false,

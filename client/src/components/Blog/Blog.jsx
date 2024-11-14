@@ -13,7 +13,7 @@ function Blog() {
       });
 
       const data = await response.json();
-      console.log(data.blogs)
+      // console.log(data.blogs);
 
       if (response.ok) {
         setBlogs(data.blogs)
