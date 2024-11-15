@@ -44,9 +44,6 @@ function MyNavbar() {
               <Nav.Link as={Link} to="/blog" className='me-3 fs-4 text-primary'>Blog</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={Link} to="/social" className='me-3 fs-4 text-primary'>Social</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
               <Nav.Link as={Link} to="/cart" className='me-3 fs-4 text-primary'>Cart</Nav.Link>
             </Nav.Item>
             {

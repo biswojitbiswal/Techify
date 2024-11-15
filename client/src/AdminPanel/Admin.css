@@ -1,14 +1,15 @@
-.admin-product-form,.admin-edit-form,.admin-publish-form{
+.admin-product-form,.admin-edit-form,.admin-publish-form,.admin-social-forms{
     width: 50%;
     height: auto;
     margin: 5% auto;
     border: 1px solid;
     padding: 1rem;
     border-radius: 1rem;
+
 }
 
 @media (max-width: 1096px){
-    .admin-product-form,.admin-edit-form,.admin-publish-form{
+    .admin-product-form,.admin-edit-form,.admin-publish-form,.admin-social-forms{
         width: 90%;
         padding: 1rem;
     }
