@@ -47,7 +47,7 @@ function Product() {
   return (
     <>
       <section id="product-page">
-        <InputGroup className="mb-3 w-75" style={{height: "50px"}}>
+        <InputGroup className="mb-3" style={{height: "50px"}}>
           <Form.Control
             placeholder="Search Here"
             aria-label="Recipient's username"
@@ -61,7 +61,7 @@ function Product() {
           {
             products.map((product, index) => {
               return <Card key={index}
-                onClick={() => navigate(`/product/${product._id}`)} style={{ width: '25rem', backgroundColor: '#e3edf7', borderRadius: "1rem" }} className='p-2'>
+                onClick={() => navigate(`/product/${product._id}`)} style={{ width: '25rem', backgroundColor: '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
                 <Card.Img variant="top" style={{ height: '300px', objectFit: 'cover', borderRadius: '0.5rem' }} src={product.image} />
                 <Card.Body style={{ height: "50%" }}>
                   <Card.Title>{product.title}</Card.Title>
@@ -88,7 +88,7 @@ function Product() {
                         Delete<span><i className="fa-solid fa-trash"></i></span>
                         </Button>
                       </>
-                    ) : null
+                    ) : ""
                   }
                 </Card.Body>
               </Card>

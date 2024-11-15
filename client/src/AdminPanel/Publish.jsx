@@ -72,7 +72,7 @@ function Publish() {
 
   return (
     <>
-      <div className="admin-product-form">
+      <div className="admin-publish-form">
         <h1 className='text-primary mb-4'>Add Blog</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="blogTitle">
@@ -81,12 +81,12 @@ function Publish() {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="blogDescription">
-            <Form.Label>Example textarea</Form.Label>
+            <Form.Label>Description:</Form.Label>
             <Form.Control as="textarea" rows={5} name='blogDescription' value={blog.blogDescription} onChange={handleBlogData} />
           </Form.Group>
 
           <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Default file input example</Form.Label>
+            <Form.Label>Blog Image:</Form.Label>
             <Form.Control type="file" name='blogImg' onChange={handleImageUpload}
               accept="image/*"/>
           </Form.Group>

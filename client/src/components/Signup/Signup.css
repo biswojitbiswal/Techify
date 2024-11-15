@@ -6,3 +6,17 @@
     padding: 1rem;
     border-radius: 1rem;
 }
+
+@media (max-width: 1096px){
+    .signup-page{
+        width: 90%;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 768px){
+    .signup-page{
+        width: 90%;
+        padding: 1rem;
+    }
+}

@@ -1,9 +1,10 @@
 #product-page{
-    padding: 2rem;
+    padding: 2rem 3rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: 4rem;
 }
 .custom-hero-card{
     height: 250px;
@@ -15,6 +16,18 @@
     border: none;
     border-radius: 1rem;
 }
-.card-container{
-    /* background-color: #e3edf7; */
+
+
+
+
+@media (max-width: 768px){
+    #product-page {
+        padding: 2rem 1rem;
+        
+    }
+
+    .input-group{
+        width: 90%;
+    }
 }
+

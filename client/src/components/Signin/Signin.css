@@ -6,3 +6,10 @@
     padding: 1rem;
     border-radius: 1rem;
 }
+
+@media (max-width: 768px){
+    .signin-page{
+        width: 90%;
+        padding: 1rem;
+    }
+}

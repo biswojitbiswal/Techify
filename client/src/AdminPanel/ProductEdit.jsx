@@ -67,7 +67,7 @@ function ProductEdit() {
   }, [product]);
   return (
     <>
-      <div className="admin-product-form">
+      <div className="admin-edit-form">
         <h1 className='text-primary mb-4'>Edit Product Details</h1>
         <Form onSubmit={handleFormSubmit}>
           <Form.Group className="mb-3" controlId="title">

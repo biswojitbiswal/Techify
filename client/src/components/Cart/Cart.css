@@ -1,7 +1,6 @@
 #cart-page {
     padding: 2rem 5rem;         
     margin: 20px auto;    
-    /* max-width: 800px; */
   }
   
   .cart-card {
@@ -11,32 +10,66 @@
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    align-items: stretch;    /* Ensures both image and card take full height */
+    align-items: stretch;
     height: 250px; 
-    margin-bottom: 2rem;          /* Set a fixed height for alignment */
+    margin-bottom: 2rem;
   }
   
-  /* Image Styling */
   .cart-card img {
     width: 350px;
-    height: 100%;            /* Matches the container height */
+    height: 100%;
     border-radius: 8px;
     object-fit: cover;
   }
   
-  /* Card Styling */
+  
   .cart-card .card {
     flex-grow: 1;
-    height: 100%;            /* Match the image and container height */
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distributes card content vertically */
+    justify-content: space-between;
   }
   
   
   #cart-page h1 {
-    margin-bottom: 20px;   /* Space below the heading */
+    margin-bottom: 20px;
     text-align: center;
-    color: #333333;        /* Darker color for contrast */
+    color: #333333;
   }
+
+  .buy-btn i{
+    font-size: 1.1rem;
+    margin-right: .5rem;
+  }
+  .remove-btn i{
+    font-size: 1rem;
+    margin-right: .5rem;
+  }
+
+
+
+  @media (max-width: 1096px){
+    .cart-card {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      margin-bottom: 2rem;
+    }
+
+    .cart-card img{
+      max-height: 400px;
+    }
+  }
+
+  @media (max-width: 640px){
+    #cart-page{
+      padding: 1rem;
+    }
+    .cart-card{
+      padding: .5rem;
+    }
+    
+  }
+  
   

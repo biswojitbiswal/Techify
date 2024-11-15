@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 function Blog() {
   const [blogs, setBlogs] = useState([]);
 
-  const {authorization, user} = useAuth();
+  const { authorization, user } = useAuth();
 
   const getAllBlogs = async () => {
     try {
@@ -28,7 +28,7 @@ function Blog() {
     }
   }
 
-  const handleDeleteBlog = async(blogId) => {
+  const handleDeleteBlog = async (blogId) => {
     try {
       const response = await fetch(`http://localhost:5000/api/yoga/admin/blog/delete/${blogId}`, {
         method: "DELETE",
@@ -40,7 +40,7 @@ function Blog() {
       const data = await response.json();
       // console.log(data);
 
-      if(response.ok){
+      if (response.ok) {
         toast.success("Blog Removed");
         setBlogs((prevBlogs) => prevBlogs.filter(prevblog => prevblog._id !== data.blog._id));
       } else {
@@ -63,37 +63,37 @@ function Blog() {
 
         <div className="blog-container">
           <h2 className='mb-4'>Latest Articles</h2>
-            {
-              blogs.length > 0 ? (
+          {
+            blogs.length > 0 ? (
               blogs.map((blog, index) => (
                 <div key={blog._id} className="blog-card">
-                <img src={blog.blogImg} alt="Product Image" />
-                <Card>
-                <Card.Header className='fs-3 text-primary d-flex justify-content-between'>
-                  <h4>{blog.blogTitle}</h4>
-                  {
-                    user?.isAdmin ? <Button variant='danger' onClick={() => handleDeleteBlog(blog._id)} className='fs-5'>Delete<span><i className="fa-solid fa-trash"></i></span></Button> : null
+                    <img src={blog.blogImg} alt="Product Image" className='h-100' />
+                  <Card>
+                    <Card.Header className='fs-3 text-primary d-flex justify-content-between'>
+                      <h4>{blog.blogTitle}</h4>
+                      {
+                        user?.isAdmin ? <Button variant='danger' onClick={() => handleDeleteBlog(blog._id)} className='fs-5'>Delete<span><i className="fa-solid fa-trash"></i></span></Button> : null
 
-                  }
-                </Card.Header>
-                <Card.Body>
-                  <blockquote className="blockquote mb-0">
-                    <p>{blog.blogDescription}</p>
-                    <Link className='mb-2 text-decoration-none' to="www.google.com">Read More &rarr;</Link>
-                    <footer className="blockquote-footer" style={{ marginTop: ".5rem" }}>
-                      Published On {new Date(blog.createdAt).toDateString()}
-                    </footer>
-                  </blockquote>
-                </Card.Body>
-              </Card>
-              </div>
+                      }
+                    </Card.Header>
+                    <Card.Body>
+                      <blockquote className="blockquote mb-0">
+                        <p>{blog.blogDescription}</p>
+                        <Link className='mb-2 text-decoration-none' to="www.google.com">Read More &rarr;</Link>
+                        <footer className="blockquote-footer" style={{ marginTop: ".5rem" }}>
+                          Published On {new Date(blog.createdAt).toDateString()}
+                        </footer>
+                      </blockquote>
+                    </Card.Body>
+                  </Card>
+                </div>
               ))
             ) : (
               <p>Blog Not Found</p>
             )
           }
-          
-            
+
+
         </div>
       </section >
     </>

@@ -81,7 +81,9 @@ const loginUser = async(req, res) => {
             return res.status(404).json({message: "User Does Not Exist"});
         }
 
+        console.log("Checking Password...");
         const isValidPassword = await user.isPasswordCorrect(password);
+        console.log("Password Validation Result:", isValidPassword);
 
         if(!isValidPassword){
             return res.status(401).json({message: "Invalid User Authentication"})

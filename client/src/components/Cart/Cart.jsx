@@ -63,10 +63,13 @@ function Cart() {
                 <Card.Body>
                   <Card.Title>₹{item.price}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
-                  <Button variant="danger" onClick={() => handleRemove(item._id)} className='fs-3 me-2'>Remove Item</Button>
-                  <Button onClick={handleBooking} variant="warning" className="fs-3 me-2">
-                    <span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>BUY NOW
-                  </Button>
+                  {/* <div className="cart-btns"> */}
+                    <Button variant="secondary" onClick={() => handleRemove(item._id)} className='remove-btn me-4'>
+                      <span><i className="fa-solid fa-trash"></i></span>Remove</Button>
+                    <Button onClick={handleBooking} variant="warning" className="buy-btn">
+                      <span><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now
+                    </Button>
+                  {/* </div> */}
                 </Card.Body>
               </Card>
             </div>
