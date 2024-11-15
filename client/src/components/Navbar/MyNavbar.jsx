@@ -18,7 +18,7 @@ function MyNavbar() {
 
   return (
     <>
-      <Navbar key={expandValue} expand={expandValue} className="bg-light p-2">
+      <Navbar key={expandValue} expand={expandValue} className="p-2" style={{backgroundColor: "hsl(210, 56%, 93%)"}}>
       <Container fluid>
         <Navbar.Brand as={Link} to="/" className='fs-1 text-primary'>Yoga</Navbar.Brand>
         <Navbar.Toggle className='text-primary' aria-controls={`offcanvasNavbar-expand-${expandValue}`} />

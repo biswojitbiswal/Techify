@@ -10,6 +10,9 @@ import { useStore } from '../../Store/ProductStore';
 import { toast } from 'react-toastify';
 
 function Product() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
+
 
   const { products, setProducts } = useStore();
   const { user, isLoggedInuser, authorization } = useAuth();
@@ -19,6 +22,19 @@ function Product() {
   if(!isLoggedInuser){
     return <Navigate to="/signin" />
   }
+
+
+let filteredProducts = products.filter((product) =>
+  product.title.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
+if(sortOrder === 'asc'){
+  filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
+} else if(sortOrder === 'dsc'){
+  filteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
+}
+
+
 
   const handleDelete = async(productId) => {
     try {
@@ -50,6 +66,8 @@ function Product() {
         <InputGroup className="mb-3" style={{height: "50px"}}>
           <Form.Control
             placeholder="Search Here"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             aria-label="Recipient's username"
             aria-describedby="basic-addon2"
           />
@@ -57,10 +75,19 @@ function Product() {
             Search
           </Button>
         </InputGroup>
+        <div className="sortBtns">
+          <Button onClick={() => setSortOrder('asc')} 
+          active = {sortOrder === 'asc'}
+          className='fs-5'>Low &rarr; High</Button>
+          <Button 
+          onClick={() => setSortOrder('dsc')}
+          active={sortOrder === 'dsc'}
+          className='fs-5'>High &rarr; Low</Button>
+        </div>
         <div className="card-container mt-4 d-flex flex-wrap gap-5 justify-content-center">
           {
-            products.map((product, index) => {
-              return <Card key={index}
+            filteredProducts.map((product, index) => {
+              return <Card key={product._id}
                 onClick={() => navigate(`/product/${product._id}`)} style={{ width: '25rem', backgroundColor: '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
                 <Card.Img variant="top" style={{ height: '300px', objectFit: 'cover', borderRadius: '0.5rem' }} src={product.image} />
                 <Card.Body style={{ height: "50%" }}>

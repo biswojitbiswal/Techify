@@ -16,6 +16,11 @@
     border: none;
     border-radius: 1rem;
 }
+.sortBtns{
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
 
 
 
