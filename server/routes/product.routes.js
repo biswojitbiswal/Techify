@@ -4,7 +4,7 @@ import { getAllProducts, addToCart, removeItemCart } from "../controllers/produc
 
 const router = Router()
 
-router.route("/get").get(authVerify, getAllProducts);
+router.route("/get").get(getAllProducts);
 router.route("/cart/add/:productId").post(authVerify, addToCart);
 router.route("/cart/remove/:productId").patch(authVerify, removeItemCart)
 

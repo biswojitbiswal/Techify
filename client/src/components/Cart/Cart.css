@@ -1,6 +1,8 @@
 #cart-page {
     padding: 2rem 5rem;         
-    margin: 20px auto;    
+    margin: 20px auto; 
+    height: auto;
+    min-height: 85vh;   
   }
   
   .cart-card {

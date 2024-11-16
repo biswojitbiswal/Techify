@@ -13,7 +13,7 @@ function Social() {
       })
 
       const data = await response.json()
-      console.log(data.posts);
+      // console.log(data.posts);
 
       if(response.ok){
         setPosts(data.posts);

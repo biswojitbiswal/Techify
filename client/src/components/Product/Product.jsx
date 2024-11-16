@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Card from 'react-bootstrap/Card';
 import './Product.css'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../Store/Auth';
 import { useStore } from '../../Store/ProductStore';
 import { toast } from 'react-toastify';
@@ -19,9 +19,7 @@ function Product() {
   const navigate = useNavigate();
 
   
-  if(!isLoggedInuser){
-    return <Navigate to="/signin" />
-  }
+
 
 
 let filteredProducts = products.filter((product) =>

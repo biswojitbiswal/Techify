@@ -1,4 +1,5 @@
 import React from 'react'
+import '../src/index.css'
 import MyNavbar from './components/Navbar/MyNavbar'
 import Home from './components/Home/Home'
 import Product from './components/Product/Product'
@@ -15,6 +16,7 @@ import Publish from './AdminPanel/Publish'
 import Links from './AdminPanel/Links'
 import Error from './components/Error/Error'
 import Signout from './components/Signout/Signout'
+import Footer from './components/Footer/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -41,6 +43,7 @@ function App() {
         </Route>
         <Route path='/*' element={<Error />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
       
       

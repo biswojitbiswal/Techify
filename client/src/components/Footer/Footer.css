@@ -1,0 +1,16 @@
+#footer-page{
+    position: relative;
+    background-color: #e9ecef;
+    bottom: -1rem;
+    margin: 0;
+    padding: 2rem;
+    text-align: center;
+
+}
+.footer-social-links{
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import './ProShow.css'
 import { useStore } from '../../Store/ProductStore';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
@@ -10,7 +10,8 @@ import Spinner from 'react-bootstrap/Spinner';
 function ProShow() {
   const { productId } = useParams()
   const { products } = useStore();
-  const { authorization, setUser } = useAuth();
+  const { authorization, setUser, isLoggedInuser } = useAuth();
+  const navigate = useNavigate();
 
   const product = products.find((prod) => prod._id === productId)
 
@@ -21,25 +22,30 @@ function ProShow() {
   }
 
   const handleAddToCart = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/yoga/products/cart/add/${productId}`, {
-        method: "POST",
-        headers: {
-          Authorization: authorization,
+    if (!isLoggedInuser) {
+      navigate("/signin");
+      return;
+    } else {
+      try {
+        const response = await fetch(`http://localhost:5000/api/yoga/products/cart/add/${productId}`, {
+          method: "POST",
+          headers: {
+            Authorization: authorization,
+          }
+        });
+
+        const data = await response.json();
+        // console.log(data);
+
+        if (response.ok) {
+          toast.success("Item Added To Your Cart");
+          setUser(data)
+        } else {
+          toast.error(data.extradetails ? data.extradetails : data.message);
         }
-      });
-
-      const data = await response.json();
-      // console.log(data);
-
-      if (response.ok) {
-        toast.success("Item Added To Your Cart");
-        setUser(data)
-      } else {
-        toast.error(data.extradetails ? data.extradetails : data.message);
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   }
 

@@ -5,11 +5,16 @@ import './Cart.css'
 import { useAuth } from '../../Store/Auth';
 import { useStore } from '../../Store/ProductStore';
 import { toast } from 'react-toastify';
+import { Navigate } from 'react-router-dom';
 
 function Cart() {
-  const {user, authorization} = useAuth();
+  const {user, authorization, isLoggedInuser} = useAuth();
   const {products} = useStore();
   const [cartItems, setCartItems] = useState([]);
+
+  if(!isLoggedInuser){
+    return <Navigate to="/signin" />
+  }
 
   
   useEffect(()=> {

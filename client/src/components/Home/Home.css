@@ -74,10 +74,10 @@
     scrollbar-width: none;
 }
 
-@media (max-width: 1696px){
+@media (max-width: 1596px){
     #home_section {
         padding: 1rem 3rem;
-        height: 60vh;       
+        height: 80vh;       
     }
 }
 
