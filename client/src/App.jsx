@@ -5,11 +5,11 @@ import Home from './components/Home/Home'
 import Product from './components/Product/Product'
 import ProShow from './components/ProShow/ProShow'
 import Blog from './components/Blog/Blog'
-import Social from './components/Social/Social'
 import Cart from './components/Cart/Cart'
 import Signin from './components/Signin/Signin'
 import Signup from './components/Signup/Signup'
 import AdminLayout from './AdminPanel/AdminLayout'
+import AdminHome from './AdminPanel/AdminHome'
 import ProductEdit from './AdminPanel/ProductEdit'
 import ProductAdd from './AdminPanel/ProductAdd'
 import Publish from './AdminPanel/Publish'
@@ -35,6 +35,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/signout' element={<Signout />} />
         <Route path='/admin' element={<AdminLayout />}>
+          <Route index element={<AdminHome />} />
           <Route path='add' element={<ProductAdd />} />
           <Route path='edit/:productId' element={<ProductEdit />} />
           <Route path='publish' element={<Publish />} />

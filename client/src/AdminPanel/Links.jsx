@@ -52,24 +52,26 @@ function Links() {
 
   return (
     <>
-      <section className="admin-social-forms">
-        <h1>Add Social Media Posts</h1>
-        <Form onSubmit={handleSubmit}>
-        <Form.Label htmlFor="basic-url">Your Post URL: </Form.Label>
-        <InputGroup className="mb-3">
-          <InputGroup.Text id="basic-addon3">URL</InputGroup.Text>
-          <Form.Control
-            id="basic-url"
-            aria-describedby="basic-addon3"
-            placeholder="https://example.com/..."
-            value={postUrl}   // Bind input value to state
-            onChange={handleInputChange} // Update state on input change
-          />
-        </InputGroup>
-        <Button variant="primary" className="px-4 fs-3" type="submit">
-          Post
-        </Button>
-      </Form>
+      <section className="admin-social-links">
+        <div className="admin-social-forms">
+          <h1>Add Social Media Posts</h1>
+          <Form onSubmit={handleSubmit}>
+            <Form.Label htmlFor="basic-url">Your Post URL: </Form.Label>
+            <InputGroup className="mb-3">
+              <InputGroup.Text id="basic-addon3">URL</InputGroup.Text>
+              <Form.Control
+                id="basic-url"
+                aria-describedby="basic-addon3"
+                placeholder="https://example.com/..."
+                value={postUrl}   // Bind input value to state
+                onChange={handleInputChange} // Update state on input change
+              />
+            </InputGroup>
+            <Button variant="primary" className="px-4 fs-3" type="submit">
+              Post
+            </Button>
+          </Form>
+        </div>
       </section>
     </>
   )

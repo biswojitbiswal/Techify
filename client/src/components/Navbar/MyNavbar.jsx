@@ -14,7 +14,7 @@ function MyNavbar() {
 
   const expandValue = ['sm', 'md', 'lg', 'xl', 'xxl'][3];
 
-  const {isLoggedInuser} = useAuth();
+  const {isLoggedInuser, user} = useAuth();
 
   return (
     <>
@@ -46,6 +46,12 @@ function MyNavbar() {
             <Nav.Item>
               <Nav.Link as={Link} to="/cart" className='me-3 fs-4 text-primary'>Cart</Nav.Link>
             </Nav.Item>
+            {
+              user.isAdmin ? 
+              <Nav.Item>
+              <Nav.Link as={Link} to="/admin" className='me-3 fs-4 text-primary'>DashBoard</Nav.Link>
+              </Nav.Item> : ""
+            }
             {
               isLoggedInuser ? 
               <Nav.Item>
