@@ -50,7 +50,7 @@ function Publish() {
     formData.append("blogImg", blog.blogImg)
 
     try {
-      const response = await fetch(`http://localhost:5000/api/yoga/admin/publish/add`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/publish/add`, {
         method: "POST",
         headers: {
           Authorization: authorization

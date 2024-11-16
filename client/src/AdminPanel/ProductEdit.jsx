@@ -33,7 +33,7 @@ function ProductEdit() {
     
 
     try {
-      const response = await fetch(`http://localhost:5000/api/yoga/admin/edit/${productId}`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/edit/${productId}`, {
         method: "PATCH",
         headers: {
           Authorization: authorization

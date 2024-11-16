@@ -14,7 +14,7 @@ function Blog() {
 
   const getAllBlogs = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/yoga/blog/getblog`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/blog/getblog`, {
         method: "GET",
       });
 

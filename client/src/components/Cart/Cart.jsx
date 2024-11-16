@@ -28,7 +28,7 @@ function Cart() {
 
   const handleRemove = async(itemId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/yoga/products/cart/remove/${itemId}`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/products/cart/remove/${itemId}`, {
         method: "PATCH",
         headers: {
           Authorization : authorization

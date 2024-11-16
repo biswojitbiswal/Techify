@@ -15,7 +15,7 @@ function Product() {
 
 
   const { products, setProducts } = useStore();
-  const { user, isLoggedInuser, authorization } = useAuth();
+  const { user, authorization } = useAuth();
   const navigate = useNavigate();
 
   

@@ -32,7 +32,7 @@ export const AuthContextProvider = ({children}) => {
     const userAuthentication = async() => {
         try {
             setIsLoading(true)
-            const response = await fetch(`http://localhost:5000/api/yoga/user/getuser`, {
+            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/getuser`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization

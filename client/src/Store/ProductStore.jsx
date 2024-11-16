@@ -20,7 +20,7 @@ export const StoreContextProvider = ({children}) => {
 
     const getAllProductListing = async (e) => {
         try {
-          const response = await fetch(`http://localhost:5000/api/yoga/products/get`, {
+          const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/products/get`, {
             method: "GET",
             headers: {
               Authorization: authorization

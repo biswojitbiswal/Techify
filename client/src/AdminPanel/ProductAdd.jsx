@@ -59,7 +59,7 @@ function ProductAdd() {
       formData.append('price', productData.price);
       formData.append('image', productData.image);
 
-      const response = await fetch(`http://localhost:5000/api/yoga/admin/add`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/add`, {
         method: "POST",
         headers: {
           Authorization : authorization

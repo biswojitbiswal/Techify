@@ -8,7 +8,7 @@ function Social() {
 
   const getSocialMediaPost = async() => {
     try {
-      const response = await fetch(`http://localhost:5000/api/yoga/social/get-posts`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/social/get-posts`, {
         method: "GET"
       })
 
@@ -59,12 +59,7 @@ function Social() {
               }) : <h2>Loading posts...</h2>
             }
             
-            {/* <Carousel.Item>
-              <h1>Social media posts2</h1>
-            </Carousel.Item>
-            <Carousel.Item>
-              <h1>Social media posts3</h1>
-            </Carousel.Item> */}
+        
           </Carousel>
         </div>
       </section>
