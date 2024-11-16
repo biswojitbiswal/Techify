@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import './Signup.css'
 import { toast } from 'react-toastify';
 import { useAuth } from '../../Store/Auth';
+import { Link } from 'react-router-dom';
 
 
 function Signup() {
@@ -82,6 +83,8 @@ function Signup() {
             Submit
           </Button>
         </Form>
+        <hr />
+        <Link style={{textDecoration: "none"}} to="/signin">Don't have an Account! Create An Account</Link>
       </div>
 
     </>

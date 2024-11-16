@@ -1,8 +1,12 @@
+#signin-page{
+    height: auto;
+    min-height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .signin-page{
     width: 50%;
-    height: auto;
-
-    margin: 20% auto;
     border: 1px solid;
     padding: 1rem;
     border-radius: 1rem;

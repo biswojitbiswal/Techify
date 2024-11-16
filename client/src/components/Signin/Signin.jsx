@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import './Signin.css'
 import { toast } from 'react-toastify';
 import { useAuth } from '../../Store/Auth';
+import { Link } from 'react-router-dom';
 
 function Signin() {
   const [signinData, setSignInData] = useState({
@@ -56,6 +57,7 @@ function Signin() {
 
   return (
     <>
+      <section id="signin-page">
       <div className="signin-page">
         <h1 className='text-primary mb-4'>Sign-In Form</h1>
         <Form onSubmit={handleSifninForm}>
@@ -72,7 +74,10 @@ function Signin() {
             Submit
           </Button>
         </Form>
+        <hr />
+        <Link style={{textDecoration: "none"}} to="/signup">Don't have an Account! Create An Account</Link>
       </div>
+      </section>
     </>
   )
 }
