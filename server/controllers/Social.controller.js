@@ -147,6 +147,25 @@ const fetchAndSavePost = async (req, res) => {
 };
 
 
+const getAllSocialMediaPost = async(req, res) => {
+  try {
+    const posts = await SocialPost.find({});
+    
+    if(!posts){
+      return res.status(404).json({message: "Posts Not Found"});
+    }
+
+    return res.status(200).json({
+      message: "Fetched Successfully",
+      posts,
+    })
+  } catch (error) {
+      console.log(error)
+      res.status(500).json({ success: false, message: error.message, error });
+  }
+}
+
 export {
-    fetchAndSavePost
+    fetchAndSavePost,
+    getAllSocialMediaPost
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import './Home.css'
 import { Link } from 'react-router-dom'
-// import Social from '../Social/Social'
+import Social from '../Social/Social'
 import ProdShow from './ProdShow'
 
 
@@ -9,7 +9,7 @@ function Home() {
 
   return (
     <>
-      <section id="home_section" className='mb-5'>
+      <section id="home_section">
         {/* <div className="home_container"> */}
 
         <div className="home_content">
@@ -66,6 +66,7 @@ function Home() {
         </div>
       </section>
       <ProdShow />
+      <Social />
 
     </>
   )

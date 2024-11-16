@@ -1,57 +1,32 @@
 import React from 'react'
 import './Home.css'
-import Carousel from 'react-bootstrap/Carousel';
+import { useStore } from '../../Store/ProductStore'
+import Card from 'react-bootstrap/Card';
+import { Link } from 'react-router-dom';
 
 function ProdShow() {
+    const { products } = useStore();
     return (
         <>
             <section className="showcase-prod">
-                <Carousel className='carousel' data-bs-theme="dark">
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="/Mat.png"
-                            alt="First slide"
-                        />
-                        <Carousel.Caption>
-                            <h5>Yoga Wheel for Deep Stretching</h5>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="/Blockset.png"
-                            alt="Second slide"
-                        />
-                        <Carousel.Caption>
-                            <h5>Dual-Pack Eco-Friendly Yoga Block Set</h5>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="/Cushion.png"
-                            alt="Third slide"
-                        />
-                        <Carousel.Caption>
-                            <h5>Adjustable Meditation Cushion</h5>
-                            
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="/Socks.png"
-                            alt="Third slide"
-                        />
-                        <Carousel.Caption>
-                            <h5>Bamboo Yoga Mat Bag</h5>
-                            
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                </Carousel>
+                <h2 className='fs-1'>Trending Now</h2>
+                <div className="prod-carousel">
+                    {
+                        products.length > 0 ? 
+                        products.map(product => (
+                            <Card key={product._id} style={{ width: '20rem', flex: '0 0 auto', margin: '0.5rem'}}>
+                                <Card.Img variant="top" src={product.image} alt={product.title} style={{height: "70%"}} />
+                                <Card.Body>
+                                    <Card.Title>{product.title}</Card.Title>
+                                    <Link to={`/product/${product._id}`} className='btn btn-primary'>Shop Now</Link>
+                                </Card.Body>
+                            </Card>
+                        )) 
+                        : <p>No products available.</p>
+                    }
+                </div>
             </section>
-            
+
         </>
     )
 }
