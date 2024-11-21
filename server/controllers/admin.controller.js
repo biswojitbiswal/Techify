@@ -4,6 +4,11 @@ import { Blog } from "../models/blog.model.js";
 
 const addProducts = async (req, res) => {
     try {
+
+        console.log("Request Body:", req.body);
+        console.log("Uploaded Files:", req.files);
+
+
         const { title, description, price } = req.body;
 
         if ([title, description, price].some((field) => field?.trim() === "")) {

@@ -88,7 +88,7 @@ function ProductAdd() {
 
       const data = await response.json();
 
-      if (response.status === 201) {
+      if (response.ok) {
         toast.success("Products Added Successfully");
         setProductData({ title: "", description: "", price: "", images: [] });
       } else {
