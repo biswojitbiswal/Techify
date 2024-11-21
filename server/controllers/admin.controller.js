@@ -4,11 +4,6 @@ import { Blog } from "../models/blog.model.js";
 
 const addProducts = async (req, res) => {
     try {
-
-        console.log("Request Body:", req.body);
-        console.log("Uploaded Files:", req.files);
-
-
         const { title, description, price } = req.body;
 
         if ([title, description, price].some((field) => field?.trim() === "")) {
@@ -23,13 +18,13 @@ const addProducts = async (req, res) => {
         console.log("Uploaded Files:", files);
 
         const uploadPromises = files.map(file => {
-            // console.log("Uploading File Path:", file.path);
+            console.log("Uploading File Path:", file.path);
             return uploadFileOnCloudinary(file.path);
         });
 
         const uploadResults = await Promise.all(uploadPromises);
 
-        // console.log("Cloudinary Upload Results:", uploadResults);
+        console.log("Cloudinary Upload Results:", uploadResults);
 
         const successfulUploads = uploadResults.filter(result => result.success === true);
 
@@ -38,7 +33,7 @@ const addProducts = async (req, res) => {
         }
 
         const productImages = successfulUploads.map(upload => upload.data.secure_url);
-        // console.log("Product Images URLs:", productImages);
+        console.log("Product Images URLs:", productImages);
 
 
 
