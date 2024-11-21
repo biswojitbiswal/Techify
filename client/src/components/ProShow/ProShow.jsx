@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import './ProShow.css'
 import { useStore } from '../../Store/ProductStore';
@@ -8,6 +8,9 @@ import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
 
 function ProShow() {
+  const [imageClick, setImageClick] = useState(0);
+
+
   const { productId } = useParams()
   const { products } = useStore();
   const { authorization, setUser, isLoggedInuser } = useAuth();
@@ -53,13 +56,31 @@ function ProShow() {
     toast.success("This Feature Will Be Available In Future.")
   }
 
+ const handleHoverImage = (id) => {
+  setImageClick(id);
+ }
+
   return (
     <>
       <section id="prod-details">
         <div className="prod-card">
           <div className="prod-look">
             <div className="prod-img">
-              <img src={product.image} alt="Main Image" id="mainimg" />
+              <img src={product.images[imageClick]} alt="Main Image" id="mainimg" />
+            </div>
+            <div className="product-images">
+              {
+                product.images.map((image, index) => {
+                  return <div className={`small-img-box ${imageClick === index ? 'imageSelected' : ''}`} key={index}>
+                    <img
+                      src={image}
+                      alt={`Product Image ${index + 1}`}
+                      className={`small-img`}
+                      onClick={() => handleHoverImage(index)}
+                    />
+                  </div>
+                })
+              }
             </div>
 
           </div>
@@ -73,9 +94,10 @@ function ProShow() {
               <p className='fs-4'>Product Details:</p>
               <p className='fs-5'>{product.description}</p>
             </div>
+            
             <div className="order">
-              <Button variant="primary" onClick={handleAddToCart} className="me-3 add-cart-btn"><span className='me-2'><i className="fa-solid fa-cart-shopping"></i></span>Add To Cart</Button>
-              <Button variant="warning" onClick={handleBooking} className=""><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Button>
+              <Button variant="primary" onClick={handleAddToCart} className="fs-4 add-cart-btn"><span className='me-2'><i className="fa-solid fa-cart-shopping"></i></span>Add To Cart</Button>
+              <Button variant="warning" onClick={handleBooking} className="fs-4"><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Button>
             </div>
           </div>
         </div>

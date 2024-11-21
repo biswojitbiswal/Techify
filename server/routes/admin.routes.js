@@ -6,26 +6,17 @@ import adminVerify from "../middleware/admin.middleware.js"
 
 const router = Router();
 
-router.route("/add").post(
+router.post(
+    "/add",
     authVerify,
     adminVerify,
-    upload.fields([
-        {
-            name: "image",
-            maxCount: 1,
-        }
-    ]),
+    upload.fields([{ name: "images", maxCount: 4 }]),
     addProducts);
 
 router.route("/edit/:productId").patch(
     authVerify,
     adminVerify,
-    upload.fields([
-        {
-            name: "image",
-            maxCount: 1,
-        }
-    ]),
+    upload.fields([{ name: "images", maxCount: 4 }]),
     editProductDetails);
 
 router.route("/publish/add").post(

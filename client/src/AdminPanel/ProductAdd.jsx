@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import './Admin.css'
+import './Admin.css';
 import { useAuth } from '../Store/Auth';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
@@ -11,44 +11,61 @@ function ProductAdd() {
     title: "",
     description: "",
     price: "",
-    image: null,
+    images: [],
   });
 
-  const {authorization} = useAuth();
+  const { authorization } = useAuth();
 
   const handleProductInput = (e) => {
     setProductData({
       ...productData,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
+  const handleFile = async (e) => {
+    const files = Array.from(e.target.files);
+    const validExtensions = ["image/jpeg", "image/png", "image/jpg"];
 
-  const handleFile = async(e) =>{
-    const file = e.target.files[0];
-    if (file) {
-      try {
-        const options = {
-          maxSizeMB: 0.5,
-          maxWidthOrHeight: 1024,
-          useWebWorker: true,
-        };
-
-        const compressedFile = await imageCompression(file, options);
-        setProductData({ ...productData, image: compressedFile });
-      } catch (error) {
-        console.error('Error compressing image:', error);
-      }
+    const validFiles = files.filter((file) => validExtensions.includes(file.type));
+    if (validFiles.length !== files.length) {
+      toast.error("Only JPEG, PNG, and JPG files are allowed.");
+      return;
     }
-  }
 
+    try {
+      const options = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
+      };
 
+      const compressedFiles = await Promise.all(
+        validFiles.map(async (file) => {
+          const compressedBlob = await imageCompression(file, options);
+          return new File([compressedBlob], file.name, { type: file.type });
+        })
+      );
 
-  const handleProductForm = async(e) => {
+      setProductData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...compressedFiles],
+      }));
+    } catch (error) {
+      console.error("Error compressing image:", error);
+    }
+  };
+
+  const handleProductForm = async (e) => {
     e.preventDefault();
 
-    if(!productData.title || !productData.description || !productData.price || !productData.image){
+    if (!productData.title || !productData.description || !productData.price || productData.images.length === 0) {
       toast.error('Please fill in all required fields.');
+      return;
+    }
+
+    if (!authorization) {
+      toast.error("You are not authorized. Please log in again.");
       return;
     }
 
@@ -57,62 +74,63 @@ function ProductAdd() {
       formData.append('title', productData.title);
       formData.append('description', productData.description);
       formData.append('price', productData.price);
-      formData.append('image', productData.image);
+      productData.images.forEach((image) => {
+        formData.append('images', image);
+      });
 
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/add`, {
+      const response = await fetch(`http://localhost:5000/api/yoga/admin/add`, {
         method: "POST",
         headers: {
-          Authorization : authorization
+          Authorization: authorization,
         },
-        body: formData
+        body: formData,
       });
 
       const data = await response.json();
-      console.log(data);
 
-      if(response.ok){
-        toast.success("Products Added Successfully")
-        setProductData({title: "", description: "", price: "", image: null});
+      if (response.status === 201) {
+        toast.success("Products Added Successfully");
+        setProductData({ title: "", description: "", price: "", images: [] });
       } else {
-        toast.error(data.extraDetails ? data.extraDetails : data.message)
+        toast.error(data.extraDetails ? data.extraDetails : data.message);
       }
     } catch (error) {
       console.log(error);
+      toast.error("An error occurred while adding the product.");
     }
-  }
-
-  
+  };
 
   return (
-    <>
-      <div className="admin-product-form">
-        <h1 className='text-primary mb-4'>Add Product</h1>
-        <Form onSubmit={handleProductForm}>
-          <Form.Group className="mb-3" controlId="title">
-            <Form.Label>Title:</Form.Label>
-            <Form.Control type="text" name='title' value={productData.title} onChange={handleProductInput} placeholder="Enter Title" required />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="description">
-            <Form.Label>Description:</Form.Label>
-            <Form.Control type="text" name='description' value={productData.description} onChange={handleProductInput} placeholder="Enter Description" required />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="price">
-            <Form.Label>Price:</Form.Label>
-            <Form.Control type="number" name='price' value={productData.price} onChange={handleProductInput} placeholder="Enter Price" required />
-          </Form.Group>
-
-          <Form.Group controlId="formFileMultiple" className="mb-3">
-            <Form.Label>Image:</Form.Label>
-            <Form.Control type="file" onChange={handleFile} multiple />
-          </Form.Group>
-          <Button variant="primary" type="submit" className='fs-5'>
-            Add
-          </Button>
-        </Form>
-      </div>
-    </>
-  )
+    <div className="admin-product-form">
+      <h1 className='text-primary mb-4'>Add Product</h1>
+      <Form onSubmit={handleProductForm}>
+        <Form.Group className="mb-3" controlId="title">
+          <Form.Label>Title:</Form.Label>
+          <Form.Control type="text" name='title' value={productData.title} onChange={handleProductInput} placeholder="Enter Title" required />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="description">
+          <Form.Label>Description:</Form.Label>
+          <Form.Control type="text" name='description' value={productData.description} onChange={handleProductInput} placeholder="Enter Description" required />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="price">
+          <Form.Label>Price:</Form.Label>
+          <Form.Control type="number" name='price' value={productData.price} onChange={handleProductInput} placeholder="Enter Price" required />
+        </Form.Group>
+        <Form.Group controlId="formFileMultiple" className="mb-3">
+          <Form.Label>Images:</Form.Label>
+          <Form.Control type="file" onChange={handleFile} multiple />
+        </Form.Group>
+        <div className="image-preview">
+          {productData.images.map((image, index) => (
+            <img key={index} src={URL.createObjectURL(image)} alt="Preview" style={{ width: 100, height: 100, marginRight: 10 }} />
+          ))}
+        </div>
+        <Button variant="primary" type="submit" className='fs-5'>
+          Add
+        </Button>
+      </Form>
+    </div>
+  );
 }
 
-export default ProductAdd
+export default ProductAdd;

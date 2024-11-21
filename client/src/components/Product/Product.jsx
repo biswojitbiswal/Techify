@@ -86,8 +86,8 @@ if(sortOrder === 'asc'){
           {
             filteredProducts.map((product, index) => {
               return <Card key={product._id}
-                onClick={() => navigate(`/product/${product._id}`)} style={{ width: '25rem', backgroundColor: '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
-                <Card.Img variant="top" style={{ height: '300px', objectFit: 'cover', borderRadius: '0.5rem' }} src={product.image} />
+                onClick={() => navigate(`/product/${product._id}`)} style={{ width: '22rem', backgroundColor: '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
+                <Card.Img variant="top" style={{ height: '300px', objectFit: 'cover', borderRadius: '0.5rem' }} src={product.images[0]} />
                 <Card.Body style={{ height: "50%" }}>
                   <Card.Title>{product.title}</Card.Title>
                   <Card.Text style={{ minHeight: "70px" }}>{product.description}</Card.Text>

@@ -15,7 +15,7 @@ function ProdShow() {
                         products.length > 0 ? 
                         products.map(product => (
                             <Card key={product._id} style={{ width: '20rem', flex: '0 0 auto', margin: '0.5rem'}}>
-                                <Card.Img variant="top" src={product.image} alt={product.title} style={{height: "70%"}} />
+                                <Card.Img variant="top" src={product.images[0]} alt={product.title} style={{height: "70%"}} />
                                 <Card.Body>
                                     <Card.Title>{product.title}</Card.Title>
                                     <Link to={`/product/${product._id}`} className='btn btn-primary'>Shop Now</Link>
