@@ -17,11 +17,11 @@ function ProductEdit() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [image, setImage] = useState([]); // Initialize as an empty array
+  const [image, setImage] = useState([]);
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to Array
-    const newImages = files.slice(0, 4); // Ensure max 4 images
+    const files = Array.from(e.target.files);
+    const newImages = files.slice(0, 4);
   
     setImage(newImages);
   };
@@ -38,13 +38,13 @@ function ProductEdit() {
     formData.append('existingImages', JSON.stringify(existingImages));
 
     const newImages = image.filter((img) => typeof img !== 'string');
-    newImages.forEach((img) => formData.append('images', img)); // Append each new image
+    newImages.forEach((img) => formData.append('images', img));
 
     console.log('FormData entries:');
     formData.forEach((value, key) => console.log(key, value));
 
     try {
-      const response = await fetch(`http://localhost:5000/api/yoga/admin/edit/${productId}`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/edit/${productId}`, {
         method: 'PATCH',
         headers: {
           Authorization: authorization,
