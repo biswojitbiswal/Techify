@@ -44,7 +44,7 @@ function ProductEdit() {
     formData.forEach((value, key) => console.log(key, value));
 
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/edit/${productId}`, {
+      const response = await fetch(`${import.meta.env.VITE_YOGA_API_URL}/api/yoga/admin/edit/${productId}`, {
         method: 'PATCH',
         headers: {
           Authorization: authorization,

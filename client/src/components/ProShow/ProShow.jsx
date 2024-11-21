@@ -30,7 +30,7 @@ function ProShow() {
       return;
     } else {
       try {
-        const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/products/cart/add/${productId}`, {
+        const response = await fetch(`${import.meta.env.VITE_YOGA_API_URL}/api/yoga/products/cart/add/${productId}`, {
           method: "POST",
           headers: {
             Authorization: authorization,

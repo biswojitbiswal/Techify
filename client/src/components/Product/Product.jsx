@@ -36,7 +36,7 @@ if(sortOrder === 'asc'){
 
   const handleDelete = async(productId) => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/product/delete/${productId}`, {
+      const response = await fetch(`${import.meta.env.VITE_YOGA_API_URL}/api/yoga/admin/product/delete/${productId}`, {
         method: "DELETE",
         headers: {
           Authorization: authorization
