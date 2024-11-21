@@ -78,6 +78,7 @@ function ProductAdd() {
         formData.append('images', image);
       });
 
+
       const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/add`, {
         method: "POST",
         headers: {
@@ -87,9 +88,8 @@ function ProductAdd() {
       });
 
       const data = await response.json();
-      console.log(data);
 
-      if (response.ok) {
+      if (response.status === 201) {
         toast.success("Products Added Successfully");
         setProductData({ title: "", description: "", price: "", images: [] });
       } else {
@@ -135,3 +135,4 @@ function ProductAdd() {
 }
 
 export default ProductAdd;
+
