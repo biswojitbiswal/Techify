@@ -62,7 +62,7 @@ function Cart() {
         {cartItems.length > 0 ? (
           cartItems.map((item) => (
             <div key={item._id} className="cart-card">
-              <img src={item.image} alt="Product Image" />
+              <img src={item.images[0]} alt="Product Image" />
               <Card>
                 <Card.Header as="h4">{item.title}</Card.Header>
                 <Card.Body>
