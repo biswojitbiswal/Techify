@@ -27,7 +27,7 @@ function Links() {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_YOGA_API_URL}/api/yoga/social/fetch-post`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/social/fetch-post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

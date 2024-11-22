@@ -35,7 +35,7 @@ function Signup() {
     e.preventDefault();
     // console.log(signupData)
     try {
-      const response = await fetch(`${import.meta.env.VITE_YOGA_API_URL}/api/yoga/user/signup`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/signup`, {
         method: "POST",
         headers:{
           "Content-Type": "application/json"

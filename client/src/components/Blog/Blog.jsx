@@ -14,7 +14,7 @@ function Blog() {
 
   const getAllBlogs = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_YOGA_API_URL}/api/yoga/blog/getblog`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/blog/getblog`, {
         method: "GET",
       });
 
@@ -30,7 +30,7 @@ function Blog() {
 
   const handleDeleteBlog = async (blogId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/yoga/admin/blog/delete/${blogId}`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/blog/delete/${blogId}`, {
         method: "DELETE",
         headers: {
           Authorization: authorization,

@@ -79,7 +79,7 @@ function ProductAdd() {
       });
 
 
-      const response = await fetch(`${import.meta.env.VITE_YOGA_API_URL}/api/yoga/admin/add`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/add`, {
         method: "POST",
         headers: {
           Authorization: authorization,

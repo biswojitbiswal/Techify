@@ -6,8 +6,7 @@ import adminVerify from "../middleware/admin.middleware.js"
 
 const router = Router();
 
-router.post(
-    "/add",
+router.route("/add").post(
     authVerify,
     adminVerify,
     upload.fields([{ name: "images", maxCount: 4 }]),

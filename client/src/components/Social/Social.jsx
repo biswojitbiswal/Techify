@@ -8,7 +8,7 @@ function Social() {
 
   const getSocialMediaPost = async() => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_YOGA_API_URL}/api/yoga/social/get-posts`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/social/get-posts`, {
         method: "GET"
       })
 
