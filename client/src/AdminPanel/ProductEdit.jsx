@@ -14,34 +14,54 @@ function ProductEdit() {
 
   const product = products.find((prod) => prod._id === productId);
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [image, setImage] = useState([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    price: '',
+    images: [],
+  });
+
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        title: product.title || '',
+        description: product.description || '',
+        price: product.price || '',
+        images: product.images || [],
+      });
+    }
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     const newImages = files.slice(0, 4);
-  
-    setImage(newImages);
+    setFormData((prevState) => ({
+      ...prevState,
+      images: newImages,
+    }));
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('price', price);
-    
-    const existingImages = image.filter((img) => typeof img === 'string');
-    formData.append('existingImages', JSON.stringify(existingImages));
+    const form = new FormData();
+    form.append('title', formData.title);
+    form.append('description', formData.description);
+    form.append('price', formData.price);
 
-    const newImages = image.filter((img) => typeof img !== 'string');
-    newImages.forEach((img) => formData.append('images', img));
+    const existingImages = formData.images.filter((img) => typeof img === 'string');
+    form.append('existingImages', JSON.stringify(existingImages));
 
-    console.log('FormData entries:');
-    formData.forEach((value, key) => console.log(key, value));
+    const newImages = formData.images.filter((img) => typeof img !== 'string');
+    newImages.forEach((img) => form.append('images', img));
 
     try {
       const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/edit/${productId}`, {
@@ -49,7 +69,7 @@ function ProductEdit() {
         headers: {
           Authorization: authorization,
         },
-        body: formData,
+        body: form,
       });
 
       const data = await response.json();
@@ -67,17 +87,6 @@ function ProductEdit() {
     }
   };
 
-  
-
-  useEffect(() => {
-    if (product) {
-      setTitle(product.title);
-      setDescription(product.description);
-      setPrice(product.price);
-      setImage(product.images || []);
-    }
-  }, [product]);
-
   return (
     <div className="admin-edit-form">
       <h1 className="text-primary mb-4">Edit Product Details</h1>
@@ -87,8 +96,8 @@ function ProductEdit() {
           <Form.Control
             type="text"
             name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={formData.title}
+            onChange={handleInputChange}
             placeholder="Enter Title"
             required
           />
@@ -98,8 +107,8 @@ function ProductEdit() {
           <Form.Control
             type="text"
             name="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={formData.description}
+            onChange={handleInputChange}
             placeholder="Enter Description"
             required
           />
@@ -110,8 +119,8 @@ function ProductEdit() {
           <Form.Control
             type="number"
             name="price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={formData.price}
+            onChange={handleInputChange}
             placeholder="Enter Price"
             required
           />
@@ -126,16 +135,18 @@ function ProductEdit() {
           />
         </Form.Group>
 
-        {image.length > 0 && (
+        {formData.images.length > 0 && (
           <div className="image-preview m-1">
-            {image.slice(0, 4).map((img, index) => (
+            {formData.images.slice(0, 4).map((img, index) => (
               <img
                 key={index}
                 src={typeof img === 'string' ? img : URL.createObjectURL(img)}
                 alt="Preview"
                 style={{ width: '100px', height: '100px', marginRight: '10px' }}
                 onLoad={() => {
-                  if (typeof img !== 'string') URL.revokeObjectURL(URL.createObjectURL(img));
+                  if (typeof img !== 'string') {
+                    URL.revokeObjectURL(img);
+                  }
                 }}
               />
             ))}
