@@ -88,6 +88,7 @@ function ProductAdd() {
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (response.status === 201) {
         toast.success("Products Added Successfully");
@@ -121,11 +122,11 @@ function ProductAdd() {
           <Form.Label>Images:</Form.Label>
           <Form.Control type="file" onChange={handleFile} multiple />
         </Form.Group>
-        <div className="image-preview">
+        {/* <div className="image-preview">
           {productData.images.map((image, index) => (
             <img key={index} src={URL.createObjectURL(image)} alt="Preview" style={{ width: 100, height: 100, marginRight: 10 }} />
           ))}
-        </div>
+        </div> */}
         <Button variant="primary" type="submit" className='fs-5'>
           Add
         </Button>
