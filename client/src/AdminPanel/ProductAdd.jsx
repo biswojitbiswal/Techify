@@ -5,6 +5,7 @@ import './Admin.css';
 import { useAuth } from '../Store/Auth';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
+import { useStore } from '../Store/ProductStore';
 
 function ProductAdd() {
   const [productData, setProductData] = useState({
@@ -15,6 +16,7 @@ function ProductAdd() {
   });
 
   const { authorization } = useAuth();
+  const {setProducts} = useStore();
 
   const handleProductInput = (e) => {
     setProductData({
@@ -90,7 +92,7 @@ function ProductAdd() {
       const data = await response.json();
       console.log(data);
 
-      if (response.status === 201) {
+      if (response.ok) {
         toast.success("Products Added Successfully");
         setProductData({ title: "", description: "", price: "", images: [] });
       } else {
@@ -122,11 +124,11 @@ function ProductAdd() {
           <Form.Label>Images:</Form.Label>
           <Form.Control type="file" onChange={handleFile} multiple />
         </Form.Group>
-        {/* <div className="image-preview">
+        <div className="image-preview">
           {productData.images.map((image, index) => (
             <img key={index} src={URL.createObjectURL(image)} alt="Preview" style={{ width: 100, height: 100, marginRight: 10 }} />
           ))}
-        </div> */}
+        </div>
         <Button variant="primary" type="submit" className='fs-5'>
           Add
         </Button>

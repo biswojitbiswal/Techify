@@ -23,7 +23,7 @@ function Publish() {
     })
   }
 
-  const handleImageUpload = async(e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
       try {
@@ -32,14 +32,20 @@ function Publish() {
           maxWidthOrHeight: 1024,
           useWebWorker: true,
         };
-
+  
         const compressedFile = await imageCompression(file, options);
-        setBlog({ ...blog, blogImg: compressedFile });
+        const compressedFileAsFile = new File(
+          [compressedFile],
+          file.name,
+          { type: file.type }
+        );
+  
+        setBlog({ ...blog, blogImg: compressedFileAsFile });
       } catch (error) {
         console.error('Error compressing image:', error);
       }
     }
-  }
+  };
 
   const handleSubmit = async(e) => {
     e.preventDefault();

@@ -138,7 +138,7 @@ const addBlog = async(req, res) => {
         const blog = await Blog.create({
             blogTitle,
             blogDescription,
-            blogImg: blogImageFile.url
+            blogImg: blogImageFile.data.secure_url
         })
 
         const addedBlog = await Blog.findById(blog._id)

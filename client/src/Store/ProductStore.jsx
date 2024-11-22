@@ -41,7 +41,7 @@ export const StoreContextProvider = ({children}) => {
     
       useEffect(() => {
         getAllProductListing();
-      }, [])
+      }, [products])
 
     return (
         <StoreContext.Provider value={{products, setProducts, updateProduct}}>
