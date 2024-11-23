@@ -1,5 +1,5 @@
 import React from "react";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
@@ -13,6 +13,7 @@ export const AuthContextProvider = ({children}) => {
     const [token, setToken] = useState(Cookies.get('accessToekn'));
     const [user, setUser] = useState("");
     const [isLoading, setIsLoading] = useState(true)
+    const [forceUpdate, setForceUpdate] = useState(false);
 
     const authorization = `Bearer ${token}`;
 
@@ -43,7 +44,9 @@ export const AuthContextProvider = ({children}) => {
             // console.log(data.userData);
 
             if(response.ok){
-                setUser(data.userData);
+                setUser((prevUser) =>
+                    JSON.stringify(prevUser) !== JSON.stringify(data.userData) ? data.userData : prevUser
+                );
                 setIsLoading(false)
             } else {
                 setUser("");
@@ -56,10 +59,12 @@ export const AuthContextProvider = ({children}) => {
 
     useEffect(() => {
         userAuthentication();
-    },[user]);
+    },[forceUpdate]);
+
+    const refreshUser = () => setForceUpdate((prev) => !prev);
 
     return (
-        <AuthContext.Provider value={{setTokenInCookies, authorization, isLoading, user, setUser, isLoggedInuser, loggedOutUser}}>
+        <AuthContext.Provider value={{setTokenInCookies, authorization, refreshUser, isLoading, user, setUser, isLoggedInuser, loggedOutUser}}>
             {children}
         </AuthContext.Provider>
     )

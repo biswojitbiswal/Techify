@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom';
 
 function Cart() {
-  const {user, authorization, isLoggedInuser} = useAuth();
+  const {user, authorization, refreshUser, isLoggedInuser} = useAuth();
   const {products} = useStore();
   const [cartItems, setCartItems] = useState([]);
 
@@ -24,7 +24,7 @@ function Cart() {
 
       setCartItems(updateCartItems.reverse());
     }
-  }, [user.cart, products])
+  }, [products])
 
   const handleRemove = async(itemId) => {
     try {
@@ -40,7 +40,7 @@ function Cart() {
 
       if(response.ok){
         toast.success("Item Removed")
-        // setUser(data);
+        refreshUser();
         setCartItems(prevItems => prevItems.filter(item => item._id !== itemId));
       } else {
         toast.error(data.extraDetails ? data.extraDetails : data.message);

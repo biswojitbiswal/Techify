@@ -5,10 +5,9 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import { useAuth } from '../../Store/Auth';
 import Badge from 'react-bootstrap/Badge';
-
 
 
 
@@ -35,47 +34,58 @@ function MyNavbar() {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
+            <Nav className="justify-content-end flex-grow-1 pe-3" variant="underline" defaultActiveKey="/">
             <Nav.Item>
-              <Nav.Link as={Link} to="/" className='me-3 fs-4 text-primary'>Home</Nav.Link>
+            <Nav.Link
+              as={NavLink}
+              to="/"
+              eventKey="link-1"
+              className="me-3 fs-4 text-primary"
+            >
+              Home
+            </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link as={NavLink} to="/product" eventKey="link-2" className='me-3 fs-4 text-primary'>Product</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={Link} to="/product" className='me-3 fs-4 text-primary'>Product</Nav.Link>
+              <Nav.Link as={NavLink} to="/blog" eventKey="link-3" className='me-3 fs-4 text-primary'>Blog</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={Link} to="/blog" className='me-3 fs-4 text-primary'>Blog</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link as={Link} to="/cart" className='me-3 fs-4 text-primary'>
+              <Nav.Link as={NavLink} to="/cart" eventKey="link-4" className='me-3 fs-4 text-primary'>
                 Cart
-                <Badge pill bg="primary" className='ms-2'>
+                {
+                  user && user.cart.length > 0 ? <Badge pill bg="primary" className='ms-2'>
                   {user?.cart?.length || 0}
-                </Badge>
+                </Badge> : ""
+                }
               </Nav.Link>
             </Nav.Item>
             {
               user.isAdmin ? 
               <Nav.Item>
-              <Nav.Link as={Link} to="/admin" className='me-3 fs-4 text-primary'>DashBoard</Nav.Link>
+              <Nav.Link as={NavLink} to="/admin" eventKey="link-5" className='me-3 fs-4 text-primary'>DashBoard</Nav.Link>
               </Nav.Item> : ""
             }
             {
               isLoggedInuser ? 
               <Nav.Item>
-              <Nav.Link as={Link} to="/signout" className='me-3 fs-4 text-primary'>Signout</Nav.Link>
+              <Nav.Link as={NavLink} to="/signout" eventKey="link-6" className='me-3 fs-4 text-primary'>Signout</Nav.Link>
               </Nav.Item> :
 
               <>
                 <Nav.Item>
-              <Nav.Link as={Link} to="/signin" className='me-3 fs-4 text-primary'>Signin</Nav.Link>
+              <Nav.Link as={NavLink} to="/signin" eventKey="link-7" className='me-3 fs-4 text-primary'>Signin</Nav.Link>
               </Nav.Item>
 
               <Nav.Item>
-              <Nav.Link as={Link} to="/signup" className='me-3 fs-4 text-primary'>Signup</Nav.Link>
+              <Nav.Link as={NavLink} to="/signup" eventKey="link-8" className='me-3 fs-4 text-primary'>Signup</Nav.Link>
               </Nav.Item>
 
               </>
             }
+            
             
             </Nav>
           </Offcanvas.Body>

@@ -13,7 +13,7 @@ function ProShow() {
 
   const { productId } = useParams()
   const { products } = useStore();
-  const { authorization, setUser, isLoggedInuser } = useAuth();
+  const { authorization, refreshUser, isLoggedInuser } = useAuth();
   const navigate = useNavigate();
 
   const product = products.find((prod) => prod._id === productId)
@@ -42,7 +42,9 @@ function ProShow() {
 
         if (response.ok) {
           toast.success("Item Added To Your Cart");
-          setUser(data)
+          // setUser(data)
+          refreshUser();
+          
         } else {
           toast.error(data.extradetails ? data.extradetails : data.message);
         }
