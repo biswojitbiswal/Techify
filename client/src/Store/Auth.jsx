@@ -56,7 +56,7 @@ export const AuthContextProvider = ({children}) => {
 
     useEffect(() => {
         userAuthentication();
-    },[]);
+    },[user]);
 
     return (
         <AuthContext.Provider value={{setTokenInCookies, authorization, isLoading, user, setUser, isLoggedInuser, loggedOutUser}}>

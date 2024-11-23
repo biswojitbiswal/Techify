@@ -7,6 +7,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import {Link} from 'react-router-dom'
 import { useAuth } from '../../Store/Auth';
+import Badge from 'react-bootstrap/Badge';
+
 
 
 
@@ -44,7 +46,12 @@ function MyNavbar() {
               <Nav.Link as={Link} to="/blog" className='me-3 fs-4 text-primary'>Blog</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={Link} to="/cart" className='me-3 fs-4 text-primary'>Cart</Nav.Link>
+              <Nav.Link as={Link} to="/cart" className='me-3 fs-4 text-primary'>
+                Cart
+                <Badge pill bg="primary" className='ms-2'>
+                  {user?.cart?.length || 0}
+                </Badge>
+              </Nav.Link>
             </Nav.Item>
             {
               user.isAdmin ? 
