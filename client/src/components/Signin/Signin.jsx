@@ -14,7 +14,7 @@ function Signin() {
     password: "",
   })
 
-  const {setTokenInCookies, isLoggedInuser} = useAuth()
+  const {setTokenInCookies, isLoggedInuser, refreshUser, darkMode} = useAuth()
   const navigate = useNavigate();
 
   if(isLoggedInuser){
@@ -45,6 +45,7 @@ function Signin() {
       if(response.ok){
         toast.success("Signin Successful");
         setTokenInCookies(data.token);
+        refreshUser();
         setSignInData({email: "", password: ""});
         navigate("/");
       } else {
@@ -58,23 +59,23 @@ function Signin() {
   return (
     <>
       <section id="signin-page">
-      <div className="signin-page">
+      <div className="signin-page" style={{backgroundColor: darkMode ? '#343434' : ''}}>
         <h1 className='text-primary mb-4'>Sign-In Form</h1>
         <Form onSubmit={handleSifninForm}>
           <Form.Group className="mb-3" id="email">
-            <Form.Label>Email address</Form.Label>
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Email address</Form.Label>
             <Form.Control type="email" name='email' placeholder="Enter email" value={signinData.email} onChange={handleInput} required />
           </Form.Group>
 
           <Form.Group className="mb-3" id="password">
-            <Form.Label>Password</Form.Label>
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Password</Form.Label>
             <Form.Control type="password" name='password' placeholder="Password" value={signinData.password} onChange={handleInput} required />
           </Form.Group>
           <Button variant="primary" type="submit">
             Submit
           </Button>
         </Form>
-        <hr />
+        <hr className={`${darkMode ? 'text-white' : 'text-black'}`} />
         <Link style={{textDecoration: "none"}} to="/signup">Don't have an Account! Create An Account</Link>
       </div>
       </section>

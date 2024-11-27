@@ -3,14 +3,14 @@ import './Home.css'
 import { Link } from 'react-router-dom'
 import Social from '../Social/Social'
 import ProdShow from './ProdShow'
+import { useAuth } from '../../Store/Auth'
 
 
 function Home() {
-
+  const {darkMode} = useAuth();
   return (
     <>
       <section id="home_section">
-        {/* <div className="home_container"> */}
 
         <div className="home_content">
           <div className="home_social">
@@ -55,19 +55,18 @@ function Home() {
         </div>
 
         <div className="home_data">
-          <h1>Smart Yoga</h1>
+          <h1 className={`${darkMode ? "text-white" : "text-black"}`}>Smart Yoga</h1>
           <h3 className="text-primary fs-2">Breathe | Flow | Transform</h3>
-          <p className="fs-4">
+          <p className={`fs-4 ${darkMode ? "text-white" : "text-black"}`}>
             Achieve mindfulness, improve flexibility, and boost your energy with our carefully curated yoga products. Start your wellness journey today and experience the difference!
           </p>
-          <Link href="/product" className='btn btn-primary fs-4'>
-            Shop Now <i class="uil uil-message button_icon"></i>
+          <Link to="/product" className='btn btn-primary fs-4'>
+            Shop Now <i className="uil uil-message button_icon"></i>
           </Link>
         </div>
       </section>
       <ProdShow />
       <Social />
-
     </>
   )
 }

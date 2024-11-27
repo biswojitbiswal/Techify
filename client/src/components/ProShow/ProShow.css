@@ -9,7 +9,7 @@
     height: 400px;
     justify-content: space-between;
     align-items: center;
-    background-color: #e3edf7;
+    /* background-color: #e3edf7; */
     border-radius: .25rem; 
     padding: .5rem;   
 }

@@ -15,7 +15,7 @@ function Product() {
 
 
   const { products, setProducts } = useStore();
-  const { user, authorization } = useAuth();
+  const { user, authorization, darkMode } = useAuth();
   const navigate = useNavigate();
 
   
@@ -66,7 +66,7 @@ if(sortOrder === 'asc'){
             placeholder="Search Here"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            aria-label="Recipient's username"
+            aria-label="Search"
             aria-describedby="basic-addon2"
           />
           <Button variant="primary" className='fs-3' id="button-addon2">
@@ -86,9 +86,9 @@ if(sortOrder === 'asc'){
           {
             filteredProducts.map((product, index) => {
               return <Card key={product._id}
-                onClick={() => navigate(`/product/${product._id}`)} style={{ width: '22rem', backgroundColor: '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
+                onClick={() => navigate(`/product/${product._id}`)} style={{ width: '22rem', backgroundColor: darkMode ? '#343434' : '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
                 <Card.Img variant="top" style={{ height: '300px', objectFit: 'cover', borderRadius: '0.5rem' }} src={product.images[0]} />
-                <Card.Body style={{ height: "50%" }}>
+                <Card.Body style={{ height: "50%", color: darkMode ? '#fff' : '#000' }}>
                   <Card.Title>{product.title}</Card.Title>
                   <Card.Text style={{ minHeight: "70px" }}>{product.description}</Card.Text>
                   <Card.Title>&#8377;{product.price}</Card.Title>

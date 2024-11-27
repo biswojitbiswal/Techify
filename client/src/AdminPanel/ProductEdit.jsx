@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 function ProductEdit() {
   const { productId } = useParams();
   const { products, updateProduct } = useStore();
-  const { authorization } = useAuth();
+  const { authorization, darkMode } = useAuth();
   const navigate = useNavigate();
 
   const product = products.find((prod) => prod._id === productId);
@@ -88,11 +88,11 @@ function ProductEdit() {
   };
 
   return (
-    <div className="admin-edit-form">
+    <div className="admin-edit-form" style={{backgroundColor: darkMode ? '#343434' : ''}}>
       <h1 className="text-primary mb-4">Edit Product Details</h1>
       <Form onSubmit={handleFormSubmit}>
         <Form.Group className="mb-3" controlId="title">
-          <Form.Label>Title:</Form.Label>
+          <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Title:</Form.Label>
           <Form.Control
             type="text"
             name="title"
@@ -103,7 +103,7 @@ function ProductEdit() {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="description">
-          <Form.Label>Description:</Form.Label>
+          <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Description:</Form.Label>
           <Form.Control
             type="text"
             name="description"
@@ -115,7 +115,7 @@ function ProductEdit() {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="price">
-          <Form.Label>Price:</Form.Label>
+          <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Price:</Form.Label>
           <Form.Control
             type="number"
             name="price"
@@ -127,7 +127,7 @@ function ProductEdit() {
         </Form.Group>
 
         <Form.Group controlId="formFileMultiple" className="mb-3">
-          <Form.Label>Image:</Form.Label>
+          <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Image:</Form.Label>
           <Form.Control
             type="file"
             onChange={handleImageChange}

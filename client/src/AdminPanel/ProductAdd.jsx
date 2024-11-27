@@ -15,7 +15,7 @@ function ProductAdd() {
     images: [],
   });
 
-  const { authorization } = useAuth();
+  const { authorization, darkMode } = useAuth();
   const {setProducts} = useStore();
 
   const handleProductInput = (e) => {
@@ -105,23 +105,23 @@ function ProductAdd() {
   };
 
   return (
-    <div className="admin-product-form">
+    <div className="admin-product-form" style={{backgroundColor: darkMode ? '#343434' : ''}}>
       <h1 className='text-primary mb-4'>Add Product</h1>
       <Form onSubmit={handleProductForm}>
         <Form.Group className="mb-3" controlId="title">
-          <Form.Label>Title:</Form.Label>
+          <Form.Label  className={`${darkMode ? 'text-white' : 'text-black'}`}>Title:</Form.Label>
           <Form.Control type="text" name='title' value={productData.title} onChange={handleProductInput} placeholder="Enter Title" required />
         </Form.Group>
         <Form.Group className="mb-3" controlId="description">
-          <Form.Label>Description:</Form.Label>
+          <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Description:</Form.Label>
           <Form.Control type="text" name='description' value={productData.description} onChange={handleProductInput} placeholder="Enter Description" required />
         </Form.Group>
         <Form.Group className="mb-3" controlId="price">
-          <Form.Label>Price:</Form.Label>
+          <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Price:</Form.Label>
           <Form.Control type="number" name='price' value={productData.price} onChange={handleProductInput} placeholder="Enter Price" required />
         </Form.Group>
         <Form.Group controlId="formFileMultiple" className="mb-3">
-          <Form.Label>Images:</Form.Label>
+          <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Images:</Form.Label>
           <Form.Control type="file" onChange={handleFile} multiple />
         </Form.Group>
         <div className="image-preview">

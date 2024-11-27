@@ -1,11 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './Footer.css'
+import { useAuth } from '../../Store/Auth';
 
 function Footer() {
+  const {darkMode} = useAuth();
   return (
     <>
-      <footer id='footer-page'>
+      <footer id='footer-page' style={{backgroundColor: darkMode ? '#343434' : '#e9ecef'}}>
       <div className="footer-social-links">
             <Link
               href="https://www.instagram.com"
@@ -31,8 +33,8 @@ function Footer() {
               <i className="fa-brands fa-x-twitter"></i>
             </Link>
           </div>
-          <p><p>&copy; 2024 Your Company Name. All Rights Reserved.</p></p>
-          <p>Designed & Developed By <strong className='text-primary'>Biswojit</strong></p>
+          <p className={`${darkMode ? 'text-white' : 'text-black'}`}>&copy; 2024 Smart Yoga. All Rights Reserved.</p>
+          <p className={`${darkMode ? 'text-white' : 'text-black'}`}>Designed & Developed By <strong className='text-primary'>Biswojit</strong></p>
       </footer>
     </>
   )

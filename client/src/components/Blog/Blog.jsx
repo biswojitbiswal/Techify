@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 function Blog() {
   const [blogs, setBlogs] = useState([]);
 
-  const { authorization, user } = useAuth();
+  const { authorization, user, darkMode } = useAuth();
 
   const getAllBlogs = async () => {
     try {
@@ -59,17 +59,17 @@ function Blog() {
     <>
       <section id="yoga-blog">
         <h1 className='text-primary fs-1 mb-2'>Welcome to Our Yoga Blog</h1>
-        <h4 className='m-2'>Explore articles and tips on yoga, wellness, mindfulness, and how to enhance your practice.</h4>
+        <h4 className={`m-2 ${darkMode ? 'text-white' : 'text-black'}`}>Explore articles and tips on yoga, wellness, mindfulness, and how to enhance your practice.</h4>
 
         <div className="blog-container">
-          <h2 className='mb-4'>Latest Articles</h2>
+          <h2 className={`m-4 ${darkMode ? 'text-white' : 'text-black'}`}>Latest Articles</h2>
           {
             blogs.length > 0 ? (
               blogs.map((blog, index) => (
-                <div key={blog._id} className="blog-card">
-                    <img src={blog.blogImg} alt="Product Image" className='h-100' />
-                  <Card>
-                    <Card.Header className='fs-3 text-primary d-flex justify-content-between'>
+                <div key={blog._id} className="blog-card" style={{ backgroundColor: darkMode ? '#343434' : '#fff' }}>
+                  <img src={blog.blogImg} alt="Product Image" className='h-100' />
+                  <Card style={{backgroundColor: darkMode ? '#a3a3a3' : ''}}>
+                    <Card.Header className='fs-3 text-primary d-flex justify-content-between' style={{backgroundColor: darkMode ? '#999999' : ''}}>
                       <h4>{blog.blogTitle}</h4>
                       {
                         user?.isAdmin ? <Button variant='danger' onClick={() => handleDeleteBlog(blog._id)} className='fs-5'>Delete<span><i className="fa-solid fa-trash"></i></span></Button> : null

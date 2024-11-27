@@ -1,77 +1,75 @@
 #cart-page {
-    padding: 2rem 5rem;         
-    margin: 20px auto; 
-    height: auto;
-    min-height: 85vh;   
-  }
-  
+  padding: 2rem 5rem;         
+  margin: 20px auto; 
+  height: auto;
+  min-height: 85vh;   
+}
+
+.cart-card {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  align-items: stretch;
+  height: 250px; 
+  margin-bottom: 2rem;
+}
+
+.cart-card img {
+  min-width: 300px;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+
+.cart-card .card {
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+#cart-page h1 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333333;
+}
+
+.buy-btn i{
+  font-size: 1.1rem;
+  margin-right: .5rem;
+}
+.remove-btn i{
+  font-size: 1rem;
+  margin-right: .5rem;
+}
+
+
+
+@media (max-width: 1096px){
   .cart-card {
     display: flex;
-    gap: 20px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    align-items: stretch;
-    height: 250px; 
+    flex-direction: column;
+    height: auto;
     margin-bottom: 2rem;
   }
-  
-  .cart-card img {
-    min-width: 300px;
-    height: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-  
-  
-  .cart-card .card {
-    flex-grow: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  
-  #cart-page h1 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333333;
-  }
 
-  .buy-btn i{
-    font-size: 1.1rem;
-    margin-right: .5rem;
+  .cart-card img{
+    max-height: 400px;
   }
-  .remove-btn i{
-    font-size: 1rem;
-    margin-right: .5rem;
+}
+
+@media (max-width: 640px){
+  #cart-page{
+    padding: 1rem;
   }
-
-
-
-  @media (max-width: 1096px){
-    .cart-card {
-      display: flex;
-      flex-direction: column;
-      height: auto;
-      margin-bottom: 2rem;
-    }
-
-    .cart-card img{
-      max-height: 400px;
-    }
-  }
-
-  @media (max-width: 640px){
-    #cart-page{
-      padding: 1rem;
-    }
-    .cart-card{
-      padding: .5rem;
-    }
-    
+  .cart-card{
+    padding: .5rem;
   }
   
-  
+}
+

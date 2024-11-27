@@ -6,7 +6,7 @@
     align-items: center;
     width: 100%;
     margin-bottom: 0;
-    margin-top: 3rem;
+    margin-top: 2rem;
 
 }
 .home_content{
@@ -63,7 +63,6 @@
     margin-bottom: 2rem;
 }
 .prod-carousel{
-    background-color: hsl(210, 56%, 93%);
     width: 90%;
     height: 90%;
     margin: .7rem 1.25rem;

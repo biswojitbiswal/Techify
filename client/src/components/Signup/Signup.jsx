@@ -17,10 +17,10 @@ function Signup() {
   });
 
 
-  const {setTokenInCookies, isLoggedInuser} = useAuth();
+  const { setTokenInCookies, refreshUser, isLoggedInuser } = useAuth();
   const navigate = useNavigate()
 
-  if(isLoggedInuser){
+  if (isLoggedInuser) {
     return <Navigate to="/" />
   }
 
@@ -31,25 +31,26 @@ function Signup() {
     })
   }
 
-  const handleSignupForm = async(e) => {
+  const handleSignupForm = async (e) => {
     e.preventDefault();
     // console.log(signupData)
     try {
       const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/signup`, {
         method: "POST",
-        headers:{
+        headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(signupData)
       })
-  
+
       const data = await response.json();
       // console.log(data);
-  
-      if(response.ok){
+
+      if (response.ok) {
         toast.success("Signup Successful");
         setTokenInCookies(data.token);
-        setSignupData({email: "", phone: "", password: ""});
+        refreshUser();
+        setSignupData({ email: "", phone: "", password: "" });
         navigate("/");
       } else {
         toast.error(data.extraDetails ? data.extraDetails : data.message)
@@ -63,30 +64,29 @@ function Signup() {
   return (
     <>
 
-      <div className="signup-page">
+      <div className="signup-page" style={{ backgroundColor: darkMode ? '#343434' : '' }}>
         <h1 className='text-primary mb-4'>Sign-Up Form</h1>
         <Form onSubmit={handleSignupForm}>
           <Form.Group className="mb-3" controlId="email">
-            <Form.Label>Email address</Form.Label>
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Email address</Form.Label>
             <Form.Control type="email" name='email' placeholder="Enter email" required value={signupData.email} onChange={handleInputData} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="phone">
-            <Form.Label>Mobile No.:</Form.Label>
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Mobile No.:</Form.Label>
             <Form.Control type="number" name='phone' placeholder="Enter Mobile No." required value={signupData.phone} onChange={handleInputData} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="password">
-            <Form.Label>Password</Form.Label>
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Password</Form.Label>
             <Form.Control type="password" name='password' placeholder="Password" required value={signupData.password} onChange={handleInputData} />
           </Form.Group>
           <Button variant="primary" type="submit">
             Submit
           </Button>
         </Form>
-        <hr />
-        <Link style={{textDecoration: "none"}} to="/signin">Don't have an Account! Create An Account</Link>
+        <hr className={`${darkMode ? 'text-white' : 'text-black'}`} />
+        <Link style={{ textDecoration: "none" }} to="/signin">I have An Account! Sign in</Link>
       </div>
-
     </>
   )
 }

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import './Social.css'
 import Carousel from 'react-bootstrap/Carousel';
-// import ExampleCarouselImage from 'components/ExampleCarouselImage';
+import { useAuth } from '../../Store/Auth';
 
 function Social() {
   const [posts, setPosts] = useState([]);
+
+  const {darkMode} = useAuth();
 
   const getSocialMediaPost = async() => {
     try {
@@ -30,23 +32,23 @@ function Social() {
   return (
     <>
       <section id='social-page'>
-        <h2 className='fs-1'>What People Are Saying About Us</h2>
-        <div className="social-media-posts">
+        <h2 className={`fs-1 ${darkMode ? "text-white" : "text-black"}`}>What People Are Saying About Us</h2>
+        <div className="social-media-posts" style={{backgroundColor: darkMode ? '#343434' : ''}}>
           <Carousel data-bs-theme="dark" className='post-carousel'>
             {
               posts.length > 0 ? 
               posts.map(post => {
                 return <Carousel.Item key={post._id}>
-                <div className="customer-post">
+                <div className="customer-post" style={{backgroundColor: darkMode ? '#000' : '#fff'}}>
                   <div className="user-details">
                     <div className="customer-profile">
                       <img src={post.author.profileImage} alt="Hero" />
                     </div>
-                    <p className='fs-2'><strong>{post.author.username}</strong></p>
+                    <p className={`fs-2 ${darkMode ? 'text-white' : 'text-black'}`}><strong>{post.author.username}</strong></p>
                   </div>
                   <div className="post-details">
                     <div className="post-content">
-                      <p className='fs-4'>{post.text}</p>
+                      <p className={`fs-4 ${darkMode ? 'text-white' : 'text-black'}`}>{post.text}</p>
                     </div>
                     <div className="post-metrics">
                       <p className='text-primary'><i className="fa-solid fa-thumbs-up fs-2"></i> <span className='fs-4'>{post.metrics.likes}</span></p>
@@ -58,8 +60,6 @@ function Social() {
               </Carousel.Item>
               }) : <h2>Loading posts...</h2>
             }
-            
-        
           </Carousel>
         </div>
       </section>

@@ -10,7 +10,7 @@ import {useAuth} from '../Store/Auth'
 function Links() {
   const [postUrl, setPostUrl] = useState('');
 
-  const {authorization} = useAuth();
+  const {authorization, darkMode} = useAuth();
  
   const handleInputChange = (event) => {
     setPostUrl(event.target.value);
@@ -53,18 +53,18 @@ function Links() {
   return (
     <>
       <section className="admin-social-links">
-        <div className="admin-social-forms">
-          <h1>Add Social Media Posts</h1>
+        <div className="admin-social-forms" style={{backgroundColor: darkMode ? '#343434' : ''}}>
+          <h1 className="text-primary">Add Social Media Posts</h1>
           <Form onSubmit={handleSubmit}>
-            <Form.Label htmlFor="basic-url">Your Post URL: </Form.Label>
+            <Form.Label htmlFor="basic-url"  className={`${darkMode ? 'text-white' : 'text-black'}`}>Your Post URL: </Form.Label>
             <InputGroup className="mb-3">
               <InputGroup.Text id="basic-addon3">URL</InputGroup.Text>
               <Form.Control
                 id="basic-url"
                 aria-describedby="basic-addon3"
                 placeholder="https://example.com/..."
-                value={postUrl}   // Bind input value to state
-                onChange={handleInputChange} // Update state on input change
+                value={postUrl}
+                onChange={handleInputChange}
               />
             </InputGroup>
             <Button variant="primary" className="px-4 fs-3" type="submit">

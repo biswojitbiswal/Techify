@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../Store/Auth';
 import Badge from 'react-bootstrap/Badge';
@@ -11,12 +11,14 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 function MyNavbar() {
   const expandValue = ['sm', 'md', 'lg', 'xl', 'xxl'][3];
 
-  const { isLoggedInuser, user } = useAuth();
-  
+  const { isLoggedInuser, user, darkMode, handleDarkMode } = useAuth();
+
   const [showOffCanvas, setShowOffCanvas] = useState(false);
 
   const handleCloseOffCanvas = () => setShowOffCanvas(false);
   const handleShowOffCanvas = () => setShowOffCanvas(true);
+
+  
 
   return (
     <>
@@ -24,17 +26,26 @@ function MyNavbar() {
         key={expandValue}
         expand={expandValue}
         className="p-2"
-        style={{ backgroundColor: 'hsl(210, 56%, 93%)' }}
+        style={{ backgroundColor: darkMode ? "#343434" : 'hsl(210, 56%, 93%)' }}
       >
         <Container fluid>
-          <Navbar.Brand as={Link} to="/" className="fs-1 text-primary">
-            Yoga
+          <Navbar.Brand className="fs-1 text-primary d-flex justify-content-center align-items-center">
+            <Link to="/" style={{textDecoration: "none", marginRight: "1rem"}}>Yoga</Link>
+            <Nav.Item className='fs-2' onClick={handleDarkMode}>
+                {
+                  darkMode ? <i className="uil uil-sun  text-warning"></i> : <i className="uil uil-moon"></i>
+                }
+
+          </Nav.Item>
           </Navbar.Brand>
+          
           <Navbar.Toggle
-            className="text-primary"
+            className={`text-primary border-primary`}
             onClick={handleShowOffCanvas}
             aria-controls={`offcanvasNavbar-expand-${expandValue}`}
-          />
+          >
+            <i class="fa-solid fa-bars"></i>
+          </Navbar.Toggle>
           <Navbar.Offcanvas
             show={showOffCanvas}
             onHide={handleCloseOffCanvas}

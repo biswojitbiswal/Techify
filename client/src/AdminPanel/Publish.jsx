@@ -14,7 +14,7 @@ function Publish() {
     blogImg: null
   })
 
-  const {authorization} = useAuth();
+  const {authorization, darkMode} = useAuth();
 
   const handleBlogData = (e) => {
     setBlog({
@@ -78,21 +78,21 @@ function Publish() {
 
   return (
     <>
-      <div className="admin-publish-form">
+      <div className="admin-publish-form" style={{backgroundColor: darkMode ? '#343434' : ''}}>
         <h1 className='text-primary mb-4'>Add Blog</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="blogTitle">
-            <Form.Label>Title:</Form.Label>
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Title:</Form.Label>
             <Form.Control type="text" name='blogTitle' value={blog.blogTitle} onChange={handleBlogData} placeholder="Enter Title" required />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="blogDescription">
-            <Form.Label>Description:</Form.Label>
-            <Form.Control as="textarea" rows={5} name='blogDescription' value={blog.blogDescription} onChange={handleBlogData} />
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Description:</Form.Label>
+            <Form.Control as="textarea" rows={5} name='blogDescription' value={blog.blogDescription} onChange={handleBlogData} placeholder='Description' />
           </Form.Group>
 
           <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Blog Image:</Form.Label>
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Blog Image:</Form.Label>
             <Form.Control type="file" name='blogImg' onChange={handleImageUpload}
               accept="image/*"/>
           </Form.Group>

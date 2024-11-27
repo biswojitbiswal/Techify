@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom';
 
 function Cart() {
-  const {user, authorization, refreshUser, isLoggedInuser} = useAuth();
+  const {user, authorization, refreshUser, darkMode, isLoggedInuser} = useAuth();
   const {products} = useStore();
   const [cartItems, setCartItems] = useState([]);
 
@@ -61,10 +61,10 @@ function Cart() {
         <h1 className='text-primary'>My Cart</h1>
         {cartItems.length > 0 ? (
           cartItems.map((item) => (
-            <div key={item._id} className="cart-card">
+            <div key={item._id} className="cart-card" style={{ backgroundColor: darkMode ? '#343434' : '#fff' }}>
               <img src={item.images[0]} alt="Product Image" />
-              <Card>
-                <Card.Header as="h4">{item.title}</Card.Header>
+              <Card style={{backgroundColor: darkMode ? '#a3a3a3' : ''}}>
+                <Card.Header as="h4" style={{backgroundColor: darkMode ? '#999999' : ''}}>{item.title}</Card.Header>
                 <Card.Body>
                   <Card.Title>₹{item.price}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>

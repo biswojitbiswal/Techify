@@ -2,9 +2,11 @@
     width: 50%;
     height: auto;
     margin: 10% auto;
-    border: 1px solid;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Add a light border for visibility */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 1rem;
-    border-radius: 1rem;
+    
 }
 
 @media (max-width: 1096px){
