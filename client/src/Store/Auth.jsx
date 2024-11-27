@@ -92,6 +92,8 @@ export const AuthContextProvider = ({children}) => {
             setUser, 
             isLoggedInuser, 
             loggedOutUser,
+            darkMode,
+            handleDarkMode
             
         }}>
             {children}

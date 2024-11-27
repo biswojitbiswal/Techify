@@ -33,7 +33,7 @@ function MyNavbar() {
             <Link to="/" style={{textDecoration: "none", marginRight: "1rem"}}>Yoga</Link>
             <Nav.Item className='fs-2' onClick={handleDarkMode}>
                 {
-                  darkMode ? <i className="uil uil-sun  text-warning"></i> : <i className="uil uil-moon"></i>
+                  darkMode ? <i className="uil uil-sun text-warning"></i> : <i className="uil uil-moon"></i>
                 }
 
           </Nav.Item>
