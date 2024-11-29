@@ -1,6 +1,7 @@
 import { Product } from "../models/product.model.js";
 import { uploadFileOnCloudinary } from "../utils/cloudinary.utils.js";
 import { Blog } from "../models/blog.model.js";
+import {User} from "../models/user.model.js"
 
 const addProducts = async (req, res) => {
     try {
@@ -115,6 +116,7 @@ const editProductDetails = async (req, res) => {
     }
 };
 
+
 const addBlog = async(req, res) => {
     try {
         const {blogTitle, blogDescription} = req.body;
@@ -123,13 +125,19 @@ const addBlog = async(req, res) => {
             return req.status(400).json({message: "All Fields Are Required"})
         }
 
-        const blogImage = req.files?.blogImg[0]?.path
-        // console.log(blogImage)
-        if(!blogImage){
-            return res.status(400).json({message: "File Is Required"})
+        console.log(req.files);
+        const blogImage = req.files?.blogImg[0]?.path;
+        console.log("Blog Image Path: ", blogImage);
+        if (!blogImage) {
+        return res.status(400).json({ message: "File Is Required" });
         }
 
+
+
         const blogImageFile = await uploadFileOnCloudinary(blogImage);
+        console.log("after cludinary", blogImageFile)
+        console.log("after cludinary url", blogImageFile.data.secure_url)
+
 
         if(!blogImageFile){
             return res.status(400).json({message: "File Is Required!"})
@@ -138,8 +146,8 @@ const addBlog = async(req, res) => {
         const blog = await Blog.create({
             blogTitle,
             blogDescription,
-            blogImg: blogImageFile.data.secure_url
-        })
+            blogImg: blogImageFile.data.secure_url, // Make sure this is not undefined
+        });
 
         const addedBlog = await Blog.findById(blog._id)
 
@@ -197,24 +205,85 @@ const deleteBlog = async(req, res) => {
     }
 }
 
+const getAllusers = async(req, res) => {
+    try {
+        const users = await User.find().select("-password");
+    
+        if(!users){
+            return res.status(404).json({message: "Users Not Found"})
+        }
+    
+        return res.status(200).json({message: "All User Fetched", users});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
 
+const getUserById = async(req, res) => {
+    try {
+        const {userId} = req.params;
 
+        const user = await User.findById(userId).select("-password");
 
+        if(!user){
+            return res.status(404).json({message: "User Not Found"});
+        }
 
+        return res.status(200).json({message: "All User Fetched", user});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
 
+const editUserbyId = async(req, res) => {
+    try {
+        const {email, phone} = req.body;
+        const {userId} = req.params;
 
+        if(!email || !phone){
+            return res.status(401).json({message: "All Field Required"});
+        }
 
+        const editUser = await User.findByIdAndUpdate(
+            {_id: userId},
+            {
+                $set: {
+                    email,
+                    phone,
+                }
+            },
+            { new: true, upsert: false, runValidators: true }
+        );
 
+        if(!editUser){
+            return res.status(400).json({message: "Something Went Wrong"})
+        }
 
+        return res.status(200).json({message: "User Update Successfully", editUser});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
 
+const deleteUserById = async(req, res) => {
+    try {
+        const {userId} = req.params;
 
+        const user = await User.findByIdAndDelete(userId);
 
+        if(!user) {
+            return res.status(400).json({message: "Something Went Wrong"})
+        }
 
-
-
-
-
-
+        return res.status(200).json({mesage:"User Deleted Successfully"});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
 
 
 export {
@@ -223,4 +292,8 @@ export {
     addBlog,
     deleteProduct,
     deleteBlog,
+    getAllusers,
+    getUserById,
+    editUserbyId,
+    deleteUserById
 }

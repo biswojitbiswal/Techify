@@ -6,10 +6,13 @@ import Product from './components/Product/Product'
 import ProShow from './components/ProShow/ProShow'
 import Blog from './components/Blog/Blog'
 import Cart from './components/Cart/Cart'
+import Account from './components/Account/Account'
 import Signin from './components/Signin/Signin'
 import Signup from './components/Signup/Signup'
 import AdminLayout from './AdminPanel/AdminLayout'
 import AdminHome from './AdminPanel/AdminHome'
+import AdminUsers from './AdminPanel/AdminUsers'
+import UserEdit from './AdminPanel/UserEdit'
 import ProductEdit from './AdminPanel/ProductEdit'
 import ProductAdd from './AdminPanel/ProductAdd'
 import Publish from './AdminPanel/Publish'
@@ -31,15 +34,18 @@ function App() {
         <Route path='/product/:productId' element={<ProShow />} />
         <Route path='/blog' element={<Blog />} />
         <Route path='/cart' element={<Cart />} />
+        <Route path='/account' element={<Account />}></Route>
         <Route path='/signin' element={<Signin />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/signout' element={<Signout />} />
         <Route path='/admin' element={<AdminLayout />}>
           <Route index element={<AdminHome />} />
-          <Route path='add' element={<ProductAdd />} />
+          <Route path='users' element={<AdminUsers />} />
+          <Route path='user/edit/:userId' element={<UserEdit />} />
+          <Route path='add/product' element={<ProductAdd />} />
           <Route path='edit/:productId' element={<ProductEdit />} />
-          <Route path='publish' element={<Publish />} />
-          <Route path='links' element={<Links />} />
+          <Route path='add/publish' element={<Publish />} />
+          <Route path='add/links' element={<Links />} />
 
         </Route>
         <Route path='/*' element={<Error />} />
