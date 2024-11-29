@@ -33,7 +33,6 @@ function App() {
         <Route path='/product/:productId' element={<ProShow />} />
         <Route path='/blog' element={<Blog />} />
         <Route path='/cart' element={<Cart />} />
-        <Route path='/account' element={<Account />}></Route>
         <Route path='/signin' element={<Signin />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/signout' element={<Signout />} />
