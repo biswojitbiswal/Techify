@@ -15,7 +15,7 @@ router.post(
 
 router.route("/edit/:productId").patch(
     authVerify,
-    verifyRole(['Admin']),
+    verifyRole(['Admin', 'Moderator']),
     upload.fields([{ name: "images", maxCount: 4 }]),
     editProductDetails);
 
@@ -34,7 +34,7 @@ router.route("/product/delete/:productId").delete(authVerify, verifyRole(['Admin
 router.route("/blog/delete/:blogId").delete(authVerify, verifyRole(['Admin', 'Moderator']), deleteBlog);
 router.route("/get/users").get(authVerify, verifyRole(['Admin', 'Moderator']), getAllusers);
 router.route("/user/:userId").get(authVerify, verifyRole(['Admin', 'Moderator']), getUserById);
-router.route("/user/edit/:userId").patch(authVerify, verifyRole(['Admin']), editUserbyId)
+router.route("/user/edit/:userId").patch(authVerify, verifyRole(['Admin', 'Moderator']), editUserbyId)
 router.route("/user/delete/:userId").delete(authVerify, verifyRole(['Admin']), deleteUserById);
 
 export default router

@@ -19,9 +19,9 @@ const generateAccessToken = async(userId) => {
 
 const registerUser = async(req, res) => {
     try {
-        const {email, phone, password} = req.body;
+        const {name, email, phone, password} = req.body;
     
-        if([email, phone, password].some((field) => field?.trim() === "")){
+        if([name, email, phone, password].some((field) => field?.trim() === "")){
             return res.status(400).json({message: "All Fields are Required!"})
         }
 
@@ -38,6 +38,7 @@ const registerUser = async(req, res) => {
         }
     
         const user = await User.create({
+            name,
             email,
             phone,
             password,

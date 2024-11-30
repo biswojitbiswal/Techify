@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 
 function Signup() {
   const [signupData, setSignupData] = useState({
+    name: '',
     email: '',
     phone: '',
     password: ''
@@ -67,6 +68,10 @@ function Signup() {
       <div className="signup-page" style={{ backgroundColor: darkMode ? '#343434' : '' }}>
         <h1 className='text-primary mb-4'>Sign-Up Form</h1>
         <Form onSubmit={handleSignupForm}>
+        <Form.Group className="mb-3" controlId="name">
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Name: </Form.Label>
+            <Form.Control type="text" name='name' placeholder="Enter Your Name" required value={signupData.name} onChange={handleInputData} />
+          </Form.Group>
           <Form.Group className="mb-3" controlId="email">
             <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Email address</Form.Label>
             <Form.Control type="email" name='email' placeholder="Enter email" required value={signupData.email} onChange={handleInputData} />

@@ -2,17 +2,23 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useStore } from '../Store/ProductStore';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../Store/Auth';
 import { toast } from 'react-toastify';
 
 function ProductEdit() {
   const { productId } = useParams();
   const { products, updateProduct } = useStore();
-  const { authorization, darkMode } = useAuth();
+  const { authorization, darkMode, user } = useAuth();
   const navigate = useNavigate();
 
+  
+
   const product = products.find((prod) => prod._id === productId);
+
+  if(!user || (user.role !== 'Admin' && user.role !== 'Moderator')){
+    return <Navigate to="/admin" replace />
+  }
 
   const [formData, setFormData] = useState({
     title: '',
@@ -122,8 +128,12 @@ function ProductEdit() {
             value={formData.price}
             onChange={handleInputChange}
             placeholder="Enter Price"
+            readOnly={user.role !== 'Admin'}
             required
           />
+          {
+            user.role !== 'Admin' ? <p className='text-danger'>You Can't Edit!</p> : ""
+          }
         </Form.Group>
 
         <Form.Group controlId="formFileMultiple" className="mb-3">
@@ -135,6 +145,7 @@ function ProductEdit() {
           />
         </Form.Group>
 
+        {/* Image preview */}
         {formData.images.length > 0 && (
           <div className="image-preview m-1">
             {formData.images.slice(0, 4).map((img, index) => (
@@ -145,6 +156,7 @@ function ProductEdit() {
                 style={{ width: '100px', height: '100px', marginRight: '10px' }}
                 onLoad={() => {
                   if (typeof img !== 'string') {
+                    // Release object URL after image is loaded
                     URL.revokeObjectURL(img);
                   }
                 }}

@@ -12,7 +12,7 @@ function AdminUsers() {
 
   const getAllUsers = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/yoga/admin/get/users`, {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/get/users`, {
         method: "GET",
         headers: {
           Authorization: authorization,
@@ -65,6 +65,7 @@ function AdminUsers() {
           <thead>
             <tr className='text-center'>
               <th>Id</th>
+              <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Edit</th>
@@ -77,6 +78,7 @@ function AdminUsers() {
               users ? users.map((user, index) => {
                 return <tr key={user._id} className='text-center'>
                   <td>{index + 1}</td>
+                  <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
                   <td><Link to={`/admin/user/edit/${user._id}`} className="btn btn-primary">Edit <span><i className="fa-solid fa-pencil ms-2"></i></span></Link></td>

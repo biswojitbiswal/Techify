@@ -239,17 +239,18 @@ const getUserById = async(req, res) => {
 
 const editUserbyId = async(req, res) => {
     try {
-        const {email, phone} = req.body;
+        const {name, email, phone} = req.body;
         const {userId} = req.params;
 
-        if(!email || !phone){
-            return res.status(401).json({message: "All Field Required"});
+        if(!name || !email || !phone){
+            return res.status(400).json({message: "All Field Required"});
         }
 
         const editUser = await User.findByIdAndUpdate(
             {_id: userId},
             {
                 $set: {
+                    name,
                     email,
                     phone,
                 }
@@ -258,7 +259,7 @@ const editUserbyId = async(req, res) => {
         );
 
         if(!editUser){
-            return res.status(400).json({message: "Something Went Wrong"})
+            return res.status(404).json({message: "User not found or update failed."})
         }
 
         return res.status(200).json({message: "User Update Successfully", editUser});

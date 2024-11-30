@@ -2,16 +2,21 @@ import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useAuth } from '../Store/Auth';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import './Admin.css'
 import { toast } from 'react-toastify';
 
 function UserEdit() {
-    const [user, setUser] = useState({ email: '', phone: '' });
+    const [userDetail, setUserDetail] = useState({ name: '', email: '', phone: '' });
 
     const {userId} = useParams();
-    const {darkMode, authorization} = useAuth();
+    const {darkMode, authorization, user} = useAuth();
     const navigate = useNavigate();
+
+    if(!user || (user.role !== 'Admin' && user.role !== 'Moderator')){
+        return <Navigate to="/admin" replace />
+    }
+    
 
     const getUserDataById = async() => {
         try {
@@ -26,7 +31,7 @@ function UserEdit() {
             // console.log(data);
 
             if(response.ok){
-                setUser(data.user);
+                setUserDetail(data.user);
             }
         } catch (error) {
             console.log(error);
@@ -34,7 +39,7 @@ function UserEdit() {
     }
 
     const handleInputChange = (e) => {
-        setUser((prev) => ({
+        setUserDetail((prev) => ({
             ...prev,
             [e.target.name] : e.target.value
         }))
@@ -50,7 +55,7 @@ function UserEdit() {
                     "Content-Type": "application/json",
                     Authorization: authorization,
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(userDetail)
             })
 
             const data = await response.json();
@@ -74,23 +79,33 @@ function UserEdit() {
       <section className="admin-edit-user">
       <h1 className="text-primary mb-4">Edit user Details</h1>
       <Form onSubmit={handleEditDataSubmit}>
-        <Form.Group className="mb-3" controlId="title">
+      <Form.Group className="mb-3" controlId="name">
+          <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Name:</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            value={userDetail.name || ""}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="email">
           <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Email:</Form.Label>
           <Form.Control
             type="text"
             name="email"
-            value={user.email || ""}
+            value={userDetail.email || ""}
             onChange={handleInputChange}
             placeholder="Enter Email"
             required
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="description">
+        <Form.Group className="mb-3" controlId="phone">
           <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Phone:</Form.Label>
           <Form.Control
             type="number"
             name="phone"
-            value={user.phone || ""}
+            value={userDetail.phone || ""}
             onChange={handleInputChange}
             placeholder="Enter Phone No."
             required

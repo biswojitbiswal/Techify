@@ -4,6 +4,10 @@ import jwt from 'jsonwebtoken';
 import {Product} from "./product.model.js"
 
 const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
