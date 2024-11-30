@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { addBlog, addProducts, editProductDetails, deleteProduct, deleteBlog, getAllusers, getUserById, editUserbyId, deleteUserById } from "../controllers/admin.controller.js";
+import { addBlog, addProducts, editProductDetails, deleteProduct, deleteBlog, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus } from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
-import verifyRole from "../middleware/verifyRole.middleware.js.js"
+import verifyRole from "../middleware/verifyRole.middleware.js"
 
 const router = Router();
 
@@ -36,5 +36,7 @@ router.route("/get/users").get(authVerify, verifyRole(['Admin', 'Moderator']), g
 router.route("/user/:userId").get(authVerify, verifyRole(['Admin', 'Moderator']), getUserById);
 router.route("/user/edit/:userId").patch(authVerify, verifyRole(['Admin', 'Moderator']), editUserbyId)
 router.route("/user/delete/:userId").delete(authVerify, verifyRole(['Admin']), deleteUserById);
+router.route("/get/reviews").get(authVerify, verifyRole(['Admin', 'Moderator']), getAllReview);
+router.route("/status/:reviewId").patch(authVerify, verifyRole(['Admin', 'Moderator']), handleStatus)
 
 export default router

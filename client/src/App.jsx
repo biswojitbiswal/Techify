@@ -13,6 +13,7 @@ import AdminLayout from './AdminPanel/AdminLayout'
 import AdminHome from './AdminPanel/AdminHome'
 import AdminUsers from './AdminPanel/AdminUsers'
 import UserEdit from './AdminPanel/UserEdit'
+import AdminReview from './AdminPanel/AdminReview'
 import ProductEdit from './AdminPanel/ProductEdit'
 import ProductAdd from './AdminPanel/ProductAdd'
 import Publish from './AdminPanel/Publish'
@@ -44,6 +45,7 @@ function App() {
           <Route path='user/edit/:userId' element={<UserEdit />} />
           <Route path='add/product' element={<ProductAdd />} />
           <Route path='edit/:productId' element={<ProductEdit />} />
+          <Route path='review' element={<AdminReview />} />
           <Route path='add/publish' element={<Publish />} />
           <Route path='add/links' element={<Links />} />
 

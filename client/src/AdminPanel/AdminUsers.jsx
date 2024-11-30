@@ -12,7 +12,7 @@ function AdminUsers() {
 
   const getAllUsers = async () => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/get/users`, {
+      const response = await fetch(`http://localhost:5000/api/yoga/admin/get/users`, {
         method: "GET",
         headers: {
           Authorization: authorization,
@@ -35,7 +35,7 @@ function AdminUsers() {
       toast.error("Access Denied");
     } else {
       try {
-        const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/user/delete/${userId}`, {
+        const response = await fetch(`http://localhost:5000/api/yoga/admin/user/delete/${userId}`, {
           method: "DELETE",
           headers: {
             Authorization: authorization

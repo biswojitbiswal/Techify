@@ -2,6 +2,7 @@ import { Product } from "../models/product.model.js";
 import { uploadFileOnCloudinary } from "../utils/cloudinary.utils.js";
 import { Blog } from "../models/blog.model.js";
 import {User} from "../models/user.model.js"
+import {Review} from "../models/review.model.js"
 
 const addProducts = async (req, res) => {
     try {
@@ -286,6 +287,46 @@ const deleteUserById = async(req, res) => {
     }
 }
 
+const getAllReview = async(req, res) => {
+    try {
+        const reviews = await Review.find({})
+        .populate("reviewBy", "name")
+        .populate("reviewProduct", "title");
+
+        if(!reviews || reviews.length === 0){
+            return res.status(404).json({message: "Reviews Not Found!"});
+        }
+
+        return res.status(200).json({message: "Review Fetched Successfully", reviews});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
+
+const handleStatus = async(req, res) => {
+    try {
+        const {reviewId} = req.params;
+
+        const review = await Review.findById(reviewId)
+
+        if(!review){
+            return res.status(404).json({message: "Review Not Found"});
+        }
+
+        if (review.status === 'Approved') {
+            return res.status(400).json({ message: 'Review is already approved!' });
+        } 
+
+        review.status = 'Approved',
+        await review.save();
+
+        return res.status(200).json({ message: 'Approved!', review });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
 
 export {
     addProducts,
@@ -296,5 +337,7 @@ export {
     getAllusers,
     getUserById,
     editUserbyId,
-    deleteUserById
+    deleteUserById,
+    getAllReview,
+    handleStatus
 }
