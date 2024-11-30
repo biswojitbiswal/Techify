@@ -63,7 +63,7 @@ function Signin() {
         <h1 className='text-primary mb-4'>Sign-In Form</h1>
         <Form onSubmit={handleSifninForm}>
           <Form.Group className="mb-3" id="email">
-            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Email address</Form.Label>
+            <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Email</Form.Label>
             <Form.Control type="email" name='email' placeholder="Enter email" value={signinData.email} onChange={handleInput} required />
           </Form.Group>
 

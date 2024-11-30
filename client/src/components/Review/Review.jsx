@@ -70,7 +70,7 @@ function Review(product) {
             <section id="prod-review-page">
                 <div className='review-container'>
                     <div className="review-form-container d-flex justify-content-between">
-                        <h2>Reviews</h2>
+                        <h2>All Reviews</h2>
                         <Button variant="primary" onClick={handleShow} className='fs-4'>
                             Write A Review
                         </Button>
