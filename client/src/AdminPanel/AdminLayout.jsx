@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Nav from 'react-bootstrap/Nav';
 import { NavLink, Link } from 'react-router-dom'
 import { Outlet } from 'react-router-dom';
@@ -25,9 +25,11 @@ function AdminLayout() {
     if (isLoading) {
         return <Spinner animation="border" />;
     }
-    if (!user?.isAdmin) {
-        return <Navigate to="/" />;
+
+    if (!user || (user.role !== 'Admin' && user.role !== 'Moderator')) {
+        return <Navigate to="/admin" replace />
     }
+
     return (
         <>
             <Navbar
@@ -87,17 +89,19 @@ function AdminLayout() {
                                     </Nav.Link>
                                 </Nav.Item>
 
-                                <Nav.Item>
-                                    <Nav.Link
-                                        as={NavLink}
-                                        to="/admin/add/product"
-                                        // eventKey="link-3"
-                                        className="me-3 fs-4"
-                                        onClick={handleCloseOffCanvas}
-                                    >
-                                        Add Product
-                                    </Nav.Link>
-                                </Nav.Item>
+                                {
+                                    user?.role === 'Admin' ? <Nav.Item>
+                                        <Nav.Link
+                                            as={NavLink}
+                                            to="/admin/add/product"
+                                            // eventKey="link-3"
+                                            className="me-3 fs-4"
+                                            onClick={handleCloseOffCanvas}
+                                        >
+                                            Add Product
+                                        </Nav.Link>
+                                    </Nav.Item> : ""
+                                }
 
                                 <Nav.Item>
                                     <Nav.Link
@@ -121,7 +125,7 @@ function AdminLayout() {
                                         Links
                                     </Nav.Link>
                                 </Nav.Item>
-                              
+
                             </Nav>
                         </Offcanvas.Body>
                     </Navbar.Offcanvas>

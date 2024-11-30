@@ -3,7 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import connectDb from './DB/db.js';
 import userRouter from './routes/user.routes.js'
-import adminRouter from './routes/admin.routes.js'
+import adminRouter from './routes/adminModerator.routes.js'
 import productRouter from './routes/product.routes.js'
 import blogRouter from './routes/blog.routes.js'
 import socialRouter from './routes/social.routes.js'

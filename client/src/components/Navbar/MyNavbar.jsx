@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../Store/Auth';
 import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -33,7 +32,7 @@ function MyNavbar() {
             <Link to="/" style={{textDecoration: "none", marginRight: "1rem"}}>Yoga</Link>
             <Nav.Item className='fs-2' onClick={handleDarkMode}>
                 {
-                  darkMode ? <i className="uil uil-sun text-warning"></i> : <i className="uil uil-moon"></i>
+                  darkMode ? <i className="uil uil-sun  text-warning"></i> : <i className="uil uil-moon"></i>
                 }
 
           </Nav.Item>
@@ -44,7 +43,7 @@ function MyNavbar() {
             onClick={handleShowOffCanvas}
             aria-controls={`offcanvasNavbar-expand-${expandValue}`}
           >
-            <i class="fa-solid fa-bars"></i>
+            <i className="fa-solid fa-bars"></i>
           </Navbar.Toggle>
           <Navbar.Offcanvas
             show={showOffCanvas}
@@ -110,14 +109,14 @@ function MyNavbar() {
                     onClick={handleCloseOffCanvas}
                   >
                     Cart
-                    {user && user.cart.length > 0 && (
+                    {user && user?.cart?.length > 0 && (
                       <Badge pill bg="primary" className="ms-2">
                         {user.cart.length || 0}
                       </Badge>
                     )}
                   </Nav.Link>
                 </Nav.Item>
-                {user?.isAdmin && (
+                {(user?.role === 'Admin' || user?.role === 'Moderator') && (
                   <Nav.Item>
                     <Nav.Link
                       as={NavLink}
@@ -130,12 +129,25 @@ function MyNavbar() {
                     </Nav.Link>
                   </Nav.Item>
                 )}
+
+                <Nav.Item>
+                  <Nav.Link
+                    as={NavLink}
+                    to="/account"
+                    eventKey="link-6"
+                    className="me-3 fs-4 text-primary"
+                    onClick={handleCloseOffCanvas}
+                  >
+                    Account
+                  </Nav.Link>
+                </Nav.Item>
+
                 {isLoggedInuser ? (
                   <Nav.Item>
                     <Nav.Link
                       as={NavLink}
                       to="/signout"
-                      eventKey="link-6"
+                      eventKey="link-7"
                       className="me-3 fs-4 text-primary"
                       onClick={handleCloseOffCanvas}
                     >
@@ -148,7 +160,7 @@ function MyNavbar() {
                       <Nav.Link
                         as={NavLink}
                         to="/signin"
-                        eventKey="link-7"
+                        eventKey="link-8"
                         className="me-3 fs-4 text-primary"
                         onClick={handleCloseOffCanvas}
                       >
@@ -159,7 +171,7 @@ function MyNavbar() {
                       <Nav.Link
                         as={NavLink}
                         to="/signup"
-                        eventKey="link-8"
+                        eventKey="link-9"
                         className="me-3 fs-4 text-primary"
                         onClick={handleCloseOffCanvas}
                       >

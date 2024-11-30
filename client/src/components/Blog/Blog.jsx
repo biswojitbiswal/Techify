@@ -72,7 +72,7 @@ function Blog() {
                     <Card.Header className='fs-3 text-primary d-flex justify-content-between' style={{backgroundColor: darkMode ? '#999999' : ''}}>
                       <h4>{blog.blogTitle}</h4>
                       {
-                        user?.isAdmin ? <Button variant='danger' onClick={() => handleDeleteBlog(blog._id)} className='fs-5'>Delete<span><i className="fa-solid fa-trash"></i></span></Button> : null
+                        user?.role === 'Admin' ? <Button variant='danger' onClick={() => handleDeleteBlog(blog._id)} className='fs-5'>Delete<span><i className="fa-solid fa-trash"></i></span></Button> : null
 
                       }
                     </Card.Header>

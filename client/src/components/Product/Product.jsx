@@ -93,7 +93,7 @@ if(sortOrder === 'asc'){
                   <Card.Text style={{ minHeight: "70px" }}>{product.description}</Card.Text>
                   <Card.Title>&#8377;{product.price}</Card.Title>
                   {
-                    user.isAdmin ? (
+                    user.role === 'Admin' && (
                       <>
                         <Link to={`/admin/edit/${product._id}`}>
                           <Button variant="primary" className='me-3 fs-5'
@@ -113,7 +113,21 @@ if(sortOrder === 'asc'){
                         Delete<span><i className="fa-solid fa-trash"></i></span>
                         </Button>
                       </>
-                    ) : ""
+                    )
+                  }
+                  {
+                    user?.role === 'Moderator' && (
+                      <Link to={`/admin/edit/${product._id}`}>
+                          <Button variant="primary" className='me-3 fs-5'
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              event.preventDefault()
+                              navigate(`/admin/edit/${product._id}`)
+                            }}>
+                            Edit <span><i className="fa-solid fa-pencil"></i></span>
+                          </Button>
+                        </Link>
+                    )
                   }
                 </Card.Body>
               </Card>

@@ -3,9 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './Admin.css';
 import { useAuth } from '../Store/Auth';
+import Spinner from 'react-bootstrap/Spinner';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
-import { useStore } from '../Store/ProductStore';
+import {Navigate} from 'react-router-dom';
 
 function ProductAdd() {
   const [productData, setProductData] = useState({
@@ -15,8 +16,15 @@ function ProductAdd() {
     images: [],
   });
 
-  const { authorization, darkMode } = useAuth();
-  const {setProducts} = useStore();
+  const { user, authorization, darkMode, isLoading } = useAuth();
+
+  if(isLoading){
+    return <Spinner animation="border" />;
+  }
+
+  if(!user || user.role !== 'Admin'){
+    return <Navigate to='/' replace />
+  }
 
   const handleProductInput = (e) => {
     setProductData({
@@ -80,7 +88,6 @@ function ProductAdd() {
         formData.append('images', image);
       });
 
-
       const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/add`, {
         method: "POST",
         headers: {
@@ -90,9 +97,8 @@ function ProductAdd() {
       });
 
       const data = await response.json();
-      console.log(data);
 
-      if (response.ok) {
+      if (response.status === 201) {
         toast.success("Products Added Successfully");
         setProductData({ title: "", description: "", price: "", images: [] });
       } else {
@@ -138,4 +144,3 @@ function ProductAdd() {
 }
 
 export default ProductAdd;
-

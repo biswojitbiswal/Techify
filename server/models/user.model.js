@@ -23,9 +23,35 @@ const userSchema = new mongoose.Schema({
             ref: "Product",
         }
     ],
-    isAdmin: {
-        type: Boolean,
-        default: false,
+    addresses: [
+        {
+            _id: {
+                type: mongoose.Schema.Types.ObjectId,
+                default: () => new mongoose.Schema.Types.ObjectId()
+            },
+            type: {
+                type: String,
+                enum: ['Home', 'Work', 'Other'],
+                default: 'Home',
+            },
+            street: {
+                type: String,
+            },
+            city: {
+                type: String,
+            },
+            state: {
+                type: String,
+            },
+            zipcode: {
+                type: String,
+            }
+        }
+    ],
+    role: {
+        type: String,
+        enum: ['User', 'Moderator', 'Admin'],
+        default: 'User',
     }
 },{timestamps: true});
 
