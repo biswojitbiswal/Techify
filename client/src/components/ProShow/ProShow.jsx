@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
+import Review from '../Review/Review';
 
 function ProShow() {
   const [imageClick, setImageClick] = useState(0);
@@ -91,7 +92,7 @@ function ProShow() {
             <p className={`fs-4 ${darkMode ? 'text-white' : 'text-black'}`}>Smart Yoga</p>
             <h4 className="fs-3 text-primary">{product.title}</h4>
             <h2  className={`fs-2 ${darkMode ? 'text-white' : 'text-black'}`}>₹{product.price}</h2>
-            <p className="ratings text-primary">4.5<span><i className="fa-solid fa-star"></i></span></p>
+            <p className="ratings text-primary">{product.averageRating}<span><i className="fa-solid fa-star"></i></span></p>
             <div>
               <p className={`fs-4 ${darkMode ? 'text-white' : 'text-black'}`}>Product Details:</p>
               <p className={`fs-5 ${darkMode ? 'text-white' : 'text-black'}`}>{product.description}</p>
@@ -104,6 +105,10 @@ function ProShow() {
           </div>
         </div>
       </section>
+
+      <Review product={product} />
+
+
     </>
   )
 }
