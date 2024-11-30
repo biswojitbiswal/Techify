@@ -64,7 +64,6 @@ const addProducts = async (req, res) => {
 };
 
 
-
 const editProductDetails = async (req, res) => {
     try {
         const { title, description, price } = req.body;

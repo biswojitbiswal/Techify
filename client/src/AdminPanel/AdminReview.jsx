@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 
 function AdminReview() {
     const [reviews, setReviews] = useState([]);
-    const [check, setCheck] = useState(false);
 
     const { authorization, user, isLoading } = useAuth();
 
