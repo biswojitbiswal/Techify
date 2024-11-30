@@ -106,6 +106,18 @@ function AdminLayout() {
                                 <Nav.Item>
                                     <Nav.Link
                                         as={NavLink}
+                                        to="/admin/review"
+                                        // eventKey="link-4"
+                                        className="me-3 fs-4"
+                                        onClick={handleCloseOffCanvas}
+                                    >
+                                        Review
+                                    </Nav.Link>
+                                </Nav.Item>
+
+                                <Nav.Item>
+                                    <Nav.Link
+                                        as={NavLink}
                                         to="/admin/add/publish"
                                         // eventKey="link-4"
                                         className="me-3 fs-4"
