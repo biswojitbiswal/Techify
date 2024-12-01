@@ -16,7 +16,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(cors({
-    origin: ["https://yoga-app-eta-nine.vercel.app"],
+    origin: "https://yoga-app-eta-nine.vercel.app",
     methods: ["GET, POST, PUT, DELETE, PATCH, HEAD"],
     credentials: true
 }))
