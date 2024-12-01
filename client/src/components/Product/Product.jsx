@@ -102,7 +102,7 @@ if(sortOrder === 'asc'){
                               event.preventDefault()
                               navigate(`/admin/edit/${product._id}`)
                             }}>
-                            Edit <span><i className="fa-solid fa-pencil"></i></span>
+                            Edit <span><i className="fa-solid fa-pencil ms-2"></i></span>
                           </Button>
                         </Link>
 
@@ -110,7 +110,7 @@ if(sortOrder === 'asc'){
                           event.stopPropagation();
                           handleDelete(product._id)
                         }}>
-                        Delete<span><i className="fa-solid fa-trash"></i></span>
+                        Delete<span><i className="fa-solid fa-trash ms-2"></i></span>
                         </Button>
                       </>
                     )
@@ -124,7 +124,7 @@ if(sortOrder === 'asc'){
                               event.preventDefault()
                               navigate(`/admin/edit/${product._id}`)
                             }}>
-                            Edit <span><i className="fa-solid fa-pencil"></i></span>
+                            Edit <span><i className="fa-solid fa-pencil ms-2"></i></span>
                           </Button>
                         </Link>
                     )

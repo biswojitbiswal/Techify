@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { addBlog, addProducts, editProductDetails, deleteProduct, deleteBlog, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById } from "../controllers/admin.controller.js";
+import { addBlog, addProducts, editProductDetails, deleteProduct, deleteBlog, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole } from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
 import verifyRole from "../middleware/verifyRole.middleware.js";
 
@@ -39,5 +39,6 @@ router.route("/user/delete/:userId").delete(authVerify, verifyRole(['Admin']), d
 router.route("/get/reviews").get(authVerify, verifyRole(['Admin', 'Moderator']), getAllReview);
 router.route("/status/:reviewId").patch(authVerify, verifyRole(['Admin', 'Moderator']), handleStatus)
 router.route("/delete/review/:reviewId").delete(authVerify, verifyRole(['Admin']), deleteReviewById)
+router.route("/assign/role/:userId").patch(authVerify, verifyRole(['Admin']), AccessToRole)
 
 export default router

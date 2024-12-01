@@ -4,11 +4,13 @@ import { useAuth } from '../Store/Auth';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/esm/Button';
 import { toast } from 'react-toastify';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
-  const { user, authorization } = useAuth();
+  const { user, authorization, refreshUser } = useAuth();
 
   const getAllUsers = async () => {
     try {
@@ -55,6 +57,30 @@ function AdminUsers() {
     }
   }
 
+  const handleRoleChange = async(userId, newRole) => {
+    try {
+      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/assign/role/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authorization
+        },
+        body: JSON.stringify({role: newRole})
+      })
+
+      const data = await response.json();
+      console.log(data);
+
+      if(response.ok){
+        toast.success(data.message);
+        refreshUser()
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   useEffect(() => {
     getAllUsers();
   }, [])
@@ -81,10 +107,27 @@ function AdminUsers() {
                   <td>{userD.name}</td>
                   <td>{userD.email}</td>
                   <td>{userD.phone}</td>
+                  {
+                    user?.role === 'Admin' ? (
+                      <td>
+                      <DropdownButton id={`dropdown-item-${userD._id}`}  style={{minWidth: "150px"}} title={userD.role}
+                      onSelect={(newRole) => handleRoleChange(userD._id, newRole)}
+                      >
+                        <Dropdown.Item eventKey="User" as="button">User</Dropdown.Item>
+                        <Dropdown.Item eventKey="Moderator" as="button">Moderator</Dropdown.Item>
+                        <Dropdown.Item eventKey="Admin" as="button">Admin</Dropdown.Item>
+                      </DropdownButton></td>
+                    ) : (
+                      <td className={userD.role === 'Admin' ? 'text-success' :
+                        userD.role === 'Moderator' ? 'text-warning' :
+                          'text-primary'} style={{ fontWeight: "600", fontSize: "1.25rem" }}>{userD.role}</td>
+                    )
+                  }
+
                   <td><Link to={`/admin/user/edit/${userD._id}`} className="btn btn-primary">Edit <span><i className="fa-solid fa-pencil ms-2"></i></span></Link></td>
                   {
                     user?.role === 'Admin' && (
-                      <td><Button onClick={() => handleDelete(user._id)} variant='danger'>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>
+                      <td><Button onClick={() => handleDelete(userD._id)} variant='danger'>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>
                     )
                   }
                 </tr>

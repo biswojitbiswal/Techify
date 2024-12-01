@@ -135,11 +135,11 @@ function AdminReview() {
 
                                 <td>
                                     {
-                                        user.role === 'Admin' ? (
+                                        user.role === 'Admin' && (
                                             <Button variant="danger" onClick={() => handleDeleteReview(review._id)}>
                                                 Delete <i className="fa-solid fa-trash ms-2"></i>
                                             </Button>
-                                        ) : ""
+                                        )
                                     }
                                 </td>
                             </tr>
