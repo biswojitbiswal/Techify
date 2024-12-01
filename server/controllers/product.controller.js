@@ -3,7 +3,15 @@ import { User } from "../models/user.model.js";
 
 const getAllProducts = async(req, res) => {
     try {
-        const products = await Product.find({});
+        const products = await Product.find({})
+        .populate({
+            path: "reviews",
+            populate: {
+                path: "reviewBy",
+                select: "name",
+            }
+        })
+        
 
         if(!products){
             return res.status(404).json({message: "Products Not Found!"})

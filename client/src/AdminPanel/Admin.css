@@ -21,6 +21,7 @@
 }
 .admin-user-table{
     padding: 3rem 5rem;
+    min-height: 85vh;
 }
 
 @media (max-width: 1096px){

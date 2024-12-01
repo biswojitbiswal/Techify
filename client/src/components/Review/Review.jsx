@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function Review(product) {
     const [show, setShow] = useState(false);
@@ -15,7 +15,7 @@ function Review(product) {
         comment: '',
     });
 
-    const {authorization} = useAuth();
+    const { authorization } = useAuth();
     const navigate = useNavigate();
 
     const [hover, setHover] = useState(null);
@@ -38,7 +38,7 @@ function Review(product) {
         }))
     }
 
-    const handleSubmit = async() => {
+    const handleSubmit = async () => {
         try {
             const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/review/add/${product.product._id}`, {
                 method: "POST",
@@ -52,7 +52,7 @@ function Review(product) {
             const data = await response.json();
             console.log(data);
 
-            if(response.ok){
+            if (response.ok) {
                 toast.success("Review Added");
                 setReview({
                     rating: 0,
@@ -70,9 +70,9 @@ function Review(product) {
             <section id="prod-review-page">
                 <div className='review-container'>
                     <div className="review-form-container d-flex justify-content-between">
-                        <h2>All Reviews</h2>
+                        <h2 className='m-0 d-flex justify-content-center'>All Reviews <span><p style={{ borderRadius: ".75rem", fontSize: "1.25rem" }} className='btn btn-success ms-2'>{product.product.averageRating.toFixed(1)} <span><i className="fa-solid fa-star fs-5"></i></span></p></span></h2>
                         <Button variant="primary" onClick={handleShow} className='fs-4'>
-                            Write A Review
+                            Rate Product
                         </Button>
 
                         <Modal
@@ -82,7 +82,7 @@ function Review(product) {
                             keyboard={false}
                         >
                             <Modal.Header closeButton>
-                                <Modal.Title>Review Our Product</Modal.Title>
+                                <Modal.Title>Write A Review</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <Form>
@@ -96,8 +96,7 @@ function Review(product) {
                                                     style={{
                                                         cursor: 'pointer',
                                                         marginRight: '5px',
-                                                        color: star <= (hover) ? "#fea507" : "#e4e5e9",
-                                                
+                                                        color: star <= (hover || review.rating) ? "#fea507" : "#e4e5e9", // Check hover first, then rating
                                                     }}
                                                     onClick={() => handleRating(star)}
                                                     onMouseEnter={() => setHover(star)}
@@ -121,6 +120,23 @@ function Review(product) {
                         </Modal>
                     </div>
                     <hr />
+                    <div className="review-car-contaner">
+                        {
+                            product?.product?.reviews.map((review) => {
+                                return <div key={review._id} className="review-card px-2">
+
+                                    <p><span className="btn btn-success me-4 p-1" style={{ borderRadius: ".75rem", fontSize: "1rem" }}>{review.rating}<i className="fa-solid fa-star ms-1"></i></span>
+                                        <span className='fs-4'>{review.comment}</span>
+                                    </p>
+                                    <p><span className='fs-3'>&rarr;</span>{review.reviewBy.name}</p>
+                                    <p>{new Date(review.createdAt).toDateString()}</p>
+                                    <hr />
+                                </div>
+                            })
+                        }
+
+
+                    </div>
                 </div>
             </section>
         </>
