@@ -2,7 +2,7 @@ import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
 import { addBlog, addProducts, editProductDetails, deleteProduct, deleteBlog, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById } from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
-import verifyRole from "../middleware/verifyRole.middleware.js"
+import verifyRole from "../middleware/verifyRole.middleware.js";
 
 const router = Router();
 
