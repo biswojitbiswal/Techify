@@ -1,0 +1,53 @@
+#account-page{
+    padding: 1rem;
+    min-height: 85vh;
+    display: flex;
+    justify-content: center;
+
+}
+.account-container{
+    padding: .5rem;
+    min-width: 375px;
+    width: 450px;
+    height: auto;
+    background-color: #e9ecef;
+    
+}
+
+.user-info{
+    width: 100%;
+    height: auto;
+    border: 1px solid #0d6efd;
+    border-radius: .5rem;
+    padding: .5rem;
+}
+.account-box-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    place-items: center;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+.acc-box{
+    width: 170px;
+    height: 50px;
+    border: 1px solid #989797;
+    border-radius: .5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 496px){
+    #account-page{
+        padding: 0;
+        width: 100%;
+    
+    }
+    .account-container{
+        /* padding: .5rem; */
+        width: 100%;
+        height: 100vh;
+        background-color: #ffffff;
+    }
+}

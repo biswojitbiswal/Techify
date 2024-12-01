@@ -58,7 +58,7 @@ function Review(product) {
                     rating: 0,
                     comment: '',
                 })
-                navigate(`/product/${product.product._id}`)
+                handleClose()
             }
         } catch (error) {
             console.log(error);

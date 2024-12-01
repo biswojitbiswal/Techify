@@ -1,0 +1,13 @@
+#address-page{
+    min-height: 85vh;
+    margin: 1rem 8rem;
+    background-color: #e9ecef;
+    padding: 1rem;
+}
+@media (max-width: 1096px){
+    #address-page{
+        margin: .5rem;
+        padding: .5rem
+    }
+    
+}

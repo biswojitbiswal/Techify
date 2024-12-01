@@ -127,8 +127,44 @@ const getCurrUser = async(req, res) => {
     }
 }
 
+const addAddresses = async(req, res) => {
+    try {
+        const {orderByName, contact, street, city, state, zipcode, type} = req.body;
+        
+
+        if([orderByName, contact, street, city, state, zipcode, type].some((field) => field?.trim() === "")){
+            return res.status(401).json({message: "All Fields Required"});
+        }
+
+        const user = await User.findById(req.userId);
+
+        if(!user){
+            return res.status(404).json({message: "User Not Found"});
+        }
+
+        const newAddress = {
+            orderByName,
+            contact,
+            street,
+            city,
+            state,
+            zipcode,
+            type,
+        }
+
+        user.addresses.push(newAddress);
+        await user.save();
+
+        return res.status(200).json({message: "Address Added Successfully"});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 export {
     registerUser,
     loginUser,
-    getCurrUser
+    getCurrUser,
+    addAddresses
 }
