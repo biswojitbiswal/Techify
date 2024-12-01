@@ -64,6 +64,7 @@ const addProducts = async (req, res) => {
 };
 
 
+
 const editProductDetails = async (req, res) => {
     try {
         const { title, description, price } = req.body;
@@ -313,14 +314,40 @@ const handleStatus = async(req, res) => {
             return res.status(404).json({message: "Review Not Found"});
         }
 
-        if (review.status === 'Approved') {
-            return res.status(400).json({ message: 'Review is already approved!' });
-        } 
+       
 
-        review.status = 'Approved',
+        review.status = review.status === 'Pending' ? 'Approved' : 'Pending',
         await review.save();
 
         return res.status(200).json({ message: 'Approved!', review });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
+
+const deleteReviewById = async(req, res) => {
+    try {
+        const {reviewId} = req.params;
+
+        const review = await Review.findByIdAndDelete(reviewId);
+
+        if(!review){
+            return res.status(404).json({message: "Review Not Found"});
+        }
+
+        const productId = review.reviewProduct;
+
+        await Review.findByIdAndDelete(reviewId);
+
+        const product = await Product.findById(productId);
+
+        if(product){
+            product.reviews = product.reviews.filter((id) => id.toString() === reviewId);
+            await product.save();
+        }
+
+        return res.status(200).json({message: "Review Deleted"})
     } catch (error) {
         console.log(error);
         return res.status(500).json({message: "Something Went Wrong!"})
@@ -338,5 +365,6 @@ export {
     editUserbyId,
     deleteUserById,
     getAllReview,
-    handleStatus
+    handleStatus,
+    deleteReviewById
 }

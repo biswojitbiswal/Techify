@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import { useAuth } from '../Store/Auth';
 import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/esm/Button';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
 
@@ -12,6 +13,7 @@ function AdminReview() {
 
     const { authorization, user, isLoading } = useAuth();
 
+
     if (isLoading) {
         return <Spinner animation="border" />;
     }
@@ -20,9 +22,9 @@ function AdminReview() {
         return <Navigate to="/admin" replace />
     }
 
-    const handleStatus = async(id) => {
+    const handleStatus = async (id) => {
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/status/${id}`, {
+            const response = await fetch(`http://localhost:5000/api/yoga/admin/status/${id}`, {
                 method: "PATCH",
                 headers: {
                     Authorization: authorization
@@ -31,10 +33,14 @@ function AdminReview() {
 
             const data = await response.json();
             console.log(data);
-            
-            if(response.ok){
-                toast.success("Approved!");
-                getAllReviews()
+
+            if (response.ok) {
+                toast.success("Status Changed!");
+                setReviews((prevReviews) =>
+                    prevReviews.map((review) =>
+                        review._id === id ? { ...review, status: data.review.status } : review
+                    )
+                );
             }
         } catch (error) {
             console.log(error);
@@ -43,7 +49,7 @@ function AdminReview() {
 
     const getAllReviews = async () => {
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/get/reviews`, {
+            const response = await fetch(`http://localhost:5000/api/yoga/admin/get/reviews`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization,
@@ -61,14 +67,37 @@ function AdminReview() {
         }
     }
 
+
+    const handleDeleteReview = async (reviewId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/yoga/admin/delete/review/${reviewId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: authorization
+                }
+            })
+
+            const data = await response.json();
+            console.log(data);
+
+            if (response.ok) {
+                toast.error("Review Deleted");
+                getAllReviews()
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     useEffect(() => {
         getAllReviews();
     }, []);
 
-    const pendingReviews = reviews?.filter(review => review.status === 'Pending');
-    const approvedReviews = reviews?.filter(review => review.status === 'Approved');
+    const sortedReviews = reviews.sort((a, b) =>
+        a.status === "Pending" && b.status === "Approved" ? -1 : 1
+    );
 
-    // console.log(pendingReviews);
     return (
         <>
             <section className="admin-user-table">
@@ -81,60 +110,42 @@ function AdminReview() {
                             <th>Review</th>
                             <th>Rating</th>
                             <th>Status</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            {user.role === 'Admin' ? <th>Delete</th> : ""}
 
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            pendingReviews.map((review, index) => {
-                                return <tr key={review._id} className='text-center'>
-                                    <td>{index + 1}</td>
-                                    <td>{review.reviewBy.name}</td>
-                                    <td>{review.reviewProduct.title}</td>
-                                    <td>{review.comment}</td>
-                                    <td>{review.rating}</td>
-                                    <td>
-                                        <Form>
-                                            <Form.Check
-                                                type="switch"
-                                                id="custom-switch"
-                                                label={review.status}
-                                                onClick={() => handleStatus(review._id)}
-                                            />
-                                        </Form>
-                                    </td>
-                                    <td><Link className="btn btn-primary">Edit <span><i className="fa-solid fa-pencil ms-2"></i></span></Link></td>
-                                    <td><Button variant='danger'>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>
-                                </tr>
-                            })
-                        }
-                        {
-                            approvedReviews?.map((review, index) => {
-                                return <tr key={review._id} className='text-center'>
-                                    <td>{index + 1}</td>
-                                    <td>{review.reviewBy.name}</td>
-                                    <td>{review.reviewProduct.title}</td>
-                                    <td>{review.comment}</td>
-                                    <td>{review.rating}</td>
-                                    <td>
-                                        <Form>
-                                            <Form.Check
-                                                type="switch"
-                                                id="custom-switch"
-                                                label={review.status}
-                                                readOnly
-                                                checked={review.status === 'Approved'}
-                                            />
-                                        </Form>
-                                    </td>
-                                    <td><Link className="btn btn-primary">Edit <span><i className="fa-solid fa-pencil ms-2"></i></span></Link></td>
-                                    <td><Button variant='danger'>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>
-                                </tr>
-                            })
-                        }
+                        {sortedReviews.map((review, index) => (
+                            <tr key={review._id} className="text-center">
+                                <td>{index + 1}</td>
+                                <td>{review.reviewBy.name}</td>
+                                <td>{review.reviewProduct.title}</td>
+                                <td>{review.comment}</td>
+                                <td>{review.rating}</td>
+                                <td>
+                                    <Form>
+                                        <Form.Check
+                                            className='fs- 1'
+                                            type="switch"
+                                            id={`status-switch-${review._id}`}
+                                            label={review.status}
+                                            checked={review.status === 'Approved'}
+                                            onChange={() => handleStatus(review._id)}
+                                        />
+                                    </Form>
+                                </td>
 
+                                <td>
+                                    {
+                                        user.role === 'Admin' ? (
+                                            <Button variant="danger" onClick={() => handleDeleteReview(review._id)}>
+                                                Delete <i className="fa-solid fa-trash ms-2"></i>
+                                            </Button>
+                                        ) : ""
+                                    }
+                                </td>
+                            </tr>
+                        ))}
 
                     </tbody>
                 </Table>

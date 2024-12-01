@@ -12,7 +12,7 @@ function AdminUsers() {
 
   const getAllUsers = async () => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/get/users`, {
+      const response = await fetch(`http://localhost:5000/api/yoga/admin/get/users`, {
         method: "GET",
         headers: {
           Authorization: authorization,
@@ -35,7 +35,7 @@ function AdminUsers() {
       toast.error("Access Denied");
     } else {
       try {
-        const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/user/delete/${userId}`, {
+        const response = await fetch(`http://localhost:5000/api/yoga/admin/user/delete/${userId}`, {
           method: "DELETE",
           headers: {
             Authorization: authorization
@@ -69,24 +69,24 @@ function AdminUsers() {
               <th>Email</th>
               <th>Phone</th>
               <th>Edit</th>
-              <th>Delete</th>
+              {user.role === 'Admin' ? <th>Delete</th> : ""}
 
             </tr>
           </thead>
           <tbody>
             {
-              users ? users.map((user, index) => {
-                return <tr key={user._id} className='text-center'>
+              users ? users.map((userD, index) => {
+                return <tr key={userD._id} className='text-center'>
                   <td>{index + 1}</td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone}</td>
-                  <td><Link to={`/admin/user/edit/${user._id}`} className="btn btn-primary">Edit <span><i className="fa-solid fa-pencil ms-2"></i></span></Link></td>
-                  <td><Button onClick={() => handleDelete(user._id)} variant='danger'>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>
-
-
-
-
+                  <td>{userD.name}</td>
+                  <td>{userD.email}</td>
+                  <td>{userD.phone}</td>
+                  <td><Link to={`/admin/user/edit/${userD._id}`} className="btn btn-primary">Edit <span><i className="fa-solid fa-pencil ms-2"></i></span></Link></td>
+                  {
+                    user?.role === 'Admin' && (
+                      <td><Button onClick={() => handleDelete(user._id)} variant='danger'>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>
+                    )
+                  }
                 </tr>
               }) : <tr>
                 <td colSpan={user.role === 'Admin' ? 5 : 4} className="text-center">
