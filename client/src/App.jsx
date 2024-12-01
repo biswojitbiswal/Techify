@@ -4,7 +4,6 @@ import MyNavbar from './components/Navbar/MyNavbar'
 import Home from './components/Home/Home'
 import Product from './components/Product/Product'
 import ProShow from './components/ProShow/ProShow'
-import Order from './components/Order/Order'
 import Blog from './components/Blog/Blog'
 import Cart from './components/Cart/Cart'
 import Account from './components/Account/Account'
@@ -35,7 +34,6 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/product' element={<Product />} />
         <Route path='/product/:productId' element={<ProShow />} />
-        <Route path='/product/buy/:productId' element={<Order />} />
         <Route path='/blog' element={<Blog />} />
         <Route path='/cart' element={<Cart />} />
         <Route path='/account' element={<Account />} />
