@@ -166,7 +166,7 @@ function ShowAddress() {
                             <Form.Group controlId="editContact">
                                 <Form.Label>Contact</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="number"
                                     name="contact"
                                     value={editData.contact || ''}
                                     onChange={handleChange}
