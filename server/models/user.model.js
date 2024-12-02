@@ -52,6 +52,10 @@ const userSchema = new mongoose.Schema({
             },
             zipcode: {
                 type: String,
+            },
+            isPrimary: {
+                type: Boolean,
+                default: false
             }
         }
     ],

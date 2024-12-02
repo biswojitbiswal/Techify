@@ -86,7 +86,7 @@ function ShowAddress() {
         });
     };
 
-    console.log(editData)
+    // console.log(editData)
 
     const handleSaveChanges = async () => {
         
@@ -116,16 +116,50 @@ function ShowAddress() {
         }
     };
 
+    const handleSetPrimary = async (addressId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/yoga/user/address/${addressId}/primary`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: authorization,
+                },
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                toast.success('Primary Address Updated Successfully');
+                refreshUser(); 
+            } else {
+                toast.error(data.message || 'Failed to update primary address');
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('An error occurred while updating the primary address');
+        }
+    };
+
+
     return (
         <div className="address-container">
             {user?.addresses && user.addresses.length > 0 ? (
                 user.addresses.map((address) => (
                     <div
-                        className="address-card d-flex justify-content-between border-bottom border-1 gap-2 my-2"
+                        className={`address-card d-flex justify-content-between border-bottom border-1 gap-2 my-2 ${address.primary ? 'border-success' : ''
+                            }`}
                         key={address._id}
                     >
                         <div className="address-info">
-                            <Badge bg="primary">{address.type}</Badge>
+                            <div className="d-flex align-items-center">
+                                <Form.Check
+                                    type="checkbox"
+                                    checked={address.isPrimary}
+                                    onChange={() => handleSetPrimary(address._id)}
+                                    className="me-2 fs-5"
+                                />
+                                <Badge bg={address.primary ? 'success' : 'primary'}>
+                                    {address.primary ? 'Primary' : address.type}
+                                </Badge>
+                            </div>
                             <h5>
                                 {address.orderByName} <span className="ms-3">{address.contact}</span>
                             </h5>
@@ -145,7 +179,6 @@ function ShowAddress() {
             ) : (
                 <p>No addresses available.</p>
             )}
-
             
             {editData && (
                 <Modal show={show} onHide={handleClose}>

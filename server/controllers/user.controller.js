@@ -213,11 +213,38 @@ const updateAddress = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+
+const handlePrimaryAddress = async(req, res) => {
+    try {
+        const { addressId } = req.params;
+
+        const user = await User.findById(req.userId);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        // Reset all addresses' primary field to false
+        user.addresses.forEach((address) => (address.isPrimary = false));
+
+        // Set the selected address as primary
+        const address = user.addresses.find((addr) => addr._id.toString() === addressId);
+        if (!address) return res.status(404).json({ message: 'Address not found' });
+
+        address.isPrimary = true;
+
+        await user.save();
+        res.status(200).json({ message: 'Primary address updated successfully', addresses: user.addresses });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update primary address', error: error.message });
+    }
+};
+
+
 export {
     registerUser,
     loginUser,
     getCurrUser,
     addAddresses,
     deleteAddressById,
-    updateAddress
+    updateAddress,
+    handlePrimaryAddress
 }
