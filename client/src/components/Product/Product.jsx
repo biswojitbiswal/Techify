@@ -22,7 +22,7 @@ function Product() {
 
 
 
-let filteredProducts = products.filter((product) =>
+let filteredProducts = products?.filter((product) =>
   product.title.toLowerCase().includes(searchTerm.toLowerCase())
 );
 
@@ -84,9 +84,9 @@ if(sortOrder === 'asc'){
         </div>
         <div className="card-container mt-4 d-flex flex-wrap gap-5 justify-content-center">
           {
-            filteredProducts.map((product, index) => {
+            filteredProducts?.map((product, index) => {
               return <Card key={product._id}
-                onClick={() => navigate(`/product/${product._id}`)} style={{ width: '22rem', backgroundColor: darkMode ? '#343434' : '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
+                onClick={() => navigate(`/product/${product?._id}`)} style={{ width: '22rem', backgroundColor: darkMode ? '#343434' : '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
                 <Card.Img variant="top" style={{ height: '300px', objectFit: 'cover', borderRadius: '0.5rem' }} src={product.images[0]} />
                 <Card.Body style={{ height: "50%", color: darkMode ? '#fff' : '#000' }}>
                   <Card.Title>{product.title}</Card.Title>
