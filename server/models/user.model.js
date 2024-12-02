@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
             orderByName: {
                 type: String
             },
-            phone: {
+            contact: {
                 type: Number
             },
             street: {

@@ -86,7 +86,7 @@ function ShowAddress() {
         });
     };
 
-    // console.log(editData)
+    console.log(editData)
 
     const handleSaveChanges = async () => {
         
