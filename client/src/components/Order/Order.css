@@ -1,4 +1,4 @@
-#address-page{
+#order-buy-page{
     min-height: 85vh;
     width: 60%;
     margin: 1rem auto;
@@ -7,10 +7,10 @@
     
 }
 @media (max-width: 1096px){
-    #address-page{
+    #order-buy-page{
         margin: .5rem;
         padding: .5rem;
-        width: 96%;
+        width: 95%;
     }
     
 }

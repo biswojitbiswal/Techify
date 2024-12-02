@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import './ProShow.css'
 import { useStore } from '../../Store/ProductStore';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
@@ -55,9 +55,6 @@ function ProShow() {
     }
   }
 
-  const handleBooking = async () => {
-    toast.success("This Feature Will Be Available In Future.")
-  }
 
  const handleHoverImage = (id) => {
   setImageClick(id);
@@ -100,7 +97,7 @@ function ProShow() {
             
             <div className="order">
               <Button variant="primary" onClick={handleAddToCart} className="fs-4 add-cart-btn"><span className='me-2'><i className="fa-solid fa-cart-shopping"></i></span>Add To Cart</Button>
-              <Button variant="warning" onClick={handleBooking} className="fs-4"><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Button>
+              <Link className="btn btn-warning fs-4" to={`/product/buy/${product._id}`}><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Link>
             </div>
           </div>
         </div>
