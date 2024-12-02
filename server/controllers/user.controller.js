@@ -162,9 +162,62 @@ const addAddresses = async(req, res) => {
     }
 }
 
+const deleteAddressById = async(req, res) => {
+    try {
+        const { addressId } = req.params;
+
+        const user = await User.findById(req.userId);
+
+        if(!user){
+            return res.status(404).json({message: "User Not Found"});
+        }
+
+        const addressIndex = user.addresses.findIndex(address => address.toString() === addressId);
+
+        if(addressIndex === -1){
+            return res.status(404).json({message: "Address Not Found!"});
+        }
+
+        user.addresses.splice(addressIndex, 1);
+        await user.save();
+        
+        return res.status(200).json({message: "Address Deleted Successfull"});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+const updateAddress = async (req, res) => {
+    
+    try {
+        const { addressId } = req.params;
+        const updatedAddress = req.body;
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const addressIndex = user.addresses.findIndex(address => address._id.toString() === addressId);
+        if (addressIndex === -1) {
+            return res.status(404).json({ message: 'Address not found' });
+        }
+
+        user.addresses[addressIndex] = { ...user.addresses[addressIndex], ...updatedAddress };
+        await user.save();
+
+        res.status(200).json({ message: 'Address updated successfully', addresses: user.addresses });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+};
 export {
     registerUser,
     loginUser,
     getCurrUser,
-    addAddresses
+    addAddresses,
+    deleteAddressById,
+    updateAddress
 }

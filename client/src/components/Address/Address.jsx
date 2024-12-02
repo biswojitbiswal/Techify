@@ -57,7 +57,7 @@ function Address() {
         type: ""
     })
 
-    const {authorization, user} = useAuth();
+    const {authorization, refreshUser} = useAuth();
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -94,6 +94,7 @@ function Address() {
                     zipcode: "",
                     type: ""
                 })
+                refreshUser()
                 handleClose();
 
             }
