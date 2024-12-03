@@ -21,7 +21,7 @@ function Account() {
             <Link className='acc-box fs-4 fw-semibold m-0 p-0 text-decoration-none text-black'><span><i className="fa-solid fa-user text-primary me-2"></i></span> Profile</Link>
 
 
-            <Link className='acc-box fs-4 fw-semibold m-0 p-0 text-decoration-none text-black'><span><i className="fa-solid fa-gift text-primary me-2"></i></span>Orders</Link>
+            <Link to="/account/myorders" className='acc-box fs-4 fw-semibold m-0 p-0 text-decoration-none text-black'><span><i className="fa-solid fa-gift text-primary me-2"></i></span>Orders</Link>
 
             <Link to="/account/address" className='acc-box fs-4 fw-semibold m-0 p-0 text-decoration-none text-black'><span><i className="fa-solid fa-location-dot text-primary me-2"></i></span>Address</Link>
 

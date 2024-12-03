@@ -1,0 +1,12 @@
+#myorder-page{
+    width: 60%;
+    min-height: 85vh;
+    margin: 1rem auto;
+    background-color: #e9ecef;
+}
+@media (max-width: 796px){
+    #myorder-page{
+        width: 96%;
+        padding: .5rem;
+    }
+}

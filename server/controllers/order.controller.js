@@ -75,12 +75,10 @@ const createOrder = async (req, res) => {
 
 const verifyOrderPayment = async (req, res) => {
   try {
-    // Log the entire request body to verify incoming data
-    console.log("Request Body:", req.body);
+    // console.log("Request Body:", req.body);
 
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-    // Check for missing parameters
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
         success: false,
@@ -96,10 +94,10 @@ const verifyOrderPayment = async (req, res) => {
       .digest("hex");
 
     // Log for debugging
-    console.log("Razorpay Order ID:", razorpay_order_id);
-    console.log("Razorpay Payment ID:", razorpay_payment_id);
-    console.log("Expected Signature:", expectedSign);
-    console.log("Received Signature:", razorpay_signature);
+    // console.log("Razorpay Order ID:", razorpay_order_id);
+    // console.log("Razorpay Payment ID:", razorpay_payment_id);
+    // console.log("Expected Signature:", expectedSign);
+    // console.log("Received Signature:", razorpay_signature);
 
     const isAuthentic = expectedSign === razorpay_signature;
 
@@ -151,24 +149,28 @@ const verifyOrderPayment = async (req, res) => {
 };
 
 
-// const getUserOrders = async (req, res) => {
-//   try {
-//     const orders = await Order.find({ orderBy: req.userId })
-//       .populate('orderedItem')
-//       .populate('address');
+const getUserOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ orderBy: req.userId })
+      .populate('orderedItem')
+      .populate({
+        path: 'orderBy',
+        select: 'addresses',
+      });
 
-//     if (!orders) {
-//       return res.status(404).json({ message: "No orders found." });
-//     }
+    if (!orders) {
+      return res.status(404).json({ message: "No orders found." });
+    }
 
-//     return res.status(200).json({
-//       success: true,
-//       orders,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching orders:", error);
-//     return res.status(500).json({ message: "Internal Server Error." });
-//   }
-// };
+    return res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+};
 
-export { createOrder, verifyOrderPayment };
+
+export { createOrder, verifyOrderPayment, getUserOrders };

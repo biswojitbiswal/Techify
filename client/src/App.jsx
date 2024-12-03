@@ -8,6 +8,7 @@ import Order from './components/Order/Order'
 import Blog from './components/Blog/Blog'
 import Cart from './components/Cart/Cart'
 import Account from './components/Account/Account'
+import MyOrder from './components/MyOrder/MyOrders'
 import Address from './components/Address/Address'
 import Signin from './components/Signin/Signin'
 import Signup from './components/Signup/Signup'
@@ -40,6 +41,7 @@ function App() {
         <Route path='/cart' element={<Cart />} />
         <Route path='/account' element={<Account />} />
         <Route path='/account/address' element={<Address />} />
+        <Route path='/account/myorders' element={<MyOrder />} />
         <Route path='/signin' element={<Signin />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/signout' element={<Signout />} />
