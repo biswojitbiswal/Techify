@@ -151,26 +151,32 @@ const verifyOrderPayment = async (req, res) => {
 
 const getUserOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ orderBy: req.userId })
-      .populate('orderedItem')
-      .populate({
-        path: 'orderBy',
-        select: 'addresses',
+      const { page = 1, limit = 2 } = req.query;
+      const query = req.user.role === 'Admin' ? {} : { orderBy: req.userId };
+
+      const orders = await Order.find(query)
+          .skip((page - 1) * limit)
+          .limit(parseInt(limit))
+          .populate('orderedItem')
+          .populate({
+              path: 'orderBy',
+              select: 'addresses',
+          });
+
+      const totalOrders = await Order.countDocuments(query);
+      const totalPages = Math.ceil(totalOrders / limit);
+
+      res.status(200).json({
+          success: true,
+          orders,
+          totalPages,
       });
-
-    if (!orders) {
-      return res.status(404).json({ message: "No orders found." });
-    }
-
-    return res.status(200).json({
-      success: true,
-      orders,
-    });
   } catch (error) {
-    console.error("Error fetching orders:", error);
-    return res.status(500).json({ message: "Internal Server Error." });
+      console.error("Error fetching orders:", error);
+      res.status(500).json({ message: "Internal Server Error." });
   }
 };
+
 
 
 export { createOrder, verifyOrderPayment, getUserOrders };

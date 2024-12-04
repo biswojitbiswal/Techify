@@ -6,6 +6,7 @@ import { useAuth } from '../../Store/Auth';
 import { useStore } from '../../Store/ProductStore';
 import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Cart() {
   const {user, authorization, refreshUser, darkMode, isLoggedInuser} = useAuth();
@@ -50,9 +51,7 @@ function Cart() {
     }
   }
 
-  const handleBooking = async() => {
-    toast.success("This Feature Will Be Available In Future.")
-  }
+  
 
   
   return (
@@ -71,9 +70,9 @@ function Cart() {
                   {/* <div className="cart-btns"> */}
                     <Button variant="secondary" onClick={() => handleRemove(item._id)} className='remove-btn me-4'>
                       <span><i className="fa-solid fa-trash"></i></span>Remove</Button>
-                    <Button onClick={handleBooking} variant="warning" className="buy-btn">
+                    <Link to={`/product/buy/${item._id}`} className="buy-btn btn btn-warning">
                       <span><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now
-                    </Button>
+                    </Link>
                   {/* </div> */}
                 </Card.Body>
               </Card>

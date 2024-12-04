@@ -97,7 +97,7 @@ function Order() {
 
           if (verifyData.message) {
             toast.success(verifyData.message);
-            navigate("/");
+            navigate("/account/myorders");
           }
         } catch (error) {
           console.log(error)

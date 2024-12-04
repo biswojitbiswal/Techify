@@ -122,16 +122,23 @@ function Review(product) {
                     <hr />
                     <div className="review-car-contaner">
                         {
-                            product?.product?.reviews.map((review) => {
-                                return <div key={review._id} className="review-card px-2">
-
-                                    <p><span className="btn btn-success me-4 p-1" style={{ borderRadius: ".75rem", fontSize: "1rem" }}>{review.rating}<i className="fa-solid fa-star ms-1"></i></span>
-                                        <span className='fs-4'>{review.comment}</span>
-                                    </p>
-                                    <p><span className='fs-3'>&rarr;</span>{review.reviewBy.name}</p>
-                                    <p>{new Date(review.createdAt).toDateString()}</p>
-                                    <hr />
-                                </div>
+                            product?.product?.reviews
+                            .filter((review) => review.status === 'Approved') // Filter reviews that are approved
+                            .map((review) => {
+                                return (
+                                    <div key={review._id} className="review-card px-2">
+                                        <p>
+                                            <span className="btn btn-success me-4 p-1" style={{ borderRadius: ".75rem", fontSize: "1rem" }}>
+                                                {review.rating}
+                                                <i className="fa-solid fa-star ms-1"></i>
+                                            </span>
+                                            <span className="fs-4">{review.comment}</span>
+                                        </p>
+                                        <p><span className="fs-3">&rarr;</span>{review.reviewBy.name}</p>
+                                        <p>{new Date(review.createdAt).toDateString()}</p>
+                                        <hr />
+                                    </div>
+                                );
                             })
                         }
 

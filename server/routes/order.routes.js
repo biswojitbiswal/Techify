@@ -6,7 +6,7 @@ const router = Router();
 
 router.route("/create").post(authVerify, createOrder);
 router.route("/verify").post(authVerify, verifyOrderPayment);
-router.route("/history").get(authVerify, getUserOrders)
+router.route("/get").get(authVerify, getUserOrders)
 
 
 export default router
