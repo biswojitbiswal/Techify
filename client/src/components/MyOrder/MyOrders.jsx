@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './MyOrder.css'
+import './MyOrders.css'
 import { useAuth } from '../../Store/Auth'
 import Badge from 'react-bootstrap/esm/Badge';
 
