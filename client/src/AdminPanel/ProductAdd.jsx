@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
 import {Navigate} from 'react-router-dom';
+import { BASE_URL } from '../../config.js';
 
 function ProductAdd() {
   const [productData, setProductData] = useState({
@@ -88,7 +89,7 @@ function ProductAdd() {
         formData.append('images', image);
       });
 
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/add`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/admin/add`, {
         method: "POST",
         headers: {
           Authorization: authorization,

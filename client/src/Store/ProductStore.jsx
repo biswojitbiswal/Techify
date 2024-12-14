@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "./Auth";
+import { BASE_URL } from "../../config.js";
 
 export const StoreContext = createContext();
 
@@ -20,7 +21,7 @@ export const StoreContextProvider = ({children}) => {
 
     const getAllProductListing = async (e) => {
         try {
-          const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/products/get`, {
+          const response = await fetch(`${BASE_URL}/api/yoga/products/get`, {
             method: "GET",
             headers: {
               Authorization: authorization

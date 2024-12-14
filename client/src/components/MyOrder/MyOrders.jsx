@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './MyOrders.css'
 import { useAuth } from '../../Store/Auth'
 import Badge from 'react-bootstrap/esm/Badge';
+import { BASE_URL } from '../../../config.js';
 
 function MyOrder() {
     const [myOrders, setMyOrders] = useState([]);
@@ -10,7 +11,7 @@ function MyOrder() {
 
     const getMyOrders = async() => {
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/order/get`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/order/get`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization

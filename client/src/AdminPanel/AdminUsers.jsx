@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/esm/Button';
 import { toast } from 'react-toastify';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import { BASE_URL } from '../../config.js';
 
 
 function AdminUsers() {
@@ -14,7 +15,7 @@ function AdminUsers() {
 
   const getAllUsers = async () => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/get/users`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/admin/get/users`, {
         method: "GET",
         headers: {
           Authorization: authorization,
@@ -37,7 +38,7 @@ function AdminUsers() {
       toast.error("Access Denied");
     } else {
       try {
-        const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/user/delete/${userId}`, {
+        const response = await fetch(`${BASE_URL}/api/yoga/admin/user/delete/${userId}`, {
           method: "DELETE",
           headers: {
             Authorization: authorization
@@ -59,7 +60,7 @@ function AdminUsers() {
 
   const handleRoleChange = async(userId, newRole) => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/assign/role/${userId}`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/admin/assign/role/${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

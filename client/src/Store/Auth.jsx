@@ -2,6 +2,7 @@ import React from "react";
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.js";
 
 export const AuthContext = createContext();
 
@@ -43,7 +44,7 @@ export const AuthContextProvider = ({children}) => {
     const userAuthentication = async() => {
         try {
             setIsLoading(true)
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/getuser`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/user/getuser`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization

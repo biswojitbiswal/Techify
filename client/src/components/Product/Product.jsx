@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../Store/Auth';
 import { useStore } from '../../Store/ProductStore';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../../../config.js';
 
 function Product() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,7 +37,7 @@ if(sortOrder === 'asc'){
 
   const handleDelete = async(productId) => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/product/delete/${productId}`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/admin/product/delete/${productId}`, {
         method: "DELETE",
         headers: {
           Authorization: authorization

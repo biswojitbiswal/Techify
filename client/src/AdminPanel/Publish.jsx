@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../Store/Auth';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../../config.js';
 
 
 function Publish() {
@@ -56,7 +57,7 @@ function Publish() {
     formData.append("blogImg", blog.blogImg)
 
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/publish/add`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/admin/publish/add`, {
         method: "POST",
         headers: {
           Authorization: authorization

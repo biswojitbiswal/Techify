@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button';
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../../../config.js';
 
 
 function Blog() {
@@ -14,7 +15,7 @@ function Blog() {
 
   const getAllBlogs = async () => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/blog/getblog`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/blog/getblog`, {
         method: "GET",
       });
 
@@ -30,7 +31,7 @@ function Blog() {
 
   const handleDeleteBlog = async (blogId) => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/blog/delete/${blogId}`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/admin/blog/delete/${blogId}`, {
         method: "DELETE",
         headers: {
           Authorization: authorization,

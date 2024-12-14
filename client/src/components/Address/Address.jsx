@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
 import ShowAddress from '../ShowAddress/ShowAddress';
+import { BASE_URL } from '../../../config.js';
 
 const states = [
     'Andhra Pradesh',
@@ -71,7 +72,7 @@ function Address() {
 
     const handleSubmit = async() => {
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/address`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/user/address`, {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json",

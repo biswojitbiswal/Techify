@@ -5,6 +5,8 @@ import Modal from 'react-bootstrap/Modal';
 import Badge from 'react-bootstrap/Badge';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../../../config.js';
+
 
 const states = [
     'Andhra Pradesh',
@@ -59,7 +61,7 @@ function ShowAddress() {
 
     const handleDelete = async (addressId) => {
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/delete/address/${addressId}`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/user/delete/address/${addressId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: authorization,
@@ -91,7 +93,7 @@ function ShowAddress() {
     const handleSaveChanges = async () => {
         
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/update/address/${editData._id}`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/user/update/address/${editData._id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -118,7 +120,7 @@ function ShowAddress() {
 
     const handleSetPrimary = async (addressId) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/yoga/user/address/${addressId}/primary`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/user/address/${addressId}/primary`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: authorization,

@@ -5,6 +5,7 @@ import { useStore } from '../Store/ProductStore';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../Store/Auth';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../../config.js';
 
 function ProductEdit() {
   const { productId } = useParams();
@@ -70,7 +71,7 @@ function ProductEdit() {
     newImages.forEach((img) => form.append('images', img));
 
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/edit/${productId}`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/admin/edit/${productId}`, {
         method: 'PATCH',
         headers: {
           Authorization: authorization,

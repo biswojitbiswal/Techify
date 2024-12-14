@@ -6,7 +6,10 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../../config.js';
+
+
 
 function Review(product) {
     const [show, setShow] = useState(false);
@@ -40,7 +43,7 @@ function Review(product) {
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/review/add/${product.product._id}`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/review/add/${product.product._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './Social.css'
 import Carousel from 'react-bootstrap/Carousel';
 import { useAuth } from '../../Store/Auth';
+import { BASE_URL } from '../../../config.js';
 
 function Social() {
   const [posts, setPosts] = useState([]);
@@ -10,7 +11,7 @@ function Social() {
 
   const getSocialMediaPost = async() => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/social/get-posts`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/social/get-posts`, {
         method: "GET"
       })
 

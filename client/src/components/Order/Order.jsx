@@ -8,6 +8,7 @@ import { useStore } from '../../Store/ProductStore';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../../config.js';
 
 function Order() {
   const { productId } = useParams();
@@ -49,7 +50,7 @@ function Order() {
       };
       // console.log(paymentData)
 
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/order/create`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/order/create`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ function Order() {
       handler: async (response) => {
         console.log("response", response)
         try {
-          const res = await fetch(`https://yoga-api-five.vercel.app/api/yoga/order/verify`, {
+          const res = await fetch(`${BASE_URL}/api/yoga/order/verify`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',

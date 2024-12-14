@@ -5,6 +5,7 @@ import { useAuth } from '../Store/Auth';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import './Admin.css'
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../../config.js';
 
 function UserEdit() {
     const [userDetail, setUserDetail] = useState({ name: '', email: '', phone: '' });
@@ -20,7 +21,7 @@ function UserEdit() {
 
     const getUserDataById = async() => {
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/user/${userId}`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/admin/user/${userId}`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization,
@@ -49,7 +50,7 @@ function UserEdit() {
         e.preventDefault();
 
         try {
-            const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/admin/user/edit/${userId}`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/admin/user/edit/${userId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

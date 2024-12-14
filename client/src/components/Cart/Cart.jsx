@@ -7,6 +7,7 @@ import { useStore } from '../../Store/ProductStore';
 import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../../config.js';
 
 function Cart() {
   const {user, authorization, refreshUser, darkMode, isLoggedInuser} = useAuth();
@@ -29,7 +30,7 @@ function Cart() {
 
   const handleRemove = async(itemId) => {
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/products/cart/remove/${itemId}`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/products/cart/remove/${itemId}`, {
         method: "PATCH",
         headers: {
           Authorization : authorization

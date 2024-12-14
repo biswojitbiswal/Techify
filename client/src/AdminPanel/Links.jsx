@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import './Admin.css'
 import {toast} from 'react-toastify'
 import {useAuth} from '../Store/Auth'
+import { BASE_URL } from '../../config.js';
 
 
 function Links() {
@@ -27,7 +28,7 @@ function Links() {
     }
 
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/social/fetch-post`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/social/fetch-post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

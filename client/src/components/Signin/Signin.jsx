@@ -7,6 +7,7 @@ import './Signin.css'
 import { toast } from 'react-toastify';
 import { useAuth } from '../../Store/Auth';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../../config.js';
 
 function Signin() {
   const [signinData, setSignInData] = useState({
@@ -31,7 +32,7 @@ function Signin() {
   const handleSifninForm = async(e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/signin`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/user/signin`, {
         method: "POST",
         headers:{
           "Content-Type": "application/json"

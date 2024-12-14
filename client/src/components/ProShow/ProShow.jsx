@@ -7,6 +7,7 @@ import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
 import Review from '../Review/Review';
+import { BASE_URL } from '../../../config.js';
 
 function ProShow() {
   const [imageClick, setImageClick] = useState(0);
@@ -31,7 +32,7 @@ function ProShow() {
       return;
     } else {
       try {
-        const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/products/cart/add/${productId}`, {
+        const response = await fetch(`${BASE_URL}/api/yoga/products/cart/add/${productId}`, {
           method: "POST",
           headers: {
             Authorization: authorization,

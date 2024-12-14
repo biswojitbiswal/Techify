@@ -7,6 +7,7 @@ import './Signup.css'
 import { toast } from 'react-toastify';
 import { useAuth } from '../../Store/Auth';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../../config.js';
 
 
 function Signup() {
@@ -36,7 +37,7 @@ function Signup() {
     e.preventDefault();
     // console.log(signupData)
     try {
-      const response = await fetch(`https://yoga-api-five.vercel.app/api/yoga/user/signup`, {
+      const response = await fetch(`${BASE_URL}/api/yoga/user/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
