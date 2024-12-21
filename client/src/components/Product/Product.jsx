@@ -16,7 +16,7 @@ function Product() {
 
 
   const { products, setProducts } = useStore();
-  const { user, authorization, darkMode } = useAuth();
+  const { user, authorization, darkMode, refreshUser } = useAuth();
   const navigate = useNavigate();
 
   
@@ -48,7 +48,8 @@ if(sortOrder === 'asc'){
       // console.log(data);
 
       if(response.ok){
-        toast.success("Product Removed")
+        toast.success("Product Removed");
+        refreshUser();
         setProducts((prevProducts) => prevProducts.filter(product => product._id !== data.product._id))
       } else {
         toast.error(data.extraDetails ? data.extraDetails : data.message);

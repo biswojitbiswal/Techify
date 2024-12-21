@@ -111,10 +111,10 @@ function AdminUsers() {
                   {
                     user?.role === 'Admin' ? (
                       <td>
-                      <DropdownButton id={`dropdown-item-${userD._id}`}  style={{minWidth: "150px"}} title={userD.role}
+                      <DropdownButton id={`dropdown-item-${userD._id}`} title={userD.role}
                       onSelect={(newRole) => handleRoleChange(userD._id, newRole)}
                       >
-                        <Dropdown.Item eventKey="User" as="button">User</Dropdown.Item>
+                        <Dropdown.Item eventKey="User" as="button" var>User</Dropdown.Item>
                         <Dropdown.Item eventKey="Moderator" as="button">Moderator</Dropdown.Item>
                         <Dropdown.Item eventKey="Admin" as="button">Admin</Dropdown.Item>
                       </DropdownButton></td>
@@ -133,7 +133,7 @@ function AdminUsers() {
                   }
                 </tr>
               }) : <tr>
-                <td colSpan={user.role === 'Admin' ? 5 : 4} className="text-center">
+                <td colSpan={7} className="text-center fs-3">
                   User Not Found
                 </td>
               </tr>

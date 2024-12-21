@@ -39,7 +39,7 @@ function Social() {
             {
               posts.length > 0 ? 
               posts.map(post => {
-                return <Carousel.Item key={post._id}>
+                return <Carousel.Item key={post._id} className='bg-transparent'>
                 <div className="customer-post" style={{backgroundColor: darkMode ? '#000' : '#fff'}}>
                   <div className="user-details">
                     <div className="customer-profile">

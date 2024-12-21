@@ -27,7 +27,6 @@ const orderSchema = new mongoose.Schema({
     },
     address: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User.addresses",
         required: true
     },
     orderId: {
@@ -50,6 +49,7 @@ const orderSchema = new mongoose.Schema({
         enum: ["Pending", "Paid", "Failed"],
         default: "Pending"
     }
+    // paymentMethod, paymentFailureReason, statusHistory
 }, {timestamps: true});
 
 export const Order = mongoose.model("Order", orderSchema);

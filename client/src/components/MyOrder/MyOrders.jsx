@@ -41,16 +41,16 @@ function MyOrder() {
       <section id="myorder-page" className='p-2'>
         <h3>My Orders</h3>
         <hr />
-        <div className="order-container">
+        <div className="order-container text-black">
             {
                 orders && orders.length > 0 ? 
-                orders.map(order => {
+                orders?.map(order => {
                     return <div key={order._id} className='d-flex p-2 border-bottom border-secondary my-2 gap-4'>
-                        <img width="150px" height="150px" src={order.orderedItem.images[0]} alt="" />
+                        <img width="150px" height="150px" src={order?.orderedItem?.images?.[0]} alt="" />
                         <div className="order-info">
                             <Badge bg={order.orderStatus === 'Completed' ? "success" : "primary"}>{order.orderStatus}</Badge>
-                            <p>{order.orderedItem.title}</p>
-                            <p>{order.orderedItem.description}</p>
+                            <p>{order?.orderedItem?.title}</p>
+                            <p>{order?.orderedItem?.description}</p>
                             
                         </div>
                     </div>

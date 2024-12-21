@@ -19,7 +19,7 @@ function Signup() {
   });
 
 
-  const { setTokenInCookies, refreshUser, isLoggedInuser } = useAuth();
+  const { setTokenInCookies, refreshUser, isLoggedInuser, darkMode } = useAuth();
   const navigate = useNavigate()
 
   if (isLoggedInuser) {

@@ -114,11 +114,12 @@ function AdminReview() {
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedReviews.map((review, index) => (
+                        {sortedReviews && sortedReviews.length > 0 ? 
+                            sortedReviews?.map((review, index) => (
                             <tr key={review._id} className="text-center">
-                                <td>{index + 1}</td>
-                                <td>{review.reviewBy.name}</td>
-                                <td>{review.reviewProduct.title}</td>
+                                <td>{review._id}</td>
+                                <td>{review?.reviewBy?.name}</td>
+                                <td>{review?.reviewProduct?.title}</td>
                                 <td>{review.comment}</td>
                                 <td>{review.rating}</td>
                                 <td>
@@ -144,7 +145,12 @@ function AdminReview() {
                                     }
                                 </td>
                             </tr>
-                        ))}
+                        )) : <tr>
+                        <td colSpan={7} className="text-center fs-3">
+                          User Not Found
+                        </td>
+                      </tr>
+                    }
 
                     </tbody>
                 </Table>

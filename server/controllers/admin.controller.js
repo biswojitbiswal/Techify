@@ -3,6 +3,8 @@ import { uploadFileOnCloudinary } from "../utils/cloudinary.utils.js";
 import { Blog } from "../models/blog.model.js";
 import {User} from "../models/user.model.js"
 import {Review} from "../models/review.model.js"
+import {Order} from "../models/order.model.js"
+import mongoose from "mongoose";
 
 const addProducts = async (req, res) => {
     try {
@@ -175,7 +177,12 @@ const deleteProduct = async(req, res) => {
 
         if(!product){
             return res.status(404).json({message: "Prduct not found"})
-        }        
+        }
+
+        await User.updateMany(
+            {cart: productId},
+            {$pull: {cart: productId}},
+        )
 
         await Review.deleteMany({reviewProduct : productId});
 
@@ -381,6 +388,88 @@ const AccessToRole = async(req, res) => {
     }
 }
 
+const getAllOrders = async(req, res) => {
+    try {
+        const orders = await Order.find({})
+        .populate("orderedItem")
+        .populate("orderBy", "addresses");
+
+        if(!orders || orders.length === 0){
+            return res.status(404).json({message : "Order Not Found"});
+        }
+
+        const addressWithOrders = orders.map(order => {
+            const user = order.orderBy;
+            const address = user?.addresses?.find(add => add._id.toString() === order.address.toString());
+            return {...order.toObject(), address};
+        });
+
+        return res.status(200).json({message : "Order Fetched Successfully", addressWithOrders});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
+
+const validOrderStatusTransition = {
+    Pending: ['Confirmed', 'Canceled'],
+    Confirmed: ['Completed', 'Canceled'],
+    Completed: [],
+    Cancel: []
+}
+
+const isValidStatusTransition = (currentStatus, newStatus) => {
+    return validOrderStatusTransition[currentStatus]?.includes(newStatus);
+}
+
+const orderStatusUpdate = async(req, res) => {
+    try {
+        const {orderId} = req.params;
+        const {newStatus} = req.body;
+
+        // console.log(typeof newStatus);
+
+        if(!newStatus){
+            return res.status(400).json({message: "Request Body is Missing"})
+        }
+
+        const order = await Order.findById(orderId);
+        // console.log(order);
+
+        if(!isValidStatusTransition(order.orderStatus, newStatus)){
+            return res.status(400).json({message: "Invalid Status Update"});
+        }
+
+        order.orderStatus = newStatus;
+        await order.save();
+
+        return res.status(200).json({message: "Order status updated successfully"});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
+
+const deleteOrder = async(req, res) => {
+    try {
+        const {orderId} = req.params
+        // console.log(orderId)
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            return res.status(400).json({ message: "Invalid Order ID" });
+        }
+
+        const order = await Order.findByIdAndDelete(orderId);
+
+        if(!order){
+            return res.status(404).json({mesage: "Order Not Found"});
+        }
+
+        return res.status(200).json({message: "Order Deleted"});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
 
 export {
     addProducts,
@@ -395,5 +484,8 @@ export {
     getAllReview,
     handleStatus,
     deleteReviewById,
-    AccessToRole
+    AccessToRole,
+    getAllOrders,
+    orderStatusUpdate,
+    deleteOrder
 }

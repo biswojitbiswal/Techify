@@ -114,83 +114,88 @@ function Order() {
   }
 
 
-useEffect(() => {
-  setUserDetails({
-    user: user,
-    products: products
-  });
-}, [user, products]);
+  useEffect(() => {
+    setUserDetails({
+      user: user,
+      products: products
+    });
+  }, [user, products]);
 
-const totalAmount = product?.price * quantity;
+  const totalAmount = product?.price * quantity;
 
-return (
-  <section id="order-buy-page">
-    <div className="deliver-details mb-4">
-      <h3>Delivery Here</h3>
-      <hr />
-      <div>
-        {address ? (
-          <div className="address-details d-flex justify-content-between align-items-start">
-            <div className="address-info">
-              <Badge bg="primary">{address.type}</Badge>
-              <h5>
-                {address.orderByName} <span className="ms-3">{address.contact}</span>
-              </h5>
-              <p>{address.street}</p>
-              <p>{`${address.city}, ${address.state}, ${address.zipcode}`}</p>
+  return (
+    <section id="order-buy-page">
+      <div className="deliver-details mb-4">
+        <h3>Delivery Here</h3>
+        <hr />
+        <div>
+          {address ? (
+            <div className="address-details d-flex justify-content-between align-items-start">
+              <div className="address-info">
+                <Badge bg="primary">{address.type}</Badge>
+                <h5>
+                  {address.orderByName} <span className="ms-3">{address.contact}</span>
+                </h5>
+                <p>{address.street}</p>
+                <p>{`${address.city}, ${address.state}, ${address.zipcode}`}</p>
+              </div>
+              <Link to="/account/address" className="btn btn-outline-primary">
+                Change
+              </Link>
             </div>
-            <Link to="/account/address" className="btn btn-outline-primary">
-              Change
-            </Link>
-          </div>
-        ) : (
-          <p>No primary address found. Please set a primary address.</p>
-        )}
+          ) : (
+            <div>
+              <p>No primary address found. Please set a primary address.</p>
+              <Link to="/account/address" className="btn btn-outline-primary">
+                {address ? 'Change' : 'Add'}
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
 
-    <div className="mb-4">
-      <h3>Product</h3>
-      <hr />
-      <div className="product-details">
-        {product ? (
-          <div className="d-flex align-items-center gap-4">
-            <div className="product-img-quantity">
-              <img
-                src={product.images[0]}
-                alt={product.title}
-                className="product-image"
-                style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: ".5rem" }}
-              />
-              <div className="quantity-selector d-flex align-items-center gap-3 mt-3">
-                <Button variant="outline-primary" onClick={() => handleQuantityChange('decrement')}>
-                  -
-                </Button>
-                <span>{quantity}</span>
-                <Button variant="outline-primary" onClick={() => handleQuantityChange('increment')}>
-                  +
-                </Button>
+      <div className="mb-4">
+        <h3>Product</h3>
+        <hr />
+        <div className="product-details">
+          {product ? (
+            <div className="d-flex align-items-center gap-4">
+              <div className="product-img-quantity">
+                <img
+                  src={product.images[0]}
+                  alt={product.title}
+                  className="product-image"
+                  style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: ".5rem" }}
+                />
+                <div className="quantity-selector d-flex align-items-center gap-3 mt-3">
+                  <Button variant="outline-primary" onClick={() => handleQuantityChange('decrement')}>
+                    -
+                  </Button>
+                  <span>{quantity}</span>
+                  <Button variant="outline-primary" onClick={() => handleQuantityChange('increment')}>
+                    +
+                  </Button>
+                </div>
+              </div>
+              <div className="product-info text-start">
+                <h4>{product.title}</h4>
+                <p className="text-muted">{product.description}</p>
+                <h3 className="text-primary">Price: ₹{product.price}</h3>
               </div>
             </div>
-            <div className="product-info text-start">
-              <h4>{product.title}</h4>
-              <p className="text-muted">{product.description}</p>
-              <h3 className="text-primary">Price: ₹{product.price}</h3>
-            </div>
-          </div>
-        ) : (
-          <p>No product found. Please check the product ID.</p>
-        )}
+          ) : (
+            <p>No product found. Please check the product ID.</p>
+          )}
+        </div>
       </div>
-    </div>
 
-    <div className="text-center">
-      <Button variant="warning" onClick={handlePayment} className="fs-4">
-        Pay Now ₹{totalAmount}
-      </Button>
-    </div>
-  </section>
-);
+      <div className="text-center">
+        <Button variant="warning" onClick={handlePayment} className="fs-4">
+          Pay Now ₹{totalAmount}
+        </Button>
+      </div>
+    </section>
+  );
 }
 
 export default Order;

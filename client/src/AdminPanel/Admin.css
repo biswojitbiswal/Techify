@@ -24,6 +24,28 @@
     min-height: 85vh;
 }
 
+.order-container{
+    width: 95%;
+    height: auto;
+    /* background-color: #007bff; */
+    border-radius: .5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-align: left;
+}
+.order-container .table-caption{
+    width: 100%;
+    border-radius: .5rem .5rem 0rem 0rem;
+    height: 70px;
+}
+.order-container .order-table{
+    text-align: center;
+    padding: .5rem;
+}
+
+
+
 @media (max-width: 1096px){
     .admin-product-form,.admin-edit-form,.admin-publish-form,.admin-social-forms,.admin-edit-user{
         width: 90%;
