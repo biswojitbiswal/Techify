@@ -12,17 +12,16 @@ const razorpay = new Razorpay({
 // Create a new order
 const createOrder = async (req, res) => {
   try {
-    const { name, contact, quantity, addressId, totalAmount, productId } =
+    const { name, contact, orderedItem, addressId, totalAmount } =
       req.body;
 
     // Validate inputs
     if (
       !name ||
       !contact ||
-      !quantity ||
+      orderedItem.length === 0 ||
       !addressId ||
-      !totalAmount ||
-      !productId
+      !totalAmount
     ) {
       return res.status(400).json({ message: "All fields are required." });
     }
@@ -49,8 +48,7 @@ const createOrder = async (req, res) => {
       orderBy: req.userId,
       name,
       contact,
-      orderedItem: productId,
-      quantity,
+      orderedItem,
       address: addressId,
       totalAmount,
       orderId: razorpayOrder.id,

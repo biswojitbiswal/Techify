@@ -22,6 +22,7 @@ function MyNavbar() {
   return (
     <>
       <Navbar
+      sticky='top'
         key={expandValue}
         expand={expandValue}
         className="p-2"

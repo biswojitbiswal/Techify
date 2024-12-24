@@ -98,7 +98,7 @@ function ProShow() {
             
             <div className="order">
               <Button variant="primary" onClick={handleAddToCart} className="fs-4 add-cart-btn"><span className='me-2'><i className="fa-solid fa-cart-shopping"></i></span>Add To Cart</Button>
-              <Link className="btn btn-warning fs-4" to={`/product/buy/${product._id}`}><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Link>
+              <Link to="/order/buy-now" state={{productIds: [product._id]}} className='btn btn-warning fs-4'><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Link>
             </div>
           </div>
         </div>

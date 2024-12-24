@@ -13,14 +13,18 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    orderedItem: {
-        type: Schema.Types.ObjectId,
-        ref: "Product"
-    },
-    quantity: {
-        type: Number,
-        required: true
-    }, 
+    orderedItem: [
+        {
+            product: {
+                type: Schema.Types.ObjectId,
+                ref: "Product"
+            },
+            quantity: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
     totalAmount: {
         type: Number,
         required: true
