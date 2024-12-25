@@ -14,26 +14,26 @@ function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [selectItems, setSelectItems] = useState(new Set());
   // const [totalAmount, setTotalAmount] = useState(0);
-  
-  const {user, authorization, refreshUser, darkMode, isLoggedInuser} = useAuth();
-  const {products} = useStore();
 
-  if(!isLoggedInuser){
+  const { user, authorization, refreshUser, darkMode, isLoggedInuser } = useAuth();
+  const { products } = useStore();
+
+  if (!isLoggedInuser) {
     return <Navigate to="/signin" />
   }
-  
-  useEffect(()=> {
-    if(Array.isArray(user.cart)){
+
+  useEffect(() => {
+    if (Array.isArray(user.cart)) {
       const cartProductIds = user.cart;
       const updateCartItems = cartProductIds.map(id => products.find(prduct => prduct._id === id)).filter(item => item !== undefined);
 
       setCartItems(updateCartItems.reverse());
     }
-    
+
   }, [products, user.cart])
 
   useEffect(() => {
-    if(cartItems.length > 0 && selectItems.size === 0){
+    if (cartItems.length > 0 && selectItems.size === 0) {
       setSelectItems(new Set(cartItems.map(item => item._id)));
     }
   }, [cartItems, selectItems]);
@@ -50,7 +50,7 @@ function Cart() {
       return updatedItems;
     });
   };
-  
+
   //Memoization
   const selectedItems = useMemo(() => {
     return cartItems.filter((item) => selectItems.has(item._id))
@@ -62,21 +62,21 @@ function Cart() {
   }, [selectItems]);
   // const totalAmount = selectedItems.reduce((acc, item) => acc + item.price, 0)
 
-  
 
-  const handleRemove = async(itemId) => {
+
+  const handleRemove = async (itemId) => {
     try {
       const response = await fetch(`${BASE_URL}/api/yoga/products/cart/remove/${itemId}`, {
         method: "PATCH",
         headers: {
-          Authorization : authorization
+          Authorization: authorization
         }
       })
 
       const data = await response.json();
       // console.log(data);
 
-      if(response.ok){
+      if (response.ok) {
         toast.success("Item Removed")
         setCartItems(prevItems => prevItems.filter(item => item._id !== itemId));
       } else {
@@ -87,19 +87,19 @@ function Cart() {
     }
   }
 
-  
 
-  
+
+
   return (
     <>
       <section id="cart-page">
-        <h1 className='text-primary'>My Cart</h1>
+        <h1 className='text-primary text-decoration-underline'>My Cart</h1>
         {cartItems.length > 0 ? (
           cartItems.map((item) => (
             <div key={item._id} className="cart-card" style={{ backgroundColor: darkMode ? '#343434' : '#fff' }}>
               <img src={item.images[0]} alt="Product Image" />
-              <Card style={{backgroundColor: darkMode ? '#a3a3a3' : ''}}>
-                <Card.Header className='d-flex justify-content-between align-items-center' style={{backgroundColor: darkMode ? '#999999' : ''}}>
+              <Card style={{ backgroundColor: darkMode ? '#a3a3a3' : '' }}>
+                <Card.Header className='d-flex justify-content-between align-items-center' style={{ backgroundColor: darkMode ? '#999999' : '' }}>
                   <h4>{item.title}</h4>
                   <Form.Check aria-label={item._id} checked={selectItems.has(item._id)} onChange={() => handleSelectItem(item._id)} />
                 </Card.Header>
@@ -107,25 +107,29 @@ function Cart() {
                   <Card.Title>₹{item.price}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
                   {/* <div className="cart-btns"> */}
-                    <Button variant="secondary" onClick={() => handleRemove(item._id)} className='remove-btn me-4'>
-                      <span><i className="fa-solid fa-trash"></i></span>Remove</Button>
-                    
+                  <Button variant="secondary" onClick={() => handleRemove(item._id)} className='remove-btn me-4'>
+                    <span><i className="fa-solid fa-trash"></i></span>Remove</Button>
+
                   {/* </div> */}
                 </Card.Body>
               </Card>
             </div>
           ))
         ) : (
-          <p>Your cart is empty.</p>
+          <p className='text-primary fs-4 align-self-center'>Your cart is empty.</p>
         )}
 
-    <Card className='p-0'>
-      <Card.Body  className='d-flex justify-content-between align-items-center p-1 px-3'>
-        <h3>Total: <span className='text-success'>₹{totalAmount}</span></h3>
-        <Link to={selectItems.size > 0 ? `/order/buy-now` : '#'} state={{productIds: Array.from(selectItems)}} className='btn btn-warning fs-3 fw-semibold' 
-        style={{ pointerEvents: selectItems.size === 0 ? 'none' : 'auto' }}>Place Order</Link>
-      </Card.Body>
-    </Card>
+        {
+          cartItems.length > 0 ? (
+            <Card className='p-0'>
+              <Card.Body className='d-flex justify-content-between align-items-center p-1 px-3'>
+                <h3>Total: <span className='text-success'>₹{totalAmount}</span></h3>
+                <Link to={selectItems.size > 0 ? `/order/buy-now` : '#'} state={{ productIds: Array.from(selectItems) }} className='btn btn-warning fs-3 fw-semibold'
+                  style={{ pointerEvents: selectItems.size === 0 ? 'none' : 'auto' }}>Place Order</Link>
+              </Card.Body>
+            </Card>
+          ) : ""
+        }
 
       </section>
     </>

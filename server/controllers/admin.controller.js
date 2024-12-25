@@ -390,9 +390,20 @@ const AccessToRole = async(req, res) => {
 
 const getAllOrders = async(req, res) => {
     try {
+        const skip = parseInt(req.query.skip) || 0;
+        const limit = parseInt(req.query.limit) || 5;
+
         const orders = await Order.find({})
-        .populate("orderedItem")
-        .populate("orderBy", "addresses");
+        .populate({
+            path: "orderedItem.product",
+            select: "title price"
+        })
+        .populate({
+            path: "orderBy",
+            select: "name addresses"
+        })
+        .skip(skip)
+        .limit(limit);
 
         if(!orders || orders.length === 0){
             return res.status(404).json({message : "Order Not Found"});
@@ -404,7 +415,10 @@ const getAllOrders = async(req, res) => {
             return {...order.toObject(), address};
         });
 
-        return res.status(200).json({message : "Order Fetched Successfully", addressWithOrders});
+        return res.status(200).json({
+            message : "Order Fetched Successfully", 
+            orders: addressWithOrders
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({message: "Something Went Wrong!"})
@@ -489,3 +503,7 @@ export {
     orderStatusUpdate,
     deleteOrder
 }
+
+
+
+

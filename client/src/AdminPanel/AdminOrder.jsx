@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import { BASE_URL } from "../../config.js";
 import { useAuth } from "../Store/Auth.jsx";
@@ -11,11 +11,15 @@ import { toast } from 'react-toastify';
 
 function AdminOrder() {
     const [orders, setOrders] = useState([]);
+    const [skip, setSkip] = useState(0);
+    const [limit] = useState(5);
+    const storedIds = useRef(new Set());
 
     const { authorization, user } = useAuth();
+
     const handleAllOrder = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/admin/orders`, {
+            const response = await fetch(`${BASE_URL}/api/yoga/admin/orders?skip=${skip}&limit=${limit}`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization,
@@ -23,17 +27,28 @@ function AdminOrder() {
             })
 
             const data = await response.json();
-            // console.log(data.addressWithOrders);
+            // console.log(data);
 
             if (response.ok) {
-                // toast.success("all data fetched successfully");
-                setOrders(data.addressWithOrders);
+                const newOrders = data.orders.filter(order => !storedIds.current.has(order._id));
+    
+                if (newOrders.length > 0) {
+                    newOrders.forEach(order => storedIds.current.add(order._id));
+    
+                    setOrders(prevOrders => [...prevOrders, ...newOrders]);
+                }
+            } else {
+                toast.error("No More Order Found");
             }
 
         } catch (error) {
             console.log(error);
         }
     }
+
+   
+
+    
 
     const handleOrderStatus = async (orderId, newStatus) => {
         if (confirm(`Are You Sure You Want Change Order Status To ${newStatus}`)) {
@@ -81,8 +96,8 @@ function AdminOrder() {
         ));
     };
 
-    const handleOrderDelete = async(orderId) => {
-        if(confirm("Are Sure You Want To Delete The Order")){
+    const handleOrderDelete = async (orderId) => {
+        if (confirm("Are Sure You Want To Delete The Order")) {
             // console.log(orderId);
             try {
                 const response = await fetch(`${BASE_URL}/api/yoga/admin/order/${orderId}/delete`, {
@@ -91,11 +106,11 @@ function AdminOrder() {
                         Authorization: authorization,
                     }
                 })
-    
+
                 const data = await response.json();
                 // console.log(data);
-    
-                if(response.ok){
+
+                if (response.ok) {
                     toast.error("Order Deleted");
                     handleAllOrder();
                 }
@@ -107,10 +122,10 @@ function AdminOrder() {
 
     useEffect(() => {
         handleAllOrder();
-    }, []);
+    }, [skip]);
     return (
         <>
-            <div className="order-container">
+            <div className="order-container text-center">
                 <div className="table-caption bg-primary d-flex align-items-center">
                     <h3 className='fs-3 text-white ps-2'>Orders</h3>
                 </div>
@@ -133,19 +148,21 @@ function AdminOrder() {
                         </thead>
                         <tbody>
                             {
-                                orders && orders.length > 0 ?
+                                orders && orders?.length > 0 ?
                                     orders?.map(order => {
                                         return <tr key={order._id}>
-                                            <td>{order._id}</td>
+                                            <td>{`${order?._id?.slice(0, 2)}...${order?._id?.slice(-4)}`}</td>
                                             <td>{order.name}</td>
                                             <td>{user.role === 'Admin' ? order.contact : 'xxxxxxxxxx'}</td>
-                                            <td style={{ width: "160px" }}>{order?.orderedItem?.title}</td>
-                                            <td>{order.quantity}</td>
+                                            <td style={{ width: "300px" }}>{order?.orderedItem?.map((item, index) => {
+                                                return <p key={index}>{item.product.title}</p>
+                                            })}</td>
+                                            <td>{order?.orderedItem?.reduce((acc, item) => acc + item.quantity, 0)}</td>
                                             <td>{order.totalAmount}</td>
                                             {
                                                 user.role === 'Admin' ? <td>
                                                     {
-                                                        `${order.address.street}, ${order.address.city}, ${order.address.state}, ${order.address.zipcode}`
+                                                        `${order?.address?.street}, ${order?.address?.city}, ${order?.address?.state}, ${order?.address?.zipcode}`
                                                     }
                                                 </td> : ""
                                             }
@@ -173,17 +190,18 @@ function AdminOrder() {
                                                     )
                                                 }
                                             </td>
-                                            <td className={order.paymentStatus === 'Paid' ? 'text-success' : 'text-danger'} style={{fontWeight: "600"}}>
+                                            <td className={order.paymentStatus === 'Paid' ? 'text-success' : 'text-danger'} style={{ fontWeight: "600" }}>
                                                 {order.paymentStatus}
                                             </td>
-                                            <td style={{ width: "120px" }}>{order.createdAt.split('T')[0]}</td>
+                                            <td style={{ width: "120px" }}>{order?.createdAt?.split('T')[0]}</td>
                                             {
                                                 user.role == 'Admin' && (<td style={{ width: "120px" }}><Button variant='danger' onClick={() => handleOrderDelete(order._id)}>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>)
                                             }
                                         </tr>
+
                                     }) : <tr>
                                         <td colSpan={11} className="text-center fs-3">
-                                            User Not Found
+                                            Orders Not Found
                                         </td>
                                     </tr>
                             }
@@ -191,6 +209,7 @@ function AdminOrder() {
                         </tbody>
                     </Table>
                 </div>
+                <Button variant='primary' onClick={() => setSkip((prev) => prev + limit)} className='m-3 fs-5'>More</Button>
             </div>
         </>
     )
