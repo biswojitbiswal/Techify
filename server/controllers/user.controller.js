@@ -152,10 +152,15 @@ const addAddresses = async(req, res) => {
             type,
         }
 
+        if(user.addresses.length > 0){
+            user.addresses.forEach((address) => (address.isPrimary = false));
+        }
         user.addresses.push(newAddress);
         await user.save();
 
-        return res.status(200).json({message: "Address Added Successfully"});
+        return res.status(200).json({
+            message: "Address Added Successfully"
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: error.message });
@@ -171,15 +176,25 @@ const deleteAddressById = async(req, res) => {
         if(!user){
             return res.status(404).json({message: "User Not Found"});
         }
+        
+        const address = user.addresses.find((addr) => addr._id.toString() === addressId);
 
-        const addressIndex = user.addresses.findIndex(address => address.toString() === addressId);
+        const updatedUser = await User.findByIdAndUpdate(
+            req.userId,
+            {$pull: {addresses: {_id: addressId}}},
+            {new: true}
+        )
 
-        if(addressIndex === -1){
-            return res.status(404).json({message: "Address Not Found!"});
+        const addrExists = !updatedUser.addresses.some((addr) => addr._id.toString() === addressId);
+
+        if(!addrExists){
+            return res.status(404).json({message: "Address Not Found or Already Removed"});
         }
 
-        user.addresses.splice(addressIndex, 1);
-        await user.save();
+        if(address.isPrimary === true && updatedUser.addresses.length > 0){
+            updatedUser.addresses[0].isPrimary = true;
+            await updatedUser.save();
+        }
         
         return res.status(200).json({message: "Address Deleted Successfull"});
     } catch (error) {

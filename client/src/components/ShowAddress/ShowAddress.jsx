@@ -60,6 +60,7 @@ function ShowAddress() {
     };
 
     const handleDelete = async (addressId) => {
+        console.log(addressId)
         try {
             const response = await fetch(`${BASE_URL}/api/yoga/user/delete/address/${addressId}`, {
                 method: 'DELETE',
@@ -153,7 +154,7 @@ function ShowAddress() {
                         <div className="address-info">
                             <div className="d-flex align-items-center">
                                 <Form.Check
-                                    type="checkbox"
+                                    type="radio"
                                     checked={address.isPrimary}
                                     onChange={() => handleSetPrimary(address._id)}
                                     className="me-2 fs-5"
