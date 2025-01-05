@@ -12,8 +12,7 @@ const razorpay = new Razorpay({
 // Create a new order
 const createOrder = async (req, res) => {
   try {
-    const { name, contact, orderedItem, addressId, totalAmount } =
-      req.body;
+    const { name, contact, orderedItem, addressId, totalAmount } = req.body;
 
     // Validate inputs
     if (
@@ -75,12 +74,13 @@ const verifyOrderPayment = async (req, res) => {
   try {
     // console.log("Request Body:", req.body);
 
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
         success: false,
-        message: "Missing required parameters."
+        message: "Missing required parameters.",
       });
     }
 
@@ -112,14 +112,14 @@ const verifyOrderPayment = async (req, res) => {
 
       // Update the order with payment details
       const updatedOrder = await Order.updateOne(
-        { orderId: razorpay_order_id }, 
+        { orderId: razorpay_order_id },
         {
           $set: {
             paymentId: razorpay_payment_id,
             paymentSignature: razorpay_signature,
             paymentStatus: "Paid",
             orderStatus: "Confirmed",
-          }
+          },
         }
       );
 
@@ -146,35 +146,53 @@ const verifyOrderPayment = async (req, res) => {
   }
 };
 
-
 const getUserOrders = async (req, res) => {
   try {
-      const { page = 1, limit = 2 } = req.query;
-      const query = req.user.role === 'Admin' ? {} : { orderBy: req.userId };
-
-      const orders = await Order.find(query)
-          .skip((page - 1) * limit)
-          .limit(parseInt(limit))
-          .populate('orderedItem')
-          .populate({
-              path: 'orderBy',
-              select: 'addresses',
-          });
-
-      const totalOrders = await Order.countDocuments(query);
-      const totalPages = Math.ceil(totalOrders / limit);
-
-      res.status(200).json({
-          success: true,
-          orders,
-          totalPages,
+    // Fetch orders for the user
+    const orders = await Order.find({ orderBy: req.userId })
+      .populate({
+        path: 'orderBy',
+        select: 'name phone addresses',
+      })
+      .populate({
+        path: 'orderedItem.product',
+        select: 'title description price images',
       });
+
+    if (orders.length === 0) {
+      return res.status(404).json({ message: 'Order Not Found' });
+    }
+
+    // Format the response to match the required structure
+    const formattedOrders = orders.map(order => ({
+      _id: order._id,
+      orderId: order.orderId,
+      orderStatus: order.orderStatus,
+      totalAmount: order.totalAmount,
+      paymentStatus: order.paymentStatus,
+      address: order.address,
+      orderedItem: order.orderedItem.map(item => ({
+        productId: item.product._id,
+        quantity: item.quantity,
+        title: item.product.title,
+        price: item.product.price,
+        image: item.product.images[0],
+      })),
+      userDetails: {
+        name: order.orderBy.name,
+        phone: order.orderBy.phone,
+        addresses: order.orderBy.addresses,
+      },
+    }));
+
+    res.status(200).json({
+      success: true,
+      orders: formattedOrders,
+    });
   } catch (error) {
-      console.error("Error fetching orders:", error);
-      res.status(500).json({ message: "Internal Server Error." });
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ message: 'Internal Server Error.' });
   }
 };
-
-
 
 export { createOrder, verifyOrderPayment, getUserOrders };
