@@ -6,7 +6,7 @@
 #prod-details .prod-card{
     display: flex;
     width: auto;
-    height: 400px;
+    height: 450px;
     justify-content: space-between;
     align-items: center;
     /* background-color: #e3edf7; */

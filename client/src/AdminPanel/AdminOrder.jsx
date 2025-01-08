@@ -45,9 +45,6 @@ function AdminOrder() {
             console.log(error);
         }
     }
-
-   
-
     
 
     const handleOrderStatus = async (orderId, newStatus) => {

@@ -1,13 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Home.css'
-import { useStore } from '../../Store/ProductStore'
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../Store/Auth';
+import { BASE_URL } from '../../../config';
 
 function ProdShow() {
+    const [products, setProducts] = useState([]);
+
     const {darkMode} = useAuth();
-    const { products } = useStore();
+
+    const getSomeProduct = async() => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/yoga/products/showcase`, {
+                method: "GET",
+            })
+
+            const data = await response.json();
+            console.log(data);
+
+            if(response.ok){
+                setProducts(data.showcase);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getSomeProduct();
+    })
     return (
         <>
             <section className="showcase-prod">

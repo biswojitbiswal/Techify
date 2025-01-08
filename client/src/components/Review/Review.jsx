@@ -13,10 +13,14 @@ import { BASE_URL } from '../../../config.js';
 
 function Review(product) {
     const [show, setShow] = useState(false);
+    // const [feedback, setFeedback] = useState([]);
     const [review, setReview] = useState({
         rating: 0,
         comment: '',
     });
+
+    // console.log(product)
+    // console.log(product.product.averageRating)
 
     const { authorization } = useAuth();
     const navigate = useNavigate();
@@ -25,6 +29,14 @@ function Review(product) {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    // const getReviews = async() => {
+    //     try {
+            
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
     const handleRating = (star) => {
         setReview((prevState) => ({
@@ -73,7 +85,7 @@ function Review(product) {
             <section id="prod-review-page">
                 <div className='review-container'>
                     <div className="review-form-container d-flex justify-content-between">
-                        <h2 className='m-0 d-flex justify-content-center'>All Reviews <span><p style={{ borderRadius: ".75rem", fontSize: "1.25rem" }} className='btn btn-success ms-2'>{product.product.averageRating.toFixed(1)} <span><i className="fa-solid fa-star fs-5"></i></span></p></span></h2>
+                        <h2 className='m-0 d-flex justify-content-center'>All Reviews <span><p style={{ borderRadius: ".75rem", fontSize: "1.25rem" }} className='btn btn-success ms-2'>{product?.product?.averageRating?.toFixed(1)} <span><i className="fa-solid fa-star fs-5"></i></span></p></span></h2>
                         <Button variant="primary" onClick={handleShow} className='fs-4'>
                             Rate Product
                         </Button>
@@ -125,9 +137,7 @@ function Review(product) {
                     <hr />
                     <div className="review-car-contaner">
                         {
-                            product?.product?.reviews
-                            .filter((review) => review.status === 'Approved') // Filter reviews that are approved
-                            .map((review) => {
+                            product?.product?.reviews.filter((review) => review.status === 'Approved').map((review) => {
                                 return (
                                     <div key={review._id} className="review-card px-2">
                                         <p>

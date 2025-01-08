@@ -3,7 +3,6 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import './Cart.css'
 import { useAuth } from '../../Store/Auth';
-import { useStore } from '../../Store/ProductStore';
 import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -13,14 +12,36 @@ import Form from 'react-bootstrap/Form';
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [selectItems, setSelectItems] = useState(new Set());
-  // const [totalAmount, setTotalAmount] = useState(0);
 
   const { user, authorization, refreshUser, darkMode, isLoggedInuser } = useAuth();
-  const { products } = useStore();
 
   if (!isLoggedInuser) {
     return <Navigate to="/signin" />
   }
+
+  const getCartItems = async() => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/yoga/products/cart/get-products/${user._id}`, {
+        method: "GET",
+        headers: {
+          Authorization: authorization
+        }
+      })
+
+      const data = await response.json();
+      // console.log(data);
+
+      if(response.ok){
+        setCartItems(data.cart);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getCartItems();
+  })
 
   useEffect(() => {
     if (Array.isArray(user.cart)) {
@@ -30,7 +51,7 @@ function Cart() {
       setCartItems(updateCartItems.reverse());
     }
 
-  }, [products, user.cart])
+  }, [user.cart])
 
   useEffect(() => {
     if (cartItems.length > 0 && selectItems.size === 0) {
@@ -51,16 +72,13 @@ function Cart() {
     });
   };
 
-  //Memoization
   const selectedItems = useMemo(() => {
     return cartItems.filter((item) => selectItems.has(item._id))
   }, [selectItems, cartItems]);
-  // const selectedItems = cartItems.filter((item) => selectItems.has(item._id));
 
   const totalAmount = useMemo(() => {
     return selectedItems.reduce((acc, item) => acc + item.price, 0)
   }, [selectItems]);
-  // const totalAmount = selectedItems.reduce((acc, item) => acc + item.price, 0)
 
 
 

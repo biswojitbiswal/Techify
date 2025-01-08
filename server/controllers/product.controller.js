@@ -3,6 +3,9 @@ import { User } from "../models/user.model.js";
 
 const getAllProducts = async(req, res) => {
     try {
+        const skip = parseInt(req.query.skip);
+        const limit = parseInt(req.query.limit);
+
         const products = await Product.find({})
         .populate({
             path: "reviews",
@@ -11,13 +14,15 @@ const getAllProducts = async(req, res) => {
                 select: "name",
             }
         })
+        .skip(skip)
+        .limit(limit);
         
 
-        if(!products){
+        if(!products || products.length === 0){
             return res.status(404).json({message: "Products Not Found!"})
         }
 
-        return res.status(200).json({products});
+        return res.status(200).json({Allproducts : products});
     } catch (error) {
         return res.status(500).json({message: "Something Went Wrong!"})
     }
@@ -83,6 +88,67 @@ const removeItemCart = async(req, res) => {
         });
     } catch (error) {
         console.log(error)
+        return res.status(500).json({message: "Something Went Wrong!"});
+    }
+}
+
+const getCartItem = async(req, res) => {
+    try {
+        const {userId} = req.params;
+
+        if(!userId){
+            return res.status(400).json({message: "Something Went Wrong!"});
+        }
+
+        const products = await User.findById(userId).populate('cart').select("cart");
+
+        if(!products){
+            return res.status(404).json({message: "Cart is Empty"});
+        }
+
+        return res.status(200).json(products);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message: "Something Went Wrong!"});
+    }
+}
+
+const prosuctShowCase = async(req, res) => {
+    try {
+        const products = await Product.find({}).limit(10);
+
+        if(!products){
+            return res.status(404).json({message: "Product Not Found"});
+        }
+
+        return res.status(200).json({showcase: products});
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
+
+const getProductById = async(req, res) => {
+    try {
+        const {productId} = req.params;
+        console.log(productId);
+
+        const product = await Product.findById(productId)
+        .populate({
+            path: "reviews",
+            populate: {
+                path: "reviewBy",
+                select: "name",
+            }
+        });
+
+        if(!product){
+            return res.status(404).json({message: "Product Not Found"});
+        }
+
+        return res.status(200).json({item: product});
+    } catch (error) {
+        console.log(error)
         return res.status(500).json({message: "Something Went Wrong!"})
     }
 }
@@ -91,4 +157,7 @@ export {
     getAllProducts,
     addToCart,
     removeItemCart,
+    getCartItem,
+    prosuctShowCase,
+    getProductById
 }

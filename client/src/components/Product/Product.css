@@ -2,9 +2,11 @@
     padding: 2rem 3rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
-    margin-bottom: 4rem;
+    margin-bottom: 1rem;
+    min-height: 85vh;
+    /* position: relative; */
 }
 .custom-hero-card{
     height: 250px;
@@ -21,6 +23,11 @@
     gap: 1rem;
     margin-top: 1rem;
 }
+/* .pagination-btn{
+    position: absolute;
+    bottom: 0;
+    margin-top: 3rem;
+} */
 
 
 
