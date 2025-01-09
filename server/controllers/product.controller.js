@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 import { User } from "../models/user.model.js";
 
@@ -92,26 +93,31 @@ const removeItemCart = async(req, res) => {
     }
 }
 
-const getCartItem = async(req, res) => {
+const getCartItem = async (req, res) => {
     try {
-        const {userId} = req.params;
+        const { userId } = req.params;
 
-        if(!userId){
-            return res.status(400).json({message: "Something Went Wrong!"});
+        if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ message: "Invalid or missing User ID" });
         }
 
-        const products = await User.findById(userId).populate('cart').select("cart");
+        const user = await User.findById(userId).populate('cart').select("cart");
 
-        if(!products){
-            return res.status(404).json({message: "Cart is Empty"});
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
-        return res.status(200).json(products);
+        if (!user.cart || user.cart.length === 0) {
+            return res.status(404).json({ message: "Cart is empty" });
+        }
+
+        return res.status(200).json({ cart: user.cart });
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({message: "Something Went Wrong!"});
+        console.error("Error fetching cart items:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
+
 
 const prosuctShowCase = async(req, res) => {
     try {
@@ -131,7 +137,7 @@ const prosuctShowCase = async(req, res) => {
 const getProductById = async(req, res) => {
     try {
         const {productId} = req.params;
-        console.log(productId);
+        // console.log(productId);
 
         const product = await Product.findById(productId)
         .populate({
@@ -153,11 +159,36 @@ const getProductById = async(req, res) => {
     }
 }
 
+const getOrderItem = async(req, res) => {
+    try {
+        const {productIds} = req.body;
+        // console.log(productIds);
+
+        if (!Array.isArray(productIds) || !productIds.length) {
+            return res.status(400).json({ message: "Invalid input: productIds should be a non-empty array" });
+        }
+
+        const itemIds = productIds.map((id) => new mongoose.Types.ObjectId(id));
+
+        const orders = await Product.find({_id: {$in: itemIds}}).select("-reviews");
+
+        if(!orders || orders.length === 0){
+            return res.status(404).json({message: "Not Found"});
+        }
+
+        return res.status(200).json({orders})
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Internal Server Error"});
+    }
+}
+
 export {
     getAllProducts,
     addToCart,
     removeItemCart,
     getCartItem,
     prosuctShowCase,
-    getProductById
+    getProductById,
+    getOrderItem
 }

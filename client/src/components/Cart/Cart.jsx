@@ -12,7 +12,6 @@ import Form from 'react-bootstrap/Form';
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [selectItems, setSelectItems] = useState(new Set());
-
   const { user, authorization, refreshUser, darkMode, isLoggedInuser } = useAuth();
 
   if (!isLoggedInuser) {
@@ -43,15 +42,15 @@ function Cart() {
     getCartItems();
   })
 
-  useEffect(() => {
-    if (Array.isArray(user.cart)) {
-      const cartProductIds = user.cart;
-      const updateCartItems = cartProductIds.map(id => products.find(prduct => prduct._id === id)).filter(item => item !== undefined);
+  // useEffect(() => {
+  //   if (Array.isArray(user.cart)) {
+  //     const cartProductIds = user.cart;
+  //     const updateCartItems = cartProductIds.map(id => products.find(prduct => prduct._id === id)).filter(item => item !== undefined);
 
-      setCartItems(updateCartItems.reverse());
-    }
+  //     setCartItems(updateCartItems.reverse());
+  //   }
 
-  }, [user.cart])
+  // }, [user.cart])
 
   useEffect(() => {
     if (cartItems.length > 0 && selectItems.size === 0) {
@@ -71,15 +70,6 @@ function Cart() {
       return updatedItems;
     });
   };
-
-  const selectedItems = useMemo(() => {
-    return cartItems.filter((item) => selectItems.has(item._id))
-  }, [selectItems, cartItems]);
-
-  const totalAmount = useMemo(() => {
-    return selectedItems.reduce((acc, item) => acc + item.price, 0)
-  }, [selectItems]);
-
 
 
   const handleRemove = async (itemId) => {
@@ -106,6 +96,13 @@ function Cart() {
   }
 
 
+  const selectedItems = useMemo(() => {
+    return cartItems.filter((item) => selectItems.has(item._id))
+  }, [selectItems, cartItems]);
+
+  const totalAmount = useMemo(() => {
+    return selectedItems.reduce((acc, item) => acc + item.price, 0)
+  }, [selectItems]);
 
 
   return (

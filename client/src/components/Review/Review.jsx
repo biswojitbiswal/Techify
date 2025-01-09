@@ -13,7 +13,6 @@ import { BASE_URL } from '../../../config.js';
 
 function Review(product) {
     const [show, setShow] = useState(false);
-    // const [feedback, setFeedback] = useState([]);
     const [review, setReview] = useState({
         rating: 0,
         comment: '',
@@ -29,14 +28,6 @@ function Review(product) {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    // const getReviews = async() => {
-    //     try {
-            
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
 
     const handleRating = (star) => {
         setReview((prevState) => ({
@@ -137,7 +128,7 @@ function Review(product) {
                     <hr />
                     <div className="review-car-contaner">
                         {
-                            product?.product?.reviews.filter((review) => review.status === 'Approved').map((review) => {
+                            product?.product?.reviews?.filter((review) => review.status === 'Approved').map((review) => {
                                 return (
                                     <div key={review._id} className="review-card px-2">
                                         <p>

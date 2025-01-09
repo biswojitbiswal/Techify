@@ -4,32 +4,54 @@ import Badge from 'react-bootstrap/esm/Badge';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { useAuth } from '../../Store/Auth';
-import { useStore } from '../../Store/ProductStore';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../../config.js';
 import { useLocation } from 'react-router-dom';
 
 function Order() {
+  const [orderState, setOrderState] = useState({
+    products: [],
+    quantity: {},
+    totalAmount: 0,
+    orderDetails: {},
+  });
+
   const location = useLocation();
   const {productIds} = location.state;
   const { user, authorization } = useAuth();
-  const { products } = useStore();
   const navigate = useNavigate();
-  
-  const [quantity, setQuantity] = useState({});
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [orderDetails, setOrderDetails] = useState({});
 
-  const productSet = new Set(productIds)
-  const productsToBuy = products.filter((product) => productSet.has(product._id));
-  const address = orderDetails.user?.addresses?.find((address) => address.isPrimary);
+  const address = orderState.orderDetails.user?.addresses?.find((address) => address.isPrimary);
+
+
+  const getOrderProducts = async() => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/yoga/products/order/buy-now`, {
+        method: "POST",
+        headers:{
+          'Content-Type': 'application/json',
+          Authorization: authorization,
+        },
+        body: JSON.stringify({productIds}),
+      })
+
+      const data = await response.json();
+      // console.log(data);
+
+      if(response.ok){
+        setOrderState(prev => ({...prev, products: data.orders}))
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   const handleQuantityChange = (action, productId) => {
     // console.log(action);
-    setQuantity((prev) => {
-      const updatedQuantity = {...prev};
+    setOrderState((prev) => {
+      const updatedQuantity = {...prev.quantity};
       const currectQuantity = updatedQuantity[productId] || 1;
 
       if(action === 'increment'){
@@ -39,27 +61,41 @@ function Order() {
           updatedQuantity[productId] = currectQuantity - 1;
         }
       }
-      return updatedQuantity;
+      return {...prev, quantity: updatedQuantity};
     })
   };
 
+
+  useEffect(() => {
+    getOrderProducts();
+  }, [])
+
+
   useEffect(() => {
     let total = 0;
-    productsToBuy.forEach(product => {
-      const productQuantity = quantity[product._id] || 1;
+    orderState.products.forEach(product => {
+      const productQuantity = orderState.quantity[product._id] || 1;
       total += productQuantity * product.price;
     })
+    setOrderState(prev => ({...prev, totalAmount: total}))
+  }, [orderState.products, orderState.quantity]);
 
-    setTotalAmount(total)
-    
-  })
+
+  useEffect(() => {
+    setOrderState(prev => ({
+      ...prev, orderDetails: {
+        ...prev.orderDetails, user: user
+      }
+    }));
+  }, [user]);
+
 
   const handlePayment = async () => {
     
     try {
-      const orderedItems = productsToBuy.map((product) => ({
+      const orderedItems = orderState.products.map((product) => ({
         product: product._id,
-        quantity: quantity[product._id] || 1,
+        quantity: orderState.quantity[product._id] || 1,
       }));
       
       const paymentData = {
@@ -67,7 +103,7 @@ function Order() {
         contact: address.contact,
         orderedItem: orderedItems,
         addressId: address._id,
-        totalAmount: totalAmount,
+        totalAmount: orderState.totalAmount,
       };
       // console.log(paymentData)
 
@@ -135,14 +171,6 @@ function Order() {
   }
 
 
-  useEffect(() => {
-    setOrderDetails({
-      user: user,
-      products: products
-    });
-  }, [user, products]);
-
-
   return (
     <section id="order-buy-page">
       <div className="deliver-details mb-4">
@@ -178,7 +206,7 @@ function Order() {
         <h3>Product</h3>
         <hr />
         <div className="product-details">
-          {productsToBuy && productsToBuy.length > 0 ? productsToBuy.map((product) => {
+          {orderState.products.length ? orderState.products.map((product) => {
             return <div key={product._id} className="d-flex align-items-center bg-body-tertiary rounded-1 p-2 mb-2 gap-4">
               <div className="product-img-quantity">
                 <img
@@ -197,12 +225,12 @@ function Order() {
                     <Button variant="outline-primary" onClick={() => handleQuantityChange('decrement', product._id)}>
                       -
                     </Button>
-                    <span>{quantity[product._id] || 1}</span>
+                    <span>{orderState.quantity[product._id] || 1}</span>
                     <Button variant="outline-primary" onClick={() => handleQuantityChange('increment', product._id)}>
                       +
                     </Button>
                   </div>
-                  <p className="text-primary ms-4 mb-0 fs-3">Price: ₹{product.price * (quantity[product._id] || 1)}</p>
+                  <p className="text-primary ms-4 mb-0 fs-3">Price: ₹{product.price * (orderState.quantity[product._id] || 1)}</p>
                 </div>
               </div>
             </div>
@@ -215,7 +243,7 @@ function Order() {
 
       <div className="text-center">
         <Button variant="warning" onClick={handlePayment} className="fs-4">
-          Pay Now ₹{totalAmount}
+          Pay Now ₹{orderState.totalAmount}
         </Button>
       </div>
     </section>
