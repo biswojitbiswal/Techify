@@ -12,7 +12,7 @@ import Form from 'react-bootstrap/Form';
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [selectItems, setSelectItems] = useState(new Set());
-  const { user, authorization, refreshUser, darkMode, isLoggedInuser } = useAuth();
+  const { user, authorization, darkMode, isLoggedInuser } = useAuth();
 
   if (!isLoggedInuser) {
     return <Navigate to="/signin" />
@@ -31,7 +31,8 @@ function Cart() {
       // console.log(data);
 
       if(response.ok){
-        setCartItems(data.cart);
+        const items = data.cart.reverse();
+        setCartItems(items);
       }
     } catch (error) {
       console.log(error);
