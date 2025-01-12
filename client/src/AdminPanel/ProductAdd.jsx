@@ -6,7 +6,6 @@ import { useAuth } from '../Store/Auth';
 import Spinner from 'react-bootstrap/Spinner';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
-import {Navigate} from 'react-router-dom';
 import { BASE_URL } from '../../config.js';
 
 function ProductAdd() {
@@ -17,14 +16,10 @@ function ProductAdd() {
     images: [],
   });
 
-  const { user, authorization, darkMode, isLoading } = useAuth();
+  const { authorization, darkMode, isLoading } = useAuth();
 
   if(isLoading){
     return <Spinner animation="border" />;
-  }
-
-  if(!user || user.role !== 'Admin'){
-    return <Navigate to='/' replace />
   }
 
   const handleProductInput = (e) => {

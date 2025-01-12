@@ -1,26 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-// import { useStore } from '../Store/ProductStore';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../Store/Auth';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../config.js';
 
 function ProductEdit() {
-  const { productId } = useParams();
-  const { products, updateProduct } = useStore();
-  const { authorization, darkMode, user } = useAuth();
-  const navigate = useNavigate();
-
-  
-
-  const product = products.find((prod) => prod._id === productId);
-
-  if(!user || (user.role !== 'Admin' && user.role !== 'Moderator')){
-    return <Navigate to="/admin" replace />
-  }
-
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -28,16 +14,57 @@ function ProductEdit() {
     images: [],
   });
 
-  useEffect(() => {
-    if (product) {
-      setFormData({
-        title: product.title || '',
-        description: product.description || '',
-        price: product.price || '',
-        images: product.images || [],
-      });
+  const { productId } = useParams();
+  const { authorization, darkMode, user } = useAuth();
+  const navigate = useNavigate();
+  
+
+  if(!user || (user.role !== 'Admin' && user.role !== 'Moderator')){
+    return <Navigate to="/admin" replace />
+  }
+
+  const getProductById = async() => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/yoga/admin/product/${productId}`, {
+        method: "GET",
+        headers: {
+          Authorization: authorization
+        }
+      })
+      
+      const data = await response.json();
+      console.log(data);
+
+      if(response.ok){
+        setFormData({
+          title: data.title || '',
+          description: data.description || '',
+          price: data.price || '',
+          images: data.images || [],
+        });
+      }
+    } catch (error) {
+      toast.error(error);
+      console.log(error);
     }
-  }, []);
+  }
+
+  
+
+  useEffect(() => {
+    getProductById();
+  }, [])
+
+  // useEffect(() => {
+  //   if (product) {
+  //     setFormData({
+  //       title: product.title || '',
+  //       description: product.description || '',
+  //       price: product.price || '',
+  //       images: product.images || [],
+  //     });
+  //   }
+  // }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -82,7 +109,7 @@ function ProductEdit() {
       const data = await response.json();
 
       if (response.ok) {
-        updateProduct(data.editData);
+        setFormData(data.editData);
         toast.success('Product Updated');
         navigate('/product');
       } else {

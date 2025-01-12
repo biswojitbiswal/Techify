@@ -5,7 +5,6 @@ import { useAuth } from "../Store/Auth.jsx";
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
 
 
@@ -31,10 +30,10 @@ function AdminOrder() {
 
             if (response.ok) {
                 const newOrders = data.orders.filter(order => !storedIds.current.has(order._id));
-    
+
                 if (newOrders.length > 0) {
                     newOrders.forEach(order => storedIds.current.add(order._id));
-    
+
                     setOrders(prevOrders => [...prevOrders, ...newOrders]);
                 }
             } else {
@@ -45,7 +44,7 @@ function AdminOrder() {
             console.log(error);
         }
     }
-    
+
 
     const handleOrderStatus = async (orderId, newStatus) => {
         if (confirm(`Are You Sure You Want Change Order Status To ${newStatus}`)) {
@@ -181,12 +180,14 @@ function AdminOrder() {
                                                             </DropdownButton>
                                                         )
                                                     ) : (
-                                                        <td className={order.orderBy.role === 'Admin' ? 'text-success' :
-                                                            order.orderBy.role === 'Moderator' ? 'text-warning' :
-                                                                'text-primary'} style={{ fontWeight: "600", fontSize: "1.25rem" }}>{order.orderBy.role}</td>
+                                                        <span className={order.orderStatus === 'Completed' ? 'text-success' : order.orderStatus === 'Confirmed' ? 'text-primary' : 'text-danger'} style={{ fontWeight: "600", fontSize: "1.25rem" }}>
+                                                            {order.orderStatus}
+                                                        </span>
+                                                       
                                                     )
                                                 }
                                             </td>
+
                                             <td className={order.paymentStatus === 'Paid' ? 'text-success' : 'text-danger'} style={{ fontWeight: "600" }}>
                                                 {order.paymentStatus}
                                             </td>

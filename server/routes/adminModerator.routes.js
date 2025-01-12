@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { addBlog, addProducts, editProductDetails, deleteProduct, deleteBlog, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole, getAllOrders, orderStatusUpdate,deleteOrder } from "../controllers/admin.controller.js";
+import { addBlog, addProducts, editProductDetails, deleteProduct, deleteBlog, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole, getAllOrders, orderStatusUpdate,deleteOrder, getProductById } from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
 import verifyRole from "../middleware/verifyRole.middleware.js";
 
@@ -43,5 +43,6 @@ router.route("/assign/role/:userId").patch(authVerify, verifyRole(['Admin']), Ac
 router.route("/orders").get(authVerify, verifyRole(['Admin', 'Moderator']), getAllOrders)
 router.route("/order/status/:orderId").patch(authVerify, verifyRole(['Admin']), orderStatusUpdate)
 router.route("/order/:orderId/delete").delete(authVerify, verifyRole(['Admin']), deleteOrder);
+router.route("/product/:productId").get(authVerify, verifyRole(['Admin', 'Moderator']), getProductById)
 
 export default router

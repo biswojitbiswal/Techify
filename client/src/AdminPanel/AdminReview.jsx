@@ -109,48 +109,42 @@ function AdminReview() {
                             <th>Review</th>
                             <th>Rating</th>
                             <th>Status</th>
-                            {user.role === 'Admin' ? <th>Delete</th> : ""}
+                            {user.role === 'Admin' && <th>Delete</th>}
 
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedReviews && sortedReviews.length > 0 ? 
+                        {sortedReviews && sortedReviews.length > 0 ?
                             sortedReviews?.map((review, index) => (
-                            <tr key={review._id} className="text-center">
-                                <td>{review._id}</td>
-                                <td>{review?.reviewBy?.name}</td>
-                                <td>{review?.reviewProduct?.title}</td>
-                                <td>{review.comment}</td>
-                                <td>{review.rating}</td>
-                                <td>
-                                    <Form>
-                                        <Form.Check
-                                            className='fs- 1'
-                                            type="switch"
-                                            id={`status-switch-${review._id}`}
-                                            label={review.status}
-                                            checked={review.status === 'Approved'}
-                                            onChange={() => handleStatus(review._id)}
-                                        />
-                                    </Form>
-                                </td>
+                                <tr key={review._id} className="text-center">
+                                    <td>{review._id}</td>
+                                    <td>{review?.reviewBy?.name}</td>
+                                    <td>{review?.reviewProduct?.title}</td>
+                                    <td>{review.comment}</td>
+                                    <td>{review.rating}</td>
+                                    <td>
+                                        <Form>
+                                            <Form.Check
+                                                className='fs- 1'
+                                                type="switch"
+                                                id={`status-switch-${review._id}`}
+                                                label={review.status}
+                                                checked={review.status === 'Approved'}
+                                                onChange={() => handleStatus(review._id)}
+                                            />
+                                        </Form>
+                                    </td>
 
-                                <td>
                                     {
-                                        user.role === 'Admin' && (
-                                            <Button variant="danger" onClick={() => handleDeleteReview(review._id)}>
-                                                Delete <i className="fa-solid fa-trash ms-2"></i>
-                                            </Button>
-                                        )
+                                        user.role == 'Admin' && (<td style={{ width: "120px" }}><Button variant='danger' onClick={() => handleDeleteReview(review._id)}>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>)
                                     }
+                                </tr>
+                            )) : <tr>
+                                <td colSpan={7} className="text-center fs-3">
+                                    User Not Found
                                 </td>
                             </tr>
-                        )) : <tr>
-                        <td colSpan={7} className="text-center fs-3">
-                          User Not Found
-                        </td>
-                      </tr>
-                    }
+                        }
 
                     </tbody>
                 </Table>

@@ -19,16 +19,16 @@ const addProducts = async (req, res) => {
             return res.status(400).json({ message: "No files provided" });
         }
 
-        console.log("Uploaded Files:", files);
+        // console.log("Uploaded Files:", files);
 
         const uploadPromises = files.map(file => {
-            console.log("Uploading File Path:", file.path);
+            // console.log("Uploading File Path:", file.path);
             return uploadFileOnCloudinary(file.path);
         });
 
         const uploadResults = await Promise.all(uploadPromises);
 
-        console.log("Cloudinary Upload Results:", uploadResults);
+        // console.log("Cloudinary Upload Results:", uploadResults);
 
         const successfulUploads = uploadResults.filter(result => result.success === true);
 
@@ -37,7 +37,7 @@ const addProducts = async (req, res) => {
         }
 
         const productImages = successfulUploads.map(upload => upload.data.secure_url);
-        console.log("Product Images URLs:", productImages);
+        // console.log("Product Images URLs:", productImages);
 
 
 
@@ -64,8 +64,6 @@ const addProducts = async (req, res) => {
         return res.status(500).json({ message: "Something Went Wrong" });
     }
 };
-
-
 
 const editProductDetails = async (req, res) => {
     try {
@@ -485,6 +483,27 @@ const deleteOrder = async(req, res) => {
     }
 }
 
+const getProductById = async(req, res) => {
+    try {
+        const {productId} = req.params;
+
+        if(!productId){
+            return res.status(400).json({message: "Something Went Wrong"});
+        }
+
+        const item = await Product.findById(productId).select("-reviews");
+
+        if(!item){
+            return res.status(404).json({message: "User Not Found"});
+        }
+
+        return res.status(200).json(item);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something Went Wrong!"})
+    }
+}
+
 export {
     addProducts,
     editProductDetails,
@@ -501,7 +520,8 @@ export {
     AccessToRole,
     getAllOrders,
     orderStatusUpdate,
-    deleteOrder
+    deleteOrder,
+    getProductById
 }
 
 

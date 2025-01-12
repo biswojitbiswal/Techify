@@ -26,9 +26,9 @@ function AdminLayout() {
         return <Spinner animation="border" />;
     }
 
-    if (!user || (user.role !== 'Admin' && user.role !== 'Moderator')) {
-        return <Navigate to="/admin" replace />
-    }
+    // if (!user || (user.role !== 'Admin' && user.role !== 'Moderator')) {
+    //     return <Navigate to="/admin" replace />
+    // }
 
     return (
         <>

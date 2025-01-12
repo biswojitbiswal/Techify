@@ -14,7 +14,7 @@ function Product() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('');
   const [skip, setSkip] = useState(0);
-  const [limit] = useState(5);
+  const [limit] = useState(6);
   const storedIds = useRef(new Set());
 
 

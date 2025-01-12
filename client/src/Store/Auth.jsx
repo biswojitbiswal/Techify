@@ -1,7 +1,6 @@
 import React from "react";
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
-import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.js";
 
 export const AuthContext = createContext();
@@ -11,7 +10,7 @@ export const useAuth = () => {
 }
 
 export const AuthContextProvider = ({children}) => {
-    const [token, setToken] = useState(Cookies.get('accessToekn'));
+    const [token, setToken] = useState(Cookies.get('accessToken'));
     const [user, setUser] = useState("");
     const [isLoading, setIsLoading] = useState(true)
     const [forceUpdate, setForceUpdate] = useState(false);
@@ -22,7 +21,7 @@ export const AuthContextProvider = ({children}) => {
 
     const setTokenInCookies = (generateToken) => {
         setToken(generateToken);
-        return Cookies.set("accessToekn", generateToken, {expires: 7});
+        return Cookies.set("accessToken", generateToken, {expires: 7});
     }
 
     const handleDarkMode = () => {
@@ -38,7 +37,7 @@ export const AuthContextProvider = ({children}) => {
         setUser("");
         setDarkMode("");
         Cookies.remove('darkmode');
-        return Cookies.remove("accessToekn");
+        return Cookies.remove("accessToken");
     }
 
     const userAuthentication = async() => {
