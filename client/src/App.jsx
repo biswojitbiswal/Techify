@@ -30,6 +30,11 @@ import ProtectedRoute from './ProtectedRoute'
 
 const ProtectedProductAdd = ProtectedRoute(ProductAdd, ['Admin']);
 const ProtectedAdmin = ProtectedRoute(AdminLayout, ['Admin', 'Moderator']);
+const ProtectedAccount = ProtectedRoute(Account, ['User'])
+const ProtectedAddress = ProtectedRoute(Address, ['User']);
+const ProtectedOrder = ProtectedRoute(MyOrders, ['User']);
+const ProtectedCart = ProtectedRoute(Cart, ['User']);
+const ProtectedOrderNow = ProtectedRoute(Order, ['User']);
 function App() {
 
   return (
@@ -40,13 +45,13 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/product' element={<Product />} />
         <Route path='/product/:productId' element={<ProShow />} />
-        <Route path='/order/buy-now' element={<Order />} />
+        <Route path='/order/buy-now' element={<ProtectedOrderNow />} />
         <Route path='/blog' element={<Blog />} />
-        <Route path='/cart' element={<Cart />} />
+        <Route path='/cart' element={<ProtectedCart />} />
 
-        <Route path='/account' element={<Account />} />
-        <Route path='/account/address' element={<Address />} />
-        <Route path='/account/myorders' element={<MyOrders />} />
+        <Route path='/account' element={<ProtectedAccount />} />
+        <Route path='/account/address' element={<ProtectedAddress />} />
+        <Route path='/account/myorders' element={<ProtectedOrder />} />
         {/* </Route> */}
         
         <Route path='/signin' element={<Signin />} />
@@ -62,7 +67,6 @@ function App() {
           <Route path='review' element={<AdminReview />} />
           <Route path='add/publish' element={<Publish />} />
           <Route path='add/links' element={<Links />} />
-
         </Route>
         <Route path='/*' element={<Error />} />
       </Routes>

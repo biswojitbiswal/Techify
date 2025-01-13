@@ -13,10 +13,6 @@ function UserEdit() {
     const {userId} = useParams();
     const {darkMode, authorization, user} = useAuth();
     const navigate = useNavigate();
-
-    if(!user || (user.role !== 'Admin' && user.role !== 'Moderator')){
-        return <Navigate to="/admin" replace />
-    }
     
 
     const getUserDataById = async() => {

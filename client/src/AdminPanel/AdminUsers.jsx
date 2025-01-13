@@ -107,7 +107,7 @@ function AdminUsers() {
                   <td>{index + 1}</td>
                   <td>{userD.name}</td>
                   <td>{userD.email}</td>
-                  <td>{userD.phone}</td>
+                  <td>{user?.role === 'Admin' ? userD.phone : 'XXXXXXXXXX'}</td>
                   {
                     user?.role === 'Admin' ? (
                       <td>

@@ -18,10 +18,6 @@ function ProductAdd() {
 
   const { authorization, darkMode, isLoading } = useAuth();
 
-  if(isLoading){
-    return <Spinner animation="border" />;
-  }
-
   const handleProductInput = (e) => {
     setProductData({
       ...productData,

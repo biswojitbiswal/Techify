@@ -19,10 +19,6 @@ function ProductEdit() {
   const navigate = useNavigate();
   
 
-  if(!user || (user.role !== 'Admin' && user.role !== 'Moderator')){
-    return <Navigate to="/admin" replace />
-  }
-
   const getProductById = async() => {
     try {
       const response = await fetch(`${BASE_URL}/api/yoga/admin/product/${productId}`, {
@@ -55,16 +51,6 @@ function ProductEdit() {
     getProductById();
   }, [])
 
-  // useEffect(() => {
-  //   if (product) {
-  //     setFormData({
-  //       title: product.title || '',
-  //       description: product.description || '',
-  //       price: product.price || '',
-  //       images: product.images || [],
-  //     });
-  //   }
-  // }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

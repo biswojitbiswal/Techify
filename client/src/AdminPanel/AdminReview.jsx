@@ -13,14 +13,6 @@ function AdminReview() {
     const { authorization, user, isLoading } = useAuth();
 
 
-    if (isLoading) {
-        return <Spinner animation="border" />;
-    }
-
-    if (!user || (user.role !== 'Admin' && user.role !== 'Moderator')) {
-        return <Navigate to="/admin" replace />
-    }
-
     const handleStatus = async (id) => {
         try {
             const response = await fetch(`${BASE_URL}/api/yoga/admin/status/${id}`, {
