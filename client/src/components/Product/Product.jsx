@@ -33,6 +33,7 @@ function Product() {
       const data = await response.json();
       console.log(data);
 
+
       if (response.ok) {
         const newProducts = data.Allproducts.filter(product => !storedIds.current.has(product._id));
 
@@ -50,7 +51,7 @@ function Product() {
   }
 
   useEffect(() => {
-    productData();
+      productData();
   }, [skip])
 
   let filteredProducts = products?.filter((product) =>
