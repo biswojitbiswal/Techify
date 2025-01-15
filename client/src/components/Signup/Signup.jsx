@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../Store/Auth';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../../config.js';
+import Google from '../Google/Google.jsx'
 
 
 function Signup() {
@@ -91,8 +92,13 @@ function Signup() {
           </Button>
         </Form>
         <hr className={`${darkMode ? 'text-white' : 'text-black'}`} />
-        <Link style={{ textDecoration: "none" }} to="/signin">I have An Account! Sign in</Link>
+        <div className="d-flex flex-column justify-content-center align-items-center">
+        <Google />
+        
+        <Link style={{ textDecoration: "none", margin: "1rem" }} className='fs-5' to="/signin">I have An Account! Sign in</Link>
+        </div>
       </div>
+      
     </>
   )
 }
