@@ -18,7 +18,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 const allowedOrigins = process.env.NODE_ENV === "production"
-  ? ["https://yoga-app-eta-nine.vercel.app"]
+  ? ["https://yoga-app-sandy.vercel.app"]
   : "*";
 
 app.use(cors({
