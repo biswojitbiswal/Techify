@@ -6,7 +6,7 @@ import {Review} from "../models/review.model.js"
 import {Order} from "../models/order.model.js"
 import mongoose from "mongoose";
 
-const addProducts = async (req, res) => {
+const addProducts = async (req, res, next) => {
     try {
         const { title, description, price } = req.body;
 
@@ -19,16 +19,12 @@ const addProducts = async (req, res) => {
             return res.status(400).json({ message: "No files provided" });
         }
 
-        // console.log("Uploaded Files:", files);
 
         const uploadPromises = files.map(file => {
-            // console.log("Uploading File Path:", file.path);
             return uploadFileOnCloudinary(file.path);
         });
 
         const uploadResults = await Promise.all(uploadPromises);
-
-        // console.log("Cloudinary Upload Results:", uploadResults);
 
         const successfulUploads = uploadResults.filter(result => result.success === true);
 
@@ -37,7 +33,6 @@ const addProducts = async (req, res) => {
         }
 
         const productImages = successfulUploads.map(upload => upload.data.secure_url);
-        // console.log("Product Images URLs:", productImages);
 
 
 
@@ -60,12 +55,11 @@ const addProducts = async (req, res) => {
             productId: createdProduct._id,
         });
     } catch (error) {
-        console.error("Error in addProducts:", error);
-        return res.status(500).json({ message: "Something Went Wrong" });
+        next(error);
     }
 };
 
-const editProductDetails = async (req, res) => {
+const editProductDetails = async (req, res, next) => {
     try {
         const { title, description, price } = req.body;
         const productId = req.params.productId;
@@ -112,13 +106,12 @@ const editProductDetails = async (req, res) => {
             editData: updatedProduct,
         });
     } catch (error) {
-        console.error("Error in editProductDetails:", error);
-        return res.status(500).json({ message: "Something Went Wrong!" });
+        next(error);
     }
 };
 
 
-const addBlog = async(req, res) => {
+const addBlog = async(req, res, next) => {
     try {
         const {blogTitle, blogDescription} = req.body;
 
@@ -147,7 +140,7 @@ const addBlog = async(req, res) => {
         const blog = await Blog.create({
             blogTitle,
             blogDescription,
-            blogImg: blogImageFile.data.secure_url, // Make sure this is not undefined
+            blogImg: blogImageFile.data.secure_url,
         });
 
         const addedBlog = await Blog.findById(blog._id)
@@ -162,12 +155,11 @@ const addBlog = async(req, res) => {
             blogId: addedBlog._id
         })
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong", error})
+        next(error);
     }
 }
 
-const deleteProduct = async(req, res) => {
+const deleteProduct = async(req, res, next) => {
     try {
         const {productId} = req.params
 
@@ -193,12 +185,11 @@ const deleteProduct = async(req, res) => {
             product,
         })
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const deleteBlog = async(req, res) => {
+const deleteBlog = async(req, res, next) => {
     try {
         const {blogId} = req.params;
 
@@ -212,12 +203,11 @@ const deleteBlog = async(req, res) => {
             blog,
         })
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const getAllusers = async(req, res) => {
+const getAllusers = async(req, res, next) => {
     try {
         const users = await User.find().select("-password");
     
@@ -227,12 +217,11 @@ const getAllusers = async(req, res) => {
     
         return res.status(200).json({message: "All User Fetched", users});
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const getUserById = async(req, res) => {
+const getUserById = async(req, res, next) => {
     try {
         const {userId} = req.params;
 
@@ -244,12 +233,11 @@ const getUserById = async(req, res) => {
 
         return res.status(200).json({message: "All User Fetched", user});
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const editUserbyId = async(req, res) => {
+const editUserbyId = async(req, res, next) => {
     try {
         const {name, email, phone} = req.body;
         const {userId} = req.params;
@@ -276,12 +264,11 @@ const editUserbyId = async(req, res) => {
 
         return res.status(200).json({message: "User Update Successfully", editUser});
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const deleteUserById = async(req, res) => {
+const deleteUserById = async(req, res, next) => {
     try {
         const {userId} = req.params;
 
@@ -293,12 +280,11 @@ const deleteUserById = async(req, res) => {
 
         return res.status(200).json({mesage:"User Deleted Successfully"});
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const getAllReview = async(req, res) => {
+const getAllReview = async(req, res, next) => {
     try {
         const reviews = await Review.find({})
         .populate("reviewBy", "name")
@@ -310,12 +296,11 @@ const getAllReview = async(req, res) => {
 
         return res.status(200).json({message: "Review Fetched Successfully", reviews});
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const handleStatus = async(req, res) => {
+const handleStatus = async(req, res, next) => {
     try {
         const {reviewId} = req.params;
 
@@ -325,19 +310,17 @@ const handleStatus = async(req, res) => {
             return res.status(404).json({message: "Review Not Found"});
         }
 
-       
 
         review.status = review.status === 'Pending' ? 'Approved' : 'Pending',
         await review.save();
 
         return res.status(200).json({ message: 'Approved!', review });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const deleteReviewById = async(req, res) => {
+const deleteReviewById = async(req, res, next) => {
     try {
         const {reviewId} = req.params;
 
@@ -360,12 +343,11 @@ const deleteReviewById = async(req, res) => {
 
         return res.status(200).json({message: "Review Deleted"})
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const AccessToRole = async(req, res) => {
+const AccessToRole = async(req, res, next) => {
     try {
         const {userId} = req.params;
         const {role} = req.body;
@@ -381,12 +363,11 @@ const AccessToRole = async(req, res) => {
 
         return res.status(200).json({message: `Now, ${user.name} is ${user.role}.`});
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const getAllOrders = async(req, res) => {
+const getAllOrders = async(req, res, next) => {
     try {
         const skip = parseInt(req.query.skip) || 0;
         const limit = parseInt(req.query.limit) || 5;
@@ -418,8 +399,7 @@ const getAllOrders = async(req, res) => {
             orders: addressWithOrders
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
@@ -434,7 +414,7 @@ const isValidStatusTransition = (currentStatus, newStatus) => {
     return validOrderStatusTransition[currentStatus]?.includes(newStatus);
 }
 
-const orderStatusUpdate = async(req, res) => {
+const orderStatusUpdate = async(req, res, next) => {
     try {
         const {orderId} = req.params;
         const {newStatus} = req.body;
@@ -457,12 +437,11 @@ const orderStatusUpdate = async(req, res) => {
 
         return res.status(200).json({message: "Order status updated successfully"});
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const deleteOrder = async(req, res) => {
+const deleteOrder = async(req, res, next) => {
     try {
         const {orderId} = req.params
         // console.log(orderId)
@@ -478,12 +457,11 @@ const deleteOrder = async(req, res) => {
 
         return res.status(200).json({message: "Order Deleted"});
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const getProductById = async(req, res) => {
+const getProductById = async(req, res, next) => {
     try {
         const {productId} = req.params;
 
@@ -499,8 +477,7 @@ const getProductById = async(req, res) => {
 
         return res.status(200).json(item);
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 

@@ -17,7 +17,7 @@ const generateAccessToken = async(userId) => {
     }
 }
 
-const registerUser = async(req, res) => {
+const registerUser = async(req, res, next) => {
     try {
         const {name, email, phone, password} = req.body;
     
@@ -59,12 +59,11 @@ const registerUser = async(req, res) => {
             token: accessToken,
         })
     } catch (error) {
-        console.log("error");
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 }
 
-const loginUser = async(req, res) => {
+const loginUser = async(req, res, next) => {
     try {
         const {email, password} = req.body;
 
@@ -103,12 +102,11 @@ const loginUser = async(req, res) => {
             userId: loggedinuser._id
         })
     } catch (error) {
-        console.log("error");
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 }
 
-const authnticateWithGoogle = async(req, res) => {
+const authnticateWithGoogle = async(req, res, next) => {
     try {
         const {name, email, phone} = req.body;
 
@@ -155,12 +153,11 @@ const authnticateWithGoogle = async(req, res) => {
               });
         }
     } catch (error) {
-        console.log("error");
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 }
 
-const getCurrUser = async(req, res) => {
+const getCurrUser = async(req, res, next) => {
     try {
         const user = req.user;
         // console.log(req.user);
@@ -174,12 +171,11 @@ const getCurrUser = async(req, res) => {
             userData : user,
         })
     } catch (error) {
-        console.log("error");
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 }
 
-const addAddresses = async(req, res) => {
+const addAddresses = async(req, res, next) => {
     try {
         const {orderByName, contact, street, city, state, zipcode, type} = req.body;
         
@@ -214,12 +210,11 @@ const addAddresses = async(req, res) => {
             message: "Address Added Successfully"
         });
     } catch (error) {
-        console.log("error");
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 }
 
-const deleteAddressById = async(req, res) => {
+const deleteAddressById = async(req, res, next) => {
     try {
         const { addressId } = req.params;
 
@@ -250,12 +245,11 @@ const deleteAddressById = async(req, res) => {
         
         return res.status(200).json({message: "Address Deleted Successfull"});
     } catch (error) {
-        console.log("error");
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 }
 
-const updateAddress = async (req, res) => {
+const updateAddress = async (req, res, next) => {
     
     try {
         const { addressId } = req.params;
@@ -276,13 +270,12 @@ const updateAddress = async (req, res) => {
 
         res.status(200).json({ message: 'Address updated successfully', addresses: user.addresses });
     } catch (error) {
-        console.log("error");
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 };
 
 
-const handlePrimaryAddress = async(req, res) => {
+const handlePrimaryAddress = async(req, res, next) => {
     try {
         const { addressId } = req.params;
 
@@ -301,8 +294,7 @@ const handlePrimaryAddress = async(req, res) => {
         await user.save();
         res.status(200).json({ message: 'Primary address updated successfully', addresses: user.addresses });
     } catch (error) {
-        console.log("error");
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 };
 

@@ -1,7 +1,7 @@
 import { Product } from "../models/product.model.js";
 import {Review} from "../models/review.model.js";
 
-const addReview = async(req, res) => {
+const addReview = async(req, res, next) => {
     try {
         const {productId} = req.params;
         const {rating, comment} = req.body;
@@ -44,8 +44,7 @@ const addReview = async(req, res) => {
 
         return res.status(200).json({message: "Review Added Successfully"});
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Something went wrong!" });
+        next(error);
     }
 }
 

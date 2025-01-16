@@ -30,7 +30,7 @@ function Signin() {
     })
   }
 
-  const handleSifninForm = async (e) => {
+  const handleSigninForm = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch(`${BASE_URL}/api/yoga/user/signin`, {
@@ -63,7 +63,7 @@ function Signin() {
       <section id="signin-page">
         <div className="signin-page" style={{ backgroundColor: darkMode ? '#343434' : '' }}>
           <h1 className='text-primary mb-4'>Sign-In Form</h1>
-          <Form onSubmit={handleSifninForm}>
+          <Form onSubmit={handleSigninForm}>
             <Form.Group className="mb-3" id="email">
               <Form.Label className={`${darkMode ? 'text-white' : 'text-black'}`}>Email</Form.Label>
               <Form.Control type="email" name='email' placeholder="Enter email" value={signinData.email} onChange={handleInput} required />

@@ -1,20 +1,18 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
-import { Order } from "../models/order.model.js"; // Ensure this path points to your Order model file
+import { Order } from "../models/order.model.js";
 import Razorpay from "razorpay";
 
-// Initialize Razorpay instance
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Create a new order
-const createOrder = async (req, res) => {
+
+const createOrder = async (req, res, next) => {
   try {
     const { name, contact, orderedItem, addressId, totalAmount } = req.body;
 
-    // Validate inputs
     if (
       !name ||
       !contact ||
@@ -25,7 +23,6 @@ const createOrder = async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Prepare Razorpay order options
     const options = {
       amount: totalAmount * 100, // Razorpay accepts amount in paise
       currency: "INR",
@@ -33,7 +30,6 @@ const createOrder = async (req, res) => {
       payment_capture: 1,
     };
 
-    // Create Razorpay order
     const razorpayOrder = await razorpay.orders.create(options);
 
     if (!razorpayOrder) {
@@ -42,7 +38,6 @@ const createOrder = async (req, res) => {
         .json({ message: "Could not create Razorpay order." });
     }
 
-    // Save the order in the database
     const order = await Order.create({
       orderBy: req.userId,
       name,
@@ -65,14 +60,12 @@ const createOrder = async (req, res) => {
       order,
     });
   } catch (error) {
-    console.error("Error creating order:", error);
-    return res.status(500).json({ message: "Internal Server Error." });
+    next(error);
   }
 };
 
-const verifyOrderPayment = async (req, res) => {
+const verifyOrderPayment = async (req, res, next) => {
   try {
-    // console.log("Request Body:", req.body);
 
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
@@ -91,16 +84,10 @@ const verifyOrderPayment = async (req, res) => {
       .update(sign.toString())
       .digest("hex");
 
-    // Log for debugging
-    // console.log("Razorpay Order ID:", razorpay_order_id);
-    // console.log("Razorpay Payment ID:", razorpay_payment_id);
-    // console.log("Expected Signature:", expectedSign);
-    // console.log("Received Signature:", razorpay_signature);
 
     const isAuthentic = expectedSign === razorpay_signature;
 
     if (isAuthentic) {
-      // Check if the order exists
       const order = await Order.findOne({ orderId: razorpay_order_id });
 
       if (!order) {
@@ -110,7 +97,6 @@ const verifyOrderPayment = async (req, res) => {
         });
       }
 
-      // Update the order with payment details
       const updatedOrder = await Order.updateOne(
         { orderId: razorpay_order_id },
         {
@@ -141,14 +127,12 @@ const verifyOrderPayment = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error verifying payment:", error);
-    return res.status(500).json({ message: "Internal Server Error." });
+    next(error);
   }
 };
 
-const getUserOrders = async (req, res) => {
+const getUserOrders = async (req, res, next) => {
   try {
-    // Fetch orders for the user
     const orders = await Order.find({ orderBy: req.userId })
       .populate({
         path: 'orderBy',
@@ -163,7 +147,6 @@ const getUserOrders = async (req, res) => {
       return res.status(404).json({ message: 'Order Not Found' });
     }
 
-    // Format the response to match the required structure
     const formattedOrders = orders.map(order => ({
       _id: order._id,
       orderId: order.orderId,
@@ -190,8 +173,7 @@ const getUserOrders = async (req, res) => {
       orders: formattedOrders,
     });
   } catch (error) {
-    console.error('Error fetching orders:', error);
-    res.status(500).json({ message: 'Internal Server Error.' });
+    next(error);
   }
 };
 

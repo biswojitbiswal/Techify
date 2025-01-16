@@ -2,6 +2,7 @@ import "dotenv/config"
 import express from 'express'
 import cors from 'cors'
 import connectDb from './DB/db.js';
+import errorMiddleware from "./middleware/error.middleware.js";
 import userRouter from './routes/user.routes.js'
 import adminRouter from './routes/adminModerator.routes.js'
 import productRouter from './routes/product.routes.js'
@@ -27,9 +28,12 @@ app.use(cors({
     credentials: true
 }))
 
+app.use(errorMiddleware);
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true, limit: "10mb"}))
 app.use(express.static("public"));
+
 
 app.use("/api/yoga/user", userRouter);
 app.use("/api/yoga/admin", adminRouter);

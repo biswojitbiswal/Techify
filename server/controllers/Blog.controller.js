@@ -1,6 +1,6 @@
 import { Blog } from "../models/blog.model.js";
 
-const getAllBlogs = async(req, res) => {
+const getAllBlogs = async(req, res, next) => {
     try {
         const blogs = await Blog.find({});
 
@@ -10,7 +10,7 @@ const getAllBlogs = async(req, res) => {
 
         return res.status(200).json({blogs})
     } catch (error) {
-        return res.status(500).json({message: "Something Went Wrong"})
+        next(error);
     }
 }
 

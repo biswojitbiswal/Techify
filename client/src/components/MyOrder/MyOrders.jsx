@@ -5,11 +5,14 @@ import Badge from 'react-bootstrap/esm/Badge';
 import { BASE_URL } from '../../../config.js';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
 
 function MyOrder() {
     const [myOrders, setMyOrders] = useState([]);
 
     const { authorization } = useAuth();
+
+    const navigate = useNavigate();
 
     const getMyOrders = async () => {
         try {
@@ -21,7 +24,7 @@ function MyOrder() {
             })
             const data = await response.json();
             // console.log(response);
-            console.log(data);
+            // console.log(data);
 
             if (response.ok) {
                 setMyOrders(data.orders)
@@ -85,8 +88,8 @@ function MyOrder() {
                                                     <div className='d-flex w-100 gap-2'>
                                                         <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary">Cancel</Button>
 
-                                                        <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary"><i class="fa-regular fa-comment"></i> Chat With Us</Button>
-                                                    </div> : <Button className='w-100 fs-5' variant="outline-secondary"><i class="fa-regular fa-comment"></i> Chat With Us</Button>
+                                                        <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
+                                                    </div> : <Button className='w-100 fs-5' variant="outline-secondary" onClick={() => navigate("/contact")}><i class="fa-regular fa-comment"></i> Chat With Us</Button>
                                             }
 
                                         </div>

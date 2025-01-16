@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 import { User } from "../models/user.model.js";
 
-const getAllProducts = async(req, res) => {
+const getAllProducts = async(req, res, next) => {
     try {
         const skip = parseInt(req.query.skip);
         const limit = parseInt(req.query.limit);
@@ -25,11 +25,11 @@ const getAllProducts = async(req, res) => {
 
         return res.status(200).json({Allproducts : products});
     } catch (error) {
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const addToCart = async(req, res) => {
+const addToCart = async(req, res, next) => {
     try {
         const userId = req.userId
         const {productId} = req.params
@@ -59,12 +59,11 @@ const addToCart = async(req, res) => {
             cart: user.cart,
         })
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const removeItemCart = async(req, res) => {
+const removeItemCart = async(req, res, next) => {
     try {
         const {productId} = req.params
         const userId = req.userId
@@ -88,12 +87,11 @@ const removeItemCart = async(req, res) => {
             user 
         });
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({message: "Something Went Wrong!"});
+        next(error);
     }
 }
 
-const getCartItem = async (req, res) => {
+const getCartItem = async (req, res, next) => {
     try {
         const { userId } = req.params;
 
@@ -113,13 +111,12 @@ const getCartItem = async (req, res) => {
 
         return res.status(200).json({ cart: user.cart });
     } catch (error) {
-        console.error("Error fetching cart items:", error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        next(error);
     }
 };
 
 
-const prosuctShowCase = async(req, res) => {
+const prosuctShowCase = async(req, res, next) => {
     try {
         const products = await Product.find({}).limit(10);
 
@@ -129,12 +126,11 @@ const prosuctShowCase = async(req, res) => {
 
         return res.status(200).json({showcase: products});
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const getProductById = async(req, res) => {
+const getProductById = async(req, res, next) => {
     try {
         const {productId} = req.params;
         // console.log(productId);
@@ -154,12 +150,11 @@ const getProductById = async(req, res) => {
 
         return res.status(200).json({item: product});
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({message: "Something Went Wrong!"})
+        next(error);
     }
 }
 
-const getOrderItem = async(req, res) => {
+const getOrderItem = async(req, res, next) => {
     try {
         const {productIds} = req.body;
         // console.log(productIds);
@@ -178,8 +173,7 @@ const getOrderItem = async(req, res) => {
 
         return res.status(200).json({orders})
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Internal Server Error"});
+        next(error);
     }
 }
 

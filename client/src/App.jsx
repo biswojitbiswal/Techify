@@ -24,17 +24,19 @@ import Links from './AdminPanel/Links'
 import Error from './components/Error/Error'
 import Signout from './components/Signout/Signout'
 import Footer from './components/Footer/Footer'
+import Contact from './components/Contact/Contact'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './ProtectedRoute'
 
 
 const ProtectedProductAdd = ProtectedRoute(ProductAdd, ['Admin']);
 const ProtectedAdmin = ProtectedRoute(AdminLayout, ['Admin', 'Moderator']);
-const ProtectedAccount = ProtectedRoute(Account, ['User'])
-const ProtectedAddress = ProtectedRoute(Address, ['User']);
-const ProtectedOrder = ProtectedRoute(MyOrders, ['User']);
-const ProtectedCart = ProtectedRoute(Cart, ['User']);
-const ProtectedOrderNow = ProtectedRoute(Order, ['User']);
+const ProtectedAccount = ProtectedRoute(Account, ['User', 'Admin', 'Moderator'])
+const ProtectedAddress = ProtectedRoute(Address, ['User', 'Admin', 'Moderator']);
+const ProtectedOrder = ProtectedRoute(MyOrders, ['User', 'Admin', 'Moderator']);
+const ProtectedCart = ProtectedRoute(Cart, ['User', 'Admin', 'Moderator']);
+const ProtectedOrderNow = ProtectedRoute(Order, ['User', 'Admin', 'Moderator']);
+const ProductedContact = ProtectedRoute(Contact, ['User', 'Admin', 'Moderator']);
 function App() {
 
   return (
@@ -48,6 +50,7 @@ function App() {
         <Route path='/order/buy-now' element={<ProtectedOrderNow />} />
         <Route path='/blog' element={<Blog />} />
         <Route path='/cart' element={<ProtectedCart />} />
+        <Route path='/contact' element={<ProductedContact />} />
 
         <Route path='/account' element={<ProtectedAccount />} />
         <Route path='/account/address' element={<ProtectedAddress />} />

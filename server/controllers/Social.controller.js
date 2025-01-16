@@ -2,7 +2,7 @@ import axios from "axios";
 import { SocialPost } from "../models/SocialMedia.model.js";
 
 const fetchTwitterPostDetails = async (url, apiConfig) => {
-  const tweetId = url.split("/").pop(); // Extract tweet ID
+  const tweetId = url.split("/").pop();
   const response = await axios.get(
     `https://api.twitter.com/2/tweets/${tweetId}`,
     {
@@ -39,74 +39,8 @@ const fetchTwitterPostDetails = async (url, apiConfig) => {
   };
 };
 
-// Helper: Fetch Instagram post
-// const fetchInstagramPostDetails = async (url, apiConfig) => {
-//     const postId = url.split("/").slice(-2, -1)[0]; // Extract the post's shortcode
-//     const response = await axios.get(
-//       `https://graph.instagram.com/${postId}`,
-//       {
-//         headers: { Authorization: `Bearer ${apiConfig.fbIgAccessToken}` },
-//         params: {
-//           fields:
-//             "id,media_type,media_url,username,timestamp,caption,like_count,comments_count",
-//         },
-//       }
-//     );
-  
-//     const data = response.data;
-  
-//     if (!data.id) {
-//       throw new Error("Failed to fetch Instagram post details. `id` is missing.");
-//     }
-  
-//     return {
-//       platform: "Instagram",
-//       postId: data.id, // This should be present in the response
-//       url,
-//       text: data.caption || "",
-//       media: [data.media_url],
-//       author: { username: data.username },
-//       metrics: {
-//         likes: data.like_count,
-//         comments: data.comments_count,
-//       },
-//       createdAt: data.timestamp,
-//     };
-//   };
 
-// // Helper: Fetch Facebook post
-// const fetchFacebookPostDetails = async (url, apiConfig) => {
-//   const postId = url.split("/").pop(); // Extract post ID
-//   const response = await axios.get(
-//     `https://www.facebook.com/v17.0/${postId}`,
-//     {
-//       headers: { Authorization: `Bearer ${apiConfig.fbIgAccessToken}` },
-//       params: {
-//         fields:
-//           "id,message,created_time,shares.summary(true),comments.summary(true),from",
-//       },
-//     }
-//   );
-
-//   const data = response.data;
-
-//   return {
-//     platform: "Facebook",
-//     postId: data.id,
-//     url,
-//     text: data.message || "",
-//     media: [], // Extend to fetch media URLs if needed
-//     author: { name: data.from.name },
-//     metrics: {
-//       shares: data.shares?.count || 0,
-//       comments: data.comments?.summary?.total_count || 0,
-//     },
-//     createdAt: data.created_time,
-//   };
-// };
-
-// Unified Controller
-const fetchAndSavePost = async (req, res) => {
+const fetchAndSavePost = async (req, res, next) => {
   try {
     const { url } = req.body;
 
@@ -124,13 +58,7 @@ const fetchAndSavePost = async (req, res) => {
     let postDetails;
     if (url.includes("x.com")) {
       postDetails = await fetchTwitterPostDetails(url, apiConfig);
-     } 
-    //else if (url.includes("instagram.com")) {
-    //   postDetails = await fetchInstagramPostDetails(url, apiConfig);
-    // } else if (url.includes("facebook.com")) {
-    //   postDetails = await fetchFacebookPostDetails(url, apiConfig);
-    // } 
-    else {
+     } else {
       return res
         .status(400)
         .json({ success: false, message: "Unsupported platform." });
@@ -141,13 +69,12 @@ const fetchAndSavePost = async (req, res) => {
 
     res.status(201).json({ success: true, data: post });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ success: false, message: error.message, error });
+    next(error);
   }
 };
 
 
-const getAllSocialMediaPost = async(req, res) => {
+const getAllSocialMediaPost = async(req, res, next) => {
   try {
     const posts = await SocialPost.find({});
     
@@ -160,8 +87,7 @@ const getAllSocialMediaPost = async(req, res) => {
       posts,
     })
   } catch (error) {
-      console.log(error)
-      res.status(500).json({ success: false, message: error.message, error });
+    next(error);
   }
 }
 
