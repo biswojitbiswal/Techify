@@ -7,10 +7,10 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: import.meta.env.REACT_APP_FIREBASE_APIKEY,
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
   authDomain: "yoga-4b2cb.firebaseapp.com",
   projectId: "yoga-4b2cb",
-  storageBucket: "yoga-4b2cb.firebasestorage.app",
+  storageBucket: "yoga-4b2cb.appspot.app",
   messagingSenderId: "641072453083",
   appId: "1:641072453083:web:6af62dd0d274568b0943fe",
   measurementId: "G-ZLE9S97E3N"
