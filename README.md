@@ -101,7 +101,7 @@ Before setting up the project, make sure you have the following installed on you
   - **Password: biswojit#123**
 
 ## Deployement Link:-
-  ### **https://yoga-app-eta-nine.vercel.app/**
+  ### **https://yoga-app-sandy.vercel.app/**
 
 ## Conclusion
 - This project is continuously evolving, and I am committed to improving it over time. While I have thoroughly tested the core features and ensured that the application functions as expected, I acknowledge that there may still be areas for improvement. I am actively working on enhancing the project, adding new features, and addressing any potential issues that arise. My goal is to make the platform more robust, user-friendly, and secure, ensuring an excellent experience for all users.
