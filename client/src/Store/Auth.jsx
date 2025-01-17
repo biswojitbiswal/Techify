@@ -82,6 +82,8 @@ export const AuthContextProvider = ({children}) => {
         }
     }, [darkMode]);
 
+   
+
     return (
         <AuthContext.Provider value={{
             setTokenInCookies, 

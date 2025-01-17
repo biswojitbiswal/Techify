@@ -50,11 +50,11 @@ function App() {
         <Route path='/order/buy-now' element={<ProtectedOrderNow />} />
         <Route path='/blog' element={<Blog />} />
         <Route path='/cart' element={<ProtectedCart />} />
-        <Route path='/contact' element={<ProductedContact />} />
 
         <Route path='/account' element={<ProtectedAccount />} />
         <Route path='/account/address' element={<ProtectedAddress />} />
         <Route path='/account/myorders' element={<ProtectedOrder />} />
+        <Route path='/contact' element={<ProductedContact />} />
         {/* </Route> */}
         
         <Route path='/signin' element={<Signin />} />

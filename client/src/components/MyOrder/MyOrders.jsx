@@ -89,7 +89,7 @@ function MyOrder() {
                                                         <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary">Cancel</Button>
 
                                                         <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
-                                                    </div> : <Button className='w-100 fs-5' variant="outline-secondary" onClick={() => navigate("/contact")}><i class="fa-regular fa-comment"></i> Chat With Us</Button>
+                                                    </div> : <Button className='w-100 fs-5' variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
                                             }
 
                                         </div>

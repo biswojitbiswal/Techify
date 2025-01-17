@@ -10,6 +10,7 @@ import blogRouter from './routes/blog.routes.js'
 import socialRouter from './routes/social.routes.js'
 import reviewRouter from './routes/review.routes.js'
 import orderRouter from './routes/order.routes.js'
+import contactRouter from './routes/contact.routes.js'
 
 
 
@@ -42,6 +43,7 @@ app.use("/api/yoga/blog", blogRouter)
 app.use("/api/yoga/social", socialRouter)
 app.use("/api/yoga/review", reviewRouter);
 app.use("/api/yoga/order", orderRouter);
+app.use("/api/yoga/contact", contactRouter);
 
 
 
