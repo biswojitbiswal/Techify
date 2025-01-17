@@ -39,12 +39,11 @@ function MyOrder() {
         getMyOrders();
     }, [myOrders])
 
-    // const handleCancelOrder = (orderId) => {
-    //     setMyOrders(prevOrders => prevOrders.filter(order => order.orderId !== orderId));
-    // }
+
 
     const orders = myOrders?.filter((order) => order.orderStatus !== 'Pending')
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+
 
     return (
         <>
@@ -76,25 +75,27 @@ function MyOrder() {
 
                                                 </div>
                                             </div>
-                                            <hr className='m-1'/>
+                                            <hr className='m-1' />
                                             <div className="delivery-details">
                                                 {/* <h4>Delivery Here</h4> */}
                                                 <p className='mb-2'>{order.userDetails.name} <span><Badge>{address.type}</Badge></span></p>
                                                 <p className='mb-2'>{address.street}</p>
                                                 <p className='mb-2'>{`${address.city}, ${address.state}, ${address.zipcode}`}</p>
                                                 <p className='mb-2'>{address.contact}</p>
-
                                             </div>
                                         </div>
+                                        
+                                        {order?.orderStatus === 'Canceled' ? <p className='text-danger'>Cancellation Reason: {order.cancellationReason}</p> : ""}
+                                        
+
                                         <hr className='m-2' />
                                         <div className="ordered-btn d-flex justify-content-between">
                                             {
                                                 order.orderStatus !== 'Completed' && order.orderStatus !== 'Canceled' ?
                                                     <div className='d-flex w-100 gap-2'>
-                                                        {/* <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary">Cancel</Button> */}
-                                                        <OrderCancel orderId={order._id}/>
+                                                        <OrderCancel orderId={order._id} />
 
-                                                        <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
+                                                        <Button className='fs-5' style={{ width: "50%" }} variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
                                                     </div> : <Button className='w-100 fs-5' variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
                                             }
 
@@ -106,7 +107,6 @@ function MyOrder() {
                         <p>No orders found.</p>
                     }
                 </div>
-                <p>For Now You can only see a limited information in future i will improve it like cancel order and contact us option</p>
             </section>
         </>
     )

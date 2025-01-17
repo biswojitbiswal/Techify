@@ -153,6 +153,7 @@ const getUserOrders = async (req, res, next) => {
       orderStatus: order.orderStatus,
       totalAmount: order.totalAmount,
       paymentStatus: order.paymentStatus,
+      cancellationReason: order.cancellationReason,
       address: order.address,
       orderedItem: order.orderedItem.map(item => ({
         productId: item.product._id,
