@@ -177,4 +177,46 @@ const getUserOrders = async (req, res, next) => {
   }
 };
 
-export { createOrder, verifyOrderPayment, getUserOrders };
+const cancelOrder = async(req, res, next) => {
+  try {
+    const {orderId} = req.params;
+    const {reason} = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(orderId)) {
+      return res.status(400).json({message: "Something Wrong"});
+    }
+
+    if(!reason){
+      return res.status(400).json({message: "Reason Required"})
+    }
+
+    const order = await Order.findById(orderId);
+
+    if(!order){
+      return res.status(404).json({message: "Order Not Found"});
+    }
+
+    if(order.orderStatus === 'Completed'){
+      return res.status(400).json({message: "Can't Cancel!, Too Late"})
+    }
+
+    await Order.findByIdAndUpdate(
+      orderId,
+      {
+        $set: {
+          cancellationReason: reason,
+          orderStatus: "Canceled",
+          paymentStatus: "Refunded",
+        }
+      },
+      {new: true}
+    )
+
+    return res.status(200).json({message: "Order Canceled"})
+  } catch (error) {
+    console.log(error);
+    next(error)
+  }
+}
+
+export { createOrder, verifyOrderPayment, getUserOrders, cancelOrder };

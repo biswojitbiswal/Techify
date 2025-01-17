@@ -6,6 +6,7 @@ import { BASE_URL } from '../../../config.js';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
+import OrderCancel from './OrderCancel.jsx'
 
 function MyOrder() {
     const [myOrders, setMyOrders] = useState([]);
@@ -36,7 +37,11 @@ function MyOrder() {
 
     useEffect(() => {
         getMyOrders();
-    }, [])
+    }, [myOrders])
+
+    // const handleCancelOrder = (orderId) => {
+    //     setMyOrders(prevOrders => prevOrders.filter(order => order.orderId !== orderId));
+    // }
 
     const orders = myOrders?.filter((order) => order.orderStatus !== 'Pending')
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -84,9 +89,10 @@ function MyOrder() {
                                         <hr className='m-2' />
                                         <div className="ordered-btn d-flex justify-content-between">
                                             {
-                                                order.orderStatus !== 'Completed' ?
+                                                order.orderStatus !== 'Completed' && order.orderStatus !== 'Canceled' ?
                                                     <div className='d-flex w-100 gap-2'>
-                                                        <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary">Cancel</Button>
+                                                        {/* <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary">Cancel</Button> */}
+                                                        <OrderCancel orderId={order._id}/>
 
                                                         <Button className='fs-5' style={{width: "50%"}} variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
                                                     </div> : <Button className='w-100 fs-5' variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
