@@ -64,6 +64,11 @@ function Home() {
             Shop Now <i className="uil uil-message button_icon"></i>
           </Link>
         </div>
+        <div className="outer-round">
+          <div className="inner-round">
+            
+          </div>
+        </div>
       </section>
       <ProdShow />
       <Social />

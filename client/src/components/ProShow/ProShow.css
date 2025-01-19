@@ -1,7 +1,7 @@
 #prod-details {
     padding: 4rem 8rem;
-
 }
+
 
 #prod-details .prod-card{
     display: flex;
@@ -9,7 +9,6 @@
     height: 450px;
     justify-content: space-between;
     align-items: center;
-    /* background-color: #e3edf7; */
     border-radius: .25rem; 
     padding: .5rem;   
 }
@@ -20,6 +19,7 @@
     display: flex;
     /* padding: 1rem .5rem; */
     justify-content: space-between;
+
 }
 
 
@@ -63,7 +63,6 @@
 .imageSelected{
     border: 3px solid #0d6efd;
 }
-
 
 #prod-details .order{
     display: flex;

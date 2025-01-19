@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Card from 'react-bootstrap/Card';
 import './Product.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../config.js';
+
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -31,7 +31,7 @@ function Product() {
       })
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
 
 
       if (response.ok) {
@@ -51,7 +51,7 @@ function Product() {
   }
 
   useEffect(() => {
-      productData();
+    productData();
   }, [skip])
 
   let filteredProducts = products?.filter((product) =>
@@ -115,58 +115,47 @@ function Product() {
         <div className="card-container mt-4 d-flex flex-wrap gap-5 justify-content-center">
           {
             filteredProducts?.map((product) => {
-              return <Card key={product._id}
-                onClick={() => navigate(`/product/${product?._id}`)} style={{ width: '22rem', backgroundColor: darkMode ? '#343434' : '#e3edf7', borderRadius: "1rem" }} className='p-2 h-auto'>
-                <Card.Img variant="top" style={{ height: '300px', objectFit: 'cover', borderRadius: '0.5rem' }} src={product.images[0]} />
-                <Card.Body style={{ height: "50%", color: darkMode ? '#fff' : '#000' }}>
-                  <Card.Title>{product.title}</Card.Title>
-                  <Card.Text style={{ minHeight: "70px" }}>{product.description}</Card.Text>
-                  <Card.Title>&#8377;{product.price}</Card.Title>
+              return <div key={product._id} className="outer-card">
+                <div className="inner-card">
+                  <h5 className='text-primary product-title'>{product.title}</h5>
+                  <div className="product-image">
+                    <img src={product?.images[0]} alt={product.title} />
+                  </div>
+                  <p className='product-description'>{product.description}</p>
+                  <h4 className='text-primary'>&#8377;{product.price}</h4>
+                  <p className='m-1'>
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <span key={index}>
+                        <i className={`fa-solid fa-star ${index < product.averageRating ? 'text-warning' : 'text-secondary'}`}></i>
+                      </span>
+                    ))}
+                  </p>
                   {
                     user.role === 'Admin' && (
-                      <>
-                        <Link to={`/admin/edit/${product._id}`}>
-                          <Button variant="primary" className='me-3 fs-5'
-                            onClick={(event) => {
-                              event.stopPropagation()
-                              event.preventDefault()
-                              navigate(`/admin/edit/${product._id}`)
-                            }}>
-                            Edit <span><i className="fa-solid fa-pencil ms-2"></i></span>
-                          </Button>
+                      <div className=' edit-delete-buttons w-100 justify-content-between mb-2'>
+                        <Link to={`/admin/edit/${product._id}`} className='product-edit'><i className="fa-solid fa-pencil"></i>
                         </Link>
 
-                        <Button variant="danger" className='me-3 fs-5' onClick={(event) => {
+                        <button variant="danger" className='product-dlt-btn text-danger' onClick={(event) => {
                           event.stopPropagation();
                           handleDelete(product._id)
-                        }}>
-                          Delete<span><i className="fa-solid fa-trash ms-2"></i></span>
-                        </Button>
-                      </>
+                        }}><i className="fa-solid fa-trash ms-2"></i></button>
+                      </div>
                     )
                   }
                   {
                     user?.role === 'Moderator' && (
-                      <Link to={`/admin/edit/${product._id}`}>
-                        <Button variant="primary" className='me-3 fs-5'
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            event.preventDefault()
-                            navigate(`/admin/edit/${product._id}`)
-                          }}>
-                          Edit <span><i className="fa-solid fa-pencil ms-2"></i></span>
-                        </Button>
+                      <Link to={`/admin/edit/${product._id}`} className='product-edit edit-delete-buttons'><i className="fa-solid fa-pencil"></i>
                       </Link>
                     )
                   }
-                </Card.Body>
-              </Card>
+                  <button onClick={() => navigate(`/product/${product?._id}`)} className='cart-btn bg-warning'>Add To Cart</button>
+                </div>
+              </div>
             })
           }
-
-
         </div>
-        <Button variant='primary' onClick={() => setSkip((prev) => prev + limit)} className='mt-4'>More</Button>
+        {filteredProducts.length > 0 ? <Button variant='primary' onClick={() => setSkip((prev) => prev + limit)} className='mt-4'>More</Button> : ""}
       </section>
     </>
   )

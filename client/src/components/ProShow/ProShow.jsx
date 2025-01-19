@@ -89,6 +89,7 @@ function ProShow() {
   return (
     <>
       <section id="prod-details">
+        
         <div className="prod-card" style={{ backgroundColor: darkMode ? '#343434' : '#e3edf7' }}>
           <div className="prod-look">
 
@@ -131,6 +132,7 @@ function ProShow() {
             </div>
           </div>
         </div>
+        
       </section>
 
       <Review product={product} />
