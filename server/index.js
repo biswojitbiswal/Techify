@@ -6,7 +6,6 @@ import errorMiddleware from "./middleware/error.middleware.js";
 import userRouter from './routes/user.routes.js'
 import adminRouter from './routes/adminModerator.routes.js'
 import productRouter from './routes/product.routes.js'
-import blogRouter from './routes/blog.routes.js'
 import socialRouter from './routes/social.routes.js'
 import reviewRouter from './routes/review.routes.js'
 import orderRouter from './routes/order.routes.js'
@@ -39,7 +38,6 @@ app.use(express.static("public"));
 app.use("/api/yoga/user", userRouter);
 app.use("/api/yoga/admin", adminRouter);
 app.use("/api/yoga/products", productRouter)
-app.use("/api/yoga/blog", blogRouter)
 app.use("/api/yoga/social", socialRouter)
 app.use("/api/yoga/review", reviewRouter);
 app.use("/api/yoga/order", orderRouter);

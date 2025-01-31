@@ -74,7 +74,7 @@ function Signin() {
               <Form.Control type="password" name='password' placeholder="Password" value={signinData.password} onChange={handleInput} required />
             </Form.Group>
             <Button variant="primary" type="submit">
-              Submit
+              Sign In
             </Button>
           </Form>
           <hr className={`${darkMode ? 'text-white' : 'text-black'}`} />

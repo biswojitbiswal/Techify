@@ -5,7 +5,6 @@ import Home from './components/Home/Home'
 import Product from './components/Product/Product'
 import ProShow from './components/ProShow/ProShow'
 import Order from './components/Order/Order'
-import Blog from './components/Blog/Blog'
 import Cart from './components/Cart/Cart'
 import Account from './components/Account/Account'
 import MyOrders from './components/MyOrder/MyOrders'
@@ -48,7 +47,6 @@ function App() {
         <Route path='/product' element={<Product />} />
         <Route path='/product/:productId' element={<ProShow />} />
         <Route path='/order/buy-now' element={<ProtectedOrderNow />} />
-        <Route path='/blog' element={<Blog />} />
         <Route path='/cart' element={<ProtectedCart />} />
 
         <Route path='/account' element={<ProtectedAccount />} />
@@ -68,7 +66,6 @@ function App() {
           <Route path='add/product' element={<ProtectedProductAdd />} />
           <Route path='edit/:productId' element={<ProductEdit />} />
           <Route path='review' element={<AdminReview />} />
-          <Route path='add/publish' element={<Publish />} />
           <Route path='add/links' element={<Links />} />
         </Route>
         <Route path='/*' element={<Error />} />

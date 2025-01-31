@@ -34,7 +34,7 @@ function ProdShow() {
         <>
             <section className="showcase-prod">
                 <h2 className={`fs-1 ${darkMode ? "text-white" : "text-black"}`}>Trending Now</h2>
-                <div className="prod-carousel" style={{backgroundColor: darkMode ? '#343434' : '#e3edf7'}}>
+                <div className="prod-carousel">
                     {
                         products.length > 0 ? 
                         products.map(product => (

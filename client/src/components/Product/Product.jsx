@@ -13,6 +13,7 @@ function Product() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('');
+  const [loading, setLoading] = useState(false);
   const [skip, setSkip] = useState(0);
   const [limit] = useState(6);
   const storedIds = useRef(new Set());
@@ -22,6 +23,7 @@ function Product() {
   const navigate = useNavigate();
 
   const productData = async () => {
+    setLoading(true)
     try {
       const response = await fetch(`${BASE_URL}/api/yoga/products/get?skip=${skip}&limit=${limit}`, {
         method: "GET",
@@ -31,7 +33,7 @@ function Product() {
       })
 
       const data = await response.json();
-      // console.log(data);
+      console.log(data);
 
 
       if (response.ok) {
@@ -42,6 +44,7 @@ function Product() {
 
           setProducts(prevProducts => [...prevProducts, ...newProducts]);
         }
+        setLoading(false);
       } else {
         toast.error("No More Order Found");
       }
@@ -119,7 +122,7 @@ function Product() {
                 <div className="inner-card">
                   <h5 className='text-primary product-title'>{product.title}</h5>
                   <div className="product-image">
-                    <img src={product?.images[0]} alt={product.title} />
+                    <img src={product?.images[0]} alt={product.title} loading='lazy' />
                   </div>
                   <p className='product-description'>{product.description}</p>
                   <h4 className='text-primary'>&#8377;{product.price}</h4>

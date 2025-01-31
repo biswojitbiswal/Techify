@@ -93,17 +93,6 @@ function MyNavbar() {
                 <Nav.Item>
                   <Nav.Link
                     as={NavLink}
-                    to="/blog"
-                    eventKey="link-3"
-                    className="me-3 fs-4 text-primary"
-                    onClick={handleCloseOffCanvas}
-                  >
-                    Blog
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link
-                    as={NavLink}
                     to="/cart"
                     eventKey="link-4"
                     className="me-3 fs-4 text-primary"

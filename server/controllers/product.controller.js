@@ -8,13 +8,7 @@ const getAllProducts = async(req, res, next) => {
         const limit = parseInt(req.query.limit);
 
         const products = await Product.find({})
-        .populate({
-            path: "reviews",
-            populate: {
-                path: "reviewBy",
-                select: "name",
-            }
-        })
+        .select("-reviews")
         .skip(skip)
         .limit(limit);
         

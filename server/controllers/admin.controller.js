@@ -1,6 +1,5 @@
 import { Product } from "../models/product.model.js";
 import { uploadFileOnCloudinary } from "../utils/cloudinary.utils.js";
-import { Blog } from "../models/blog.model.js";
 import {User} from "../models/user.model.js"
 import {Review} from "../models/review.model.js"
 import {Order} from "../models/order.model.js"
@@ -111,53 +110,6 @@ const editProductDetails = async (req, res, next) => {
 };
 
 
-const addBlog = async(req, res, next) => {
-    try {
-        const {blogTitle, blogDescription} = req.body;
-
-        if([blogTitle, blogDescription].some((field) => field.trim() === "")){
-            return req.status(400).json({message: "All Fields Are Required"})
-        }
-
-        console.log(req.files);
-        const blogImage = req.files?.blogImg[0]?.path;
-        console.log("Blog Image Path: ", blogImage);
-        if (!blogImage) {
-        return res.status(400).json({ message: "File Is Required" });
-        }
-
-
-
-        const blogImageFile = await uploadFileOnCloudinary(blogImage);
-        console.log("after cludinary", blogImageFile)
-        console.log("after cludinary url", blogImageFile.data.secure_url)
-
-
-        if(!blogImageFile){
-            return res.status(400).json({message: "File Is Required!"})
-        }
-
-        const blog = await Blog.create({
-            blogTitle,
-            blogDescription,
-            blogImg: blogImageFile.data.secure_url,
-        });
-
-        const addedBlog = await Blog.findById(blog._id)
-
-        if(!addedBlog){
-            return res.status(400).json({message: "Something Went Wrong While Adding Blog"})
-        }
-
-        return res.status(200).json({
-            message: "Blog Added Successfully",
-            blog: addedBlog,
-            blogId: addedBlog._id
-        })
-    } catch (error) {
-        next(error);
-    }
-}
 
 const deleteProduct = async(req, res, next) => {
     try {
@@ -484,7 +436,6 @@ const getProductById = async(req, res, next) => {
 export {
     addProducts,
     editProductDetails,
-    addBlog,
     deleteProduct,
     deleteBlog,
     getAllusers,
