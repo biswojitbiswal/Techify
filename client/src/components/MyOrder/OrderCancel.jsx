@@ -12,7 +12,7 @@ function CancelOrderModal({ orderId }) {
 
     const handleCancel = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/order/${orderId}/cancel`, {
+            const response = await fetch(`${BASE_URL}/api/techify/order/${orderId}/cancel`, {
                 method: "PATCH",
                 headers: {
                     'Content-Type': 'application/json',

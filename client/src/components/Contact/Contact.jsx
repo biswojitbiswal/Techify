@@ -30,7 +30,7 @@ function Contact() {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/contact/send`, {
+            const response = await fetch(`${BASE_URL}/api/techify/contact/send`, {
                 method: "POST",
                 headers: {
                     Authorization: authorization,

@@ -23,7 +23,7 @@ function ProShow() {
     setLoading(true)
     try {
       // console.log(productId);
-      const response = await fetch(`${BASE_URL}/api/yoga/products/product/${productId}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/products/product/${productId}`, {
         method: "GET",
         headers: {
           Authorization: authorization
@@ -55,7 +55,7 @@ function ProShow() {
       return;
     } else {
       try {
-        const response = await fetch(`${BASE_URL}/api/yoga/products/cart/add/${productId}`, {
+        const response = await fetch(`${BASE_URL}/api/techify/products/cart/add/${productId}`, {
           method: "POST",
           headers: {
             Authorization: authorization,

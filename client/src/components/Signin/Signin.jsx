@@ -33,7 +33,7 @@ function Signin() {
   const handleSigninForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/user/signin`, {
+      const response = await fetch(`${BASE_URL}/api/techify/user/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

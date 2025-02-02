@@ -46,7 +46,7 @@ function Review(product) {
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/review/add/${product.product._id}`, {
+            const response = await fetch(`${BASE_URL}/api/techify/review/add/${product.product._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

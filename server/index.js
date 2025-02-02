@@ -35,18 +35,18 @@ app.use(express.urlencoded({extended: true, limit: "10mb"}))
 app.use(express.static("public"));
 
 
-app.use("/api/yoga/user", userRouter);
-app.use("/api/yoga/admin", adminRouter);
-app.use("/api/yoga/products", productRouter)
-app.use("/api/yoga/social", socialRouter)
-app.use("/api/yoga/review", reviewRouter);
-app.use("/api/yoga/order", orderRouter);
-app.use("/api/yoga/contact", contactRouter);
+app.use("/api/techify/user", userRouter);
+app.use("/api/techify/admin", adminRouter);
+app.use("/api/techify/products", productRouter)
+app.use("/api/techify/social", socialRouter)
+app.use("/api/techify/review", reviewRouter);
+app.use("/api/techify/order", orderRouter);
+app.use("/api/techify/contact", contactRouter);
 
 
 
 app.get("/", (req, res) => {
-    res.send("My yoga product app page");
+    res.send("My Techify product app page");
 })
 
 connectDb()

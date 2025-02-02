@@ -43,7 +43,7 @@ export const AuthContextProvider = ({children}) => {
     const userAuthentication = async() => {
         try {
             setIsLoading(true)
-            const response = await fetch(`${BASE_URL}/api/yoga/user/getuser`, {
+            const response = await fetch(`${BASE_URL}/api/techify/user/getuser`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization

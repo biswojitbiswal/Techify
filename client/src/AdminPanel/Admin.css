@@ -1,4 +1,4 @@
-.admin-product-form,.admin-edit-form,.admin-publish-form,.admin-social-forms,.admin-edit-user{
+.admin-product-form,.admin-edit-form,.admin-publish-form,.admin-social-forms,.admin-edit-user,.admin-category-form{
     width: 50%;
     height: auto;
     margin: 5% auto;
@@ -42,6 +42,9 @@
 .order-container .order-table{
     text-align: center;
     padding: .5rem;
+}
+#admin-dashboard-dropdown.dropdown-toggle::after{
+    color: #007bff;
 }
 
 

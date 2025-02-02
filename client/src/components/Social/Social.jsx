@@ -11,7 +11,7 @@ function Social() {
 
   const getSocialMediaPost = async() => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/social/get-posts`, {
+      const response = await fetch(`${BASE_URL}/api/techify/social/get-posts`, {
         method: "GET"
       })
 

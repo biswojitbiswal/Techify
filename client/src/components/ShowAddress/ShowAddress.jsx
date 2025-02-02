@@ -62,7 +62,7 @@ function ShowAddress() {
     const handleDelete = async (addressId) => {
         console.log(addressId)
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/user/delete/address/${addressId}`, {
+            const response = await fetch(`${BASE_URL}/api/techify/user/delete/address/${addressId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: authorization,
@@ -94,7 +94,7 @@ function ShowAddress() {
     const handleSaveChanges = async () => {
         
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/user/update/address/${editData._id}`, {
+            const response = await fetch(`${BASE_URL}/api/techify/user/update/address/${editData._id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ function ShowAddress() {
 
     const handleSetPrimary = async (addressId) => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/user/address/${addressId}/primary`, {
+            const response = await fetch(`${BASE_URL}/api/techify/user/address/${addressId}/primary`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: authorization,

@@ -28,7 +28,7 @@ function Links() {
     }
 
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/social/fetch-post`, {
+      const response = await fetch(`${BASE_URL}/api/techify/social/fetch-post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

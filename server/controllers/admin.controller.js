@@ -3,15 +3,26 @@ import { uploadFileOnCloudinary } from "../utils/cloudinary.utils.js";
 import {User} from "../models/user.model.js"
 import {Review} from "../models/review.model.js"
 import {Order} from "../models/order.model.js"
+import {Category} from "../models/category.model.js"
+import {Brand} from "../models/brand.model.js"
 import mongoose from "mongoose";
 
 const addProducts = async (req, res, next) => {
     try {
-        const { title, description, price } = req.body;
+        const { title, description, price, stock, category, brand, specification } = req.body;
 
-        if ([title, description, price].some((field) => field?.trim() === "")) {
+        if ([title, description, price, stock, category, brand, specification].some((field) => !field || field?.toString().trim() === "")) {
             return res.status(400).json({ message: "All Fields Are Required" });
         }
+
+        if (!mongoose.Types.ObjectId.isValid(category)) {
+            return res.status(400).json({ message: "Invalid Category ID" });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(brand)) {
+            return res.status(400).json({ message: "Invalid Brand ID" });
+        }
+        
 
         const files = req.files?.images;
         if (!files || files.length === 0) {
@@ -39,6 +50,10 @@ const addProducts = async (req, res, next) => {
             title,
             description,
             price,
+            stock,
+            category,
+            brand,
+            specification: JSON.parse(specification),
             images: productImages,
         });
 
@@ -109,12 +124,10 @@ const editProductDetails = async (req, res, next) => {
     }
 };
 
-
-
 const deleteProduct = async(req, res, next) => {
     try {
         const {productId} = req.params
-
+        // console.log(productId)
         const product = await Product.findById(productId);
 
         if(!product){
@@ -141,18 +154,134 @@ const deleteProduct = async(req, res, next) => {
     }
 }
 
-const deleteBlog = async(req, res, next) => {
+const addCategory = async(req, res, next) => {
     try {
-        const {blogId} = req.params;
+        const {name, description} = req.body;
 
-        const blog = await Blog.findByIdAndDelete(blogId);
-
-        if(!blog){
-            return res.status(404).json({message: "Blog Not Found"})
+        if(!name || !description){
+            return res.status(400).json({message: "All Fields Required!"})
         }
+
+        const existingCategory = await Category.findOne({name : name.trim().toLowerCase() });
+
+        if(existingCategory){
+            return res.status(400).json({message: "Category Already Exists"});
+        }
+
+
+        const file = req.files?.image[0]?.path;
+        // console.log(file)
+        if (!file) {
+            return res.status(400).json({ message: "Image file is required!" });
+        }
+
+        const uploadedFile = await uploadFileOnCloudinary(file);
+
+        if(!uploadedFile){
+            return res.status(500).json({message: "File Upload Failed"})
+        }
+
+        const category = await Category.create({
+            name: name.trim(),
+            description: description.trim(),
+            image: uploadedFile.data.secure_url,
+        })
+
+        if(!category){
+            return res.status(500).json({message: "Internal Server Error"});
+        }
+
+        return res.status(201).json({message: "Category Added Successfully", category});
+    } catch (error) {
+       next(error) ;
+    }
+}
+
+const getAllCategory = async(req, res, next) => {
+    try {
+        const {fields} = req.query
+
+        let projection = {};
+        if(fields === 'minimal'){
+            projection = {_id: 1, name: 1};
+        }
+
+        const categories = await Category.find({}, projection);
+
+        if(!categories || categories.length === 0){
+            return res.status(404).json("No Category Found");
+        }
+
+        return res.status(200).json({message: "Categories Fetched", categories})
+    } catch (error) {
+        next(error);
+    }
+}
+
+const addBrand = async(req, res, next) => {
+    try {
+        const {name, description, category} = req.body;
+
+        if ([name, description, category].some((field) => field?.trim() === "")) {
+            return res.status(400).json({ message: "All Fields Are Required" });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(category)) {
+            return res.status(400).json({ message: "Invalid Category ID" });
+        }
+
+        const existingBrand = await Brand.findOne({name: name.trim().toLowerCase()});
+        if(existingBrand){
+            return res.status(400).json({message: "Brand Already Exists"});
+        }
+
+        const file = req.files?.logo?.[0]?.path
+
+        if(!file){
+            return res.status(400).json({message: "Image File Required"});
+        }
+
+        const uploadedLogo = await uploadFileOnCloudinary(file);
+
+        if(!uploadedLogo){
+            return res.status(400).json({message: "File Uploaded Failed"});
+        }
+
+        const brand = await Brand.create({
+            name: name.trim().toLowerCase(),
+            description,
+            category,
+            logo: uploadedLogo.data.secure_url
+        })
+
+        if(!brand){
+            return res.status(500).json({message: "Internal Server Error"});
+        }
+
+        return res.status(201).json({message: "Brand Added Successfully", brand});
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getBrandByCategory = async(req, res, next) => {
+    try {
+        const {category} = req.query;
+
+        if(!category){
+            return res.status(400).json({message: "Plz Select Category"});
+        }
+
+        const brands = await Brand.find({category: category.trim().toLowerCase()});
+
+        if(!brands || brands.length === 0){
+            return res.status(404).json({message: "Brand Not Found"});
+        }
+
         return res.status(200).json({
-            message : "Blog Removed",
-            blog,
+            message: "Brand fetched",
+            brands,
         })
     } catch (error) {
         next(error);
@@ -437,7 +566,7 @@ export {
     addProducts,
     editProductDetails,
     deleteProduct,
-    deleteBlog,
+    addCategory,
     getAllusers,
     getUserById,
     editUserbyId,
@@ -449,7 +578,10 @@ export {
     getAllOrders,
     orderStatusUpdate,
     deleteOrder,
-    getProductById
+    getProductById,
+    addBrand,
+    getAllCategory,
+    getBrandByCategory,
 }
 
 

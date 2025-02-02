@@ -27,7 +27,7 @@ function Order() {
 
   const getOrderProducts = async() => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/products/order/buy-now`, {
+      const response = await fetch(`${BASE_URL}/api/techify/products/order/buy-now`, {
         method: "POST",
         headers:{
           'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ function Order() {
       };
       // console.log(paymentData)
 
-      const response = await fetch(`${BASE_URL}/api/yoga/order/create`, {
+      const response = await fetch(`${BASE_URL}/api/techify/order/create`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ function Order() {
       handler: async (response) => {
         console.log("response", response)
         try {
-          const res = await fetch(`${BASE_URL}/api/yoga/order/verify`, {
+          const res = await fetch(`${BASE_URL}/api/techify/order/verify`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',

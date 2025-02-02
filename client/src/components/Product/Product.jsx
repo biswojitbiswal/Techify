@@ -25,7 +25,7 @@ function Product() {
   const productData = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/products/get?skip=${skip}&limit=${limit}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/products/get?skip=${skip}&limit=${limit}`, {
         method: "GET",
         headers: {
           Authorization: authorization
@@ -69,7 +69,7 @@ function Product() {
 
   const handleDelete = async (productId) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/admin/product/delete/${productId}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/admin/product/delete/${productId}`, {
         method: "DELETE",
         headers: {
           Authorization: authorization

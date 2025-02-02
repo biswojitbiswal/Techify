@@ -12,7 +12,7 @@ function ProdShow() {
 
     const getSomeProduct = async() => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/products/showcase`, {
+            const response = await fetch(`${BASE_URL}/api/techify/products/showcase`, {
                 method: "GET",
             })
 
