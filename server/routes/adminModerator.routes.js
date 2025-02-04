@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { addProducts, editProductDetails, deleteProduct, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole, getAllOrders, orderStatusUpdate,deleteOrder, getProductById, addCategory, addBrand, getAllCategory, getBrandByCategory} from "../controllers/admin.controller.js";
+import { addProducts, editProductDetails, deleteProduct, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole, getAllOrders, orderStatusUpdate,deleteOrder, getProductById, addCategory, addBrand,  getBrandByCategory} from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
 import verifyRole from "../middleware/verifyRole.middleware.js";
 
@@ -45,8 +45,6 @@ router.route("/add/category").post(
     ]),
     addCategory
 )
-
-router.route('/category').get(authVerify, verifyRole(['Admin', 'Moderator']), getAllCategory);
 
 router.route("/add/brand").post(
     authVerify,

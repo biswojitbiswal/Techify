@@ -7,10 +7,10 @@ import Spinner from 'react-bootstrap/Spinner';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
 import { BASE_URL } from '../../config.js';
-import Category from './Category.jsx';
 
 
 function ProductAdd() {
+  const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [specKey, setSpecKey] = useState("");
   const [specValue, setSpecValue] = useState("");
@@ -148,6 +148,26 @@ function ProductAdd() {
     }
   };
 
+  const fetchAllCategory = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/techify/category/get-all?fields=minimal`, {
+        method: "GET",
+      })
+      const data = await response.json();
+      // console.log(data);
+      if (response.ok) {
+        setCategories(data.categories);
+      }
+    } catch (error) {
+      toast.error("Error fetching categories:", error);
+      console.error("Error fetching categories:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchAllCategory()
+  }, [])
+
   useEffect(() => {
     if (!productData.category) return;
 
@@ -161,6 +181,7 @@ function ProductAdd() {
         });
 
         const data = await response.json();
+        console.log(data)
 
         if (response.ok) {
           setBrands(data.brands);
@@ -191,10 +212,22 @@ function ProductAdd() {
           <Form.Control type="number" name='price' value={productData.price} onChange={handleProductInput} placeholder="Enter Price" required />
         </Form.Group>
 
-        <Category handleCategory={handleCategory} selectedCategory={productData.category} />
+        <Form.Group className="mb-3" controlId="price">
+          <Form.Label className='text-black'>Category:</Form.Label>
+        {
+          categories?.length > 0 ? <Form.Select aria-label="Default select example" value={productData.category} onChange={(e) => handleCategory(e.target.value)} >
+            <option>Select Category</option>
+            {
+              categories.map((category, index) => {
+                return <option key={index} value={category._id}>{category.name.charAt(0).toUpperCase() + category.name.substring(1)}</option>
+              })
+            }
+          </Form.Select> : <Spinner size='sm' variant='primary'/>
+        }
+        </Form.Group>
 
         {
-          productData.category && brands ?
+          productData.category ? brands.length > 0 ?
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Brand</Form.Label>
               <Form.Select aria-label="Default select example" value={productData.brand} onChange={(e) => handleBrand(e.target.value)}>
@@ -206,7 +239,7 @@ function ProductAdd() {
                 }
 
               </Form.Select>
-            </Form.Group> : ""
+            </Form.Group> : <Spinner size='sm' variant='primary'/> : ""
         }
 
         <Form.Group className="mb-3" controlId="stock">

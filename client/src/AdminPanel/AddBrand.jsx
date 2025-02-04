@@ -9,7 +9,7 @@ function AdminBrand() {
   const [brandData, setBrandData] = useState({
     name: '',
     description: '',
-    category: '',
+    categories: [],
     logo: null,
   });
 
@@ -30,22 +30,29 @@ function AdminBrand() {
   }
 
   const handleCategory = (categoryId) => {
-    setBrandData({
-      ...brandData,
-      category: categoryId
+    setBrandData((prevData) => {
+      const isSelected = prevData.categories.includes(categoryId);
+
+      return {
+        ...prevData,
+        categories: isSelected ? prevData.categories.filter(id => id !== categoryId) : [...prevData.categories, categoryId]
+      }
     });
   }
 
   const handleBrandData = async () => {
-    if (!brandData.category || brandData.category.length !== 24) {
-      toast.error("Invalid Category IDs");
+    if (brandData.categories.length === 0) {
+      toast.error("Please select at least one category.");
       return;
     }
+    // console.log(brandData)
 
     const formData = new FormData();
     formData.append("name", brandData.name);
     formData.append("description", brandData.description);
-    formData.append("category", brandData.category);
+    brandData.categories.forEach((category) => {
+      formData.append("categories[]", category);
+    })
     formData.append("logo", brandData.logo);
 
     try {
@@ -65,7 +72,7 @@ function AdminBrand() {
         setBrandData({
           name: '',
           description: '',
-          category: '',
+          categories: [],
           logo: null,
         })
       }
@@ -83,14 +90,14 @@ function AdminBrand() {
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" name='name' value={brandData.name} onChange={handleInput} placeholder="Category Name" required />
+            <Form.Control type="text" name='name' value={brandData.name} onChange={handleInput} placeholder="Brand Name" required />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
             <Form.Label>Description</Form.Label>
             <Form.Control as="textarea" rows={3} name='description' value={brandData.description} onChange={handleInput} required />
           </Form.Group>
 
-          <Category handleCategory={handleCategory} selectedCategory={brandData.category} />
+          <Category handleCategory={handleCategory} selectedCategory={brandData.categories} />
 
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Logo</Form.Label>

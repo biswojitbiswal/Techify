@@ -15,11 +15,11 @@ const brandSchema = new mongoose.Schema({
         type:String,
         required: true,
     },
-    category: {
+    categories: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
         required: true,
-    }
+    }]
 }, {timestamps: true});
 
 export const Brand = mongoose.model("Brand", brandSchema);

@@ -182,7 +182,7 @@ const addCategory = async(req, res, next) => {
         }
 
         const category = await Category.create({
-            name: name.trim(),
+            name: name.trim().toLowerCase(),
             description: description.trim(),
             image: uploadedFile.data.secure_url,
         })
@@ -197,42 +197,31 @@ const addCategory = async(req, res, next) => {
     }
 }
 
-const getAllCategory = async(req, res, next) => {
-    try {
-        const {fields} = req.query
-
-        let projection = {};
-        if(fields === 'minimal'){
-            projection = {_id: 1, name: 1};
-        }
-
-        const categories = await Category.find({}, projection);
-
-        if(!categories || categories.length === 0){
-            return res.status(404).json("No Category Found");
-        }
-
-        return res.status(200).json({message: "Categories Fetched", categories})
-    } catch (error) {
-        next(error);
-    }
-}
-
 const addBrand = async(req, res, next) => {
     try {
-        const {name, description, category} = req.body;
+        const {name, description, categories} = req.body;
 
-        if ([name, description, category].some((field) => field?.trim() === "")) {
+        if ([name, description].some((field) => field?.trim() === "")) {
             return res.status(400).json({ message: "All Fields Are Required" });
         }
 
-        if (!mongoose.Types.ObjectId.isValid(category)) {
+        if (!Array.isArray(categories) || !categories.every(mongoose.Types.ObjectId.isValid)) {
             return res.status(400).json({ message: "Invalid Category ID" });
         }
 
         const existingBrand = await Brand.findOne({name: name.trim().toLowerCase()});
+
         if(existingBrand){
-            return res.status(400).json({message: "Brand Already Exists"});
+            const existingCategories = new Set(existingBrand.categories.map((cat) => cat.toString()));
+            const newCategories = categories.filter((cat) => !existingCategories.has(cat));
+
+            if (newCategories.length > 0) {
+                existingBrand.categories = [...existingBrand.categories, ...newCategories];
+                await existingBrand.save();
+                return res.status(200).json({ message: "Brand Updated Successfully", brand: existingBrand });
+            }
+
+            return res.status(400).json({ message: "All selected categories already exist in this brand." });
         }
 
         const file = req.files?.logo?.[0]?.path
@@ -250,7 +239,7 @@ const addBrand = async(req, res, next) => {
         const brand = await Brand.create({
             name: name.trim().toLowerCase(),
             description,
-            category,
+            categories,
             logo: uploadedLogo.data.secure_url
         })
 
@@ -273,7 +262,9 @@ const getBrandByCategory = async(req, res, next) => {
             return res.status(400).json({message: "Plz Select Category"});
         }
 
-        const brands = await Brand.find({category: category.trim().toLowerCase()});
+        const brands = await Brand.find({
+            categories: {$in: [category.trim().toLowerCase()]}
+        });
 
         if(!brands || brands.length === 0){
             return res.status(404).json({message: "Brand Not Found"});
@@ -580,7 +571,6 @@ export {
     deleteOrder,
     getProductById,
     addBrand,
-    getAllCategory,
     getBrandByCategory,
 }
 

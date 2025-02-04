@@ -135,7 +135,7 @@ function Product() {
                   </p>
                   {
                     user.role === 'Admin' && (
-                      <div className=' edit-delete-buttons w-100 justify-content-between mb-2'>
+                      <div className='edit-delete-buttons w-100 justify-content-between mb-4'>
                         <Link to={`/admin/edit/${product._id}`} className='product-edit'><i className="fa-solid fa-pencil"></i>
                         </Link>
 

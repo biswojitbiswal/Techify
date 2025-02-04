@@ -1,26 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../config';
-import { useAuth } from '../Store/Auth';
-import { Form } from 'react-bootstrap';
+import { Form, Dropdown } from 'react-bootstrap';
 
 function Category({handleCategory, selectedCategory}) {
     const [categories, setCategories] = useState([]);
 
-    const { authorization } = useAuth();
 
     const fetchAllCategory = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/techify/admin/category?fields=minimal`, {
+            const response = await fetch(`${BASE_URL}/api/techify/category/get-all?fields=minimal`, {
                 method: "GET",
-                headers: {
-                    Authorization: authorization,
-                }
             })
-
             const data = await response.json();
             // console.log(data);
-
             if (response.ok) {
                 setCategories(data.categories);
             }
@@ -34,18 +27,30 @@ function Category({handleCategory, selectedCategory}) {
         fetchAllCategory()
     }, [])
     return (
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Category</Form.Label>
-            <Form.Select aria-label="Default select example" value={selectedCategory} onChange={(e) => handleCategory(e.target.value)}>
-                <option>Select Category</option>
-                {
-                    categories?.map((category) => {
-                        return <option key={category._id} value={category._id}>{category.name.charAt(0).toUpperCase() + category.name.substring(1)}</option>
-                    })
-                }
-                
-            </Form.Select>
-        </Form.Group>
+        <Form.Group className="mb-3">
+        <Form.Label>Category</Form.Label>
+
+        {/* Bootstrap Dropdown */}
+        <Dropdown className="w-100">
+            <Dropdown.Toggle variant="light" className="w-100 text-start">
+                Select Categories
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu style={{ maxHeight: '200px', overflowY: 'auto', padding: '0rem 1rem', width: '100%' }}>
+                {categories.map((category) => (
+                    <Form.Check
+                        key={category._id}
+                        type="checkbox"
+                        label={category.name.charAt(0).toUpperCase() + category.name.substring(1)}
+                        value={category._id}
+                        checked={selectedCategory.includes(category._id)}
+                        onChange={() => handleCategory(category._id)}
+                        className="dropdown-item text-primary"
+                    />
+                ))}
+            </Dropdown.Menu>
+        </Dropdown>
+    </Form.Group>
 
     )
 }

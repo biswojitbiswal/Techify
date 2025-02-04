@@ -10,6 +10,7 @@ import socialRouter from './routes/social.routes.js'
 import reviewRouter from './routes/review.routes.js'
 import orderRouter from './routes/order.routes.js'
 import contactRouter from './routes/contact.routes.js'
+import categoryRouter from './routes/category.routes.js'
 
 
 
@@ -42,6 +43,7 @@ app.use("/api/techify/social", socialRouter)
 app.use("/api/techify/review", reviewRouter);
 app.use("/api/techify/order", orderRouter);
 app.use("/api/techify/contact", contactRouter);
+app.use("/api/techify/category", categoryRouter);
 
 
 
