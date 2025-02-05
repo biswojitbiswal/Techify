@@ -18,7 +18,7 @@ function AdminOrder() {
 
     const handleAllOrder = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/admin/orders?skip=${skip}&limit=${limit}`, {
+            const response = await fetch(`${BASE_URL}/api/techify/admin/orders?skip=${skip}&limit=${limit}`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization,
@@ -49,7 +49,7 @@ function AdminOrder() {
     const handleOrderStatus = async (orderId, newStatus) => {
         if (confirm(`Are You Sure You Want Change Order Status To ${newStatus}`)) {
             try {
-                const response = await fetch(`${BASE_URL}/api/yoga/admin/order/status/${orderId}`, {
+                const response = await fetch(`${BASE_URL}/api/techify/admin/order/status/${orderId}`, {
                     method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
@@ -96,7 +96,7 @@ function AdminOrder() {
         if (confirm("Are Sure You Want To Delete The Order")) {
             // console.log(orderId);
             try {
-                const response = await fetch(`${BASE_URL}/api/yoga/admin/order/${orderId}/delete`, {
+                const response = await fetch(`${BASE_URL}/api/techify/admin/order/${orderId}/delete`, {
                     method: "DELETE",
                     headers: {
                         Authorization: authorization,

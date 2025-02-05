@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table';
-import { useAuth } from '../Store/Auth';
+import { useAuth } from '../Store/Auth.jsx';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
@@ -15,7 +15,7 @@ function AdminReview() {
 
     const handleStatus = async (id) => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/admin/status/${id}`, {
+            const response = await fetch(`${BASE_URL}/api/techify/admin/status/${id}`, {
                 method: "PATCH",
                 headers: {
                     Authorization: authorization
@@ -40,7 +40,7 @@ function AdminReview() {
 
     const getAllReviews = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/admin/get/reviews`, {
+            const response = await fetch(`${BASE_URL}/api/techify/admin/get/reviews`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization,
@@ -61,7 +61,7 @@ function AdminReview() {
 
     const handleDeleteReview = async (reviewId) => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/admin/delete/review/${reviewId}`, {
+            const response = await fetch(`${BASE_URL}/api/techify/admin/delete/review/${reviewId}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: authorization

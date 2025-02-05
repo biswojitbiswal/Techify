@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function MyNavbar() {
   const expandValue = ['sm', 'md', 'lg', 'xl', 'xxl'][3];
@@ -17,28 +18,22 @@ function MyNavbar() {
   const handleCloseOffCanvas = () => setShowOffCanvas(false);
   const handleShowOffCanvas = () => setShowOffCanvas(true);
 
-  
+
 
   return (
     <>
       <Navbar
-      sticky='top'
+        sticky='top'
         key={expandValue}
         expand={expandValue}
         className="p-2"
-        style={{ backgroundColor: darkMode ? "#343434" : 'hsl(210, 56%, 93%)' }}
+        style={{ backgroundColor: 'hsl(210, 56%, 93%)' }}
       >
         <Container fluid>
           <Navbar.Brand className="fs-1 text-primary d-flex justify-content-center align-items-center">
-            <Link to="/" style={{textDecoration: "none", marginRight: "1rem"}}>Yoga</Link>
-            <Nav.Item className='fs-2' onClick={handleDarkMode}>
-                {
-                  darkMode ? <i className="uil uil-sun  text-warning"></i> : <i className="uil uil-moon"></i>
-                }
-
-          </Nav.Item>
+            <Link to="/" style={{ textDecoration: "none", marginRight: "1rem" }}>Techify</Link>
           </Navbar.Brand>
-          
+
           <Navbar.Toggle
             className={`text-primary border-primary`}
             onClick={handleShowOffCanvas}
@@ -58,7 +53,7 @@ function MyNavbar() {
                 id={`offcanvasNavbarLabel-expand-${expandValue}`}
                 className="text-primary fs-2"
               >
-                Smart Yoga
+                Techify
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
@@ -71,8 +66,7 @@ function MyNavbar() {
                   <Nav.Link
                     as={NavLink}
                     to="/"
-                    eventKey="link-1"
-                    className="me-3 fs-4 text-primary"
+                    className='fs-5 text-primary'
                     onClick={handleCloseOffCanvas}
                   >
                     Home
@@ -82,9 +76,8 @@ function MyNavbar() {
                 <Nav.Item>
                   <Nav.Link
                     as={NavLink}
-                    to="/product"
-                    eventKey="link-2"
-                    className="me-3 fs-4 text-primary"
+                    to="/products/:categoryId"
+                    className='fs-5 text-primary'
                     onClick={handleCloseOffCanvas}
                   >
                     Product
@@ -93,20 +86,8 @@ function MyNavbar() {
                 <Nav.Item>
                   <Nav.Link
                     as={NavLink}
-                    to="/blog"
-                    eventKey="link-3"
-                    className="me-3 fs-4 text-primary"
-                    onClick={handleCloseOffCanvas}
-                  >
-                    Blog
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link
-                    as={NavLink}
                     to="/cart"
-                    eventKey="link-4"
-                    className="me-3 fs-4 text-primary"
+                    className='fs-5 text-primary'
                     onClick={handleCloseOffCanvas}
                   >
                     Cart
@@ -117,26 +98,35 @@ function MyNavbar() {
                     )}
                   </Nav.Link>
                 </Nav.Item>
+
                 {(user?.role === 'Admin' || user?.role === 'Moderator') && (
-                  <Nav.Item>
-                    <Nav.Link
-                      as={NavLink}
-                      to="/admin"
-                      eventKey="link-5"
-                      className="me-3 fs-4 text-primary"
-                      onClick={handleCloseOffCanvas}
-                    >
-                      Dashboard
-                    </Nav.Link>
-                  </Nav.Item>
+                  <NavDropdown
+                    title={<span className="text-primary">Dashboard</span>}
+                    id="admin-dashboard-dropdown"
+                    className='fs-5 text-primary'
+                  >
+                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin">Manage Order</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/users">Manage User</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/reviews">Manage Review</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/add/product">Add Products</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/add/category">Add Category</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/add/brand">Add Brand</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/add/testimonial">Add Testimonials</NavDropdown.Item>
+                    
+                  </NavDropdown>
                 )}
 
                 <Nav.Item>
                   <Nav.Link
                     as={NavLink}
                     to="/account"
-                    eventKey="link-6"
-                    className="me-3 fs-4 text-primary"
+                    className='fs-5 text-primary'
                     onClick={handleCloseOffCanvas}
                   >
                     Account
@@ -148,8 +138,7 @@ function MyNavbar() {
                     <Nav.Link
                       as={NavLink}
                       to="/signout"
-                      eventKey="link-7"
-                      className="me-3 fs-4 text-primary"
+                      className='fs-5 text-primary'
                       onClick={handleCloseOffCanvas}
                     >
                       Signout
@@ -161,8 +150,7 @@ function MyNavbar() {
                       <Nav.Link
                         as={NavLink}
                         to="/signin"
-                        eventKey="link-8"
-                        className="me-3 fs-4 text-primary"
+                        className='fs-5 text-primary'
                         onClick={handleCloseOffCanvas}
                       >
                         Signin
@@ -172,8 +160,7 @@ function MyNavbar() {
                       <Nav.Link
                         as={NavLink}
                         to="/signup"
-                        eventKey="link-9"
-                        className="me-3 fs-4 text-primary"
+                        className='fs-5 text-primary'
                         onClick={handleCloseOffCanvas}
                       >
                         Signup

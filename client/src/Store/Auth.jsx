@@ -1,5 +1,5 @@
 import React from "react";
-import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../config.js";
 
@@ -43,7 +43,7 @@ export const AuthContextProvider = ({children}) => {
     const userAuthentication = async() => {
         try {
             setIsLoading(true)
-            const response = await fetch(`${BASE_URL}/api/yoga/user/getuser`, {
+            const response = await fetch(`${BASE_URL}/api/techify/user/getuser`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization

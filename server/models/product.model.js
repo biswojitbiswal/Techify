@@ -17,6 +17,22 @@ const productSchema = new mongoose.Schema({
         type:[String],
         required: true,
     },
+    stock: {
+        type: Number,
+        min: 0,
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+    },
+    brand: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Brand",
+    },
+    specification: {
+        type: Map,
+        of: String,
+    },
     reviews: [
         {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,8 +42,8 @@ const productSchema = new mongoose.Schema({
     averageRating: {
         type: Number,
         default: 3,
-    }
-
+    },
+    
 }, {timestamps: true});
 
 export const Product = mongoose.model("Product", productSchema)

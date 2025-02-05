@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { Navigate} from "react-router-dom";
 import { useAuth } from "./Store/Auth";
+import { Spinner } from "react-bootstrap";
 
 function ProtectedRoute(WrappedComponent, allowedRoles) {
   return function (props){
@@ -8,7 +9,7 @@ function ProtectedRoute(WrappedComponent, allowedRoles) {
 
     if (isLoading) {
       // Render a loading spinner or placeholder
-      return <div>Loading...</div>;
+      return <Spinner animation="border" variant="primary" />
     }
 
     if(!isLoggedInuser){

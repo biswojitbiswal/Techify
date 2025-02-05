@@ -20,7 +20,7 @@ function Cart() {
 
   const getCartItems = async() => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/products/cart/get-products/${user._id}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/products/cart/get-products/${user._id}`, {
         method: "GET",
         headers: {
           Authorization: authorization
@@ -75,7 +75,7 @@ function Cart() {
 
   const handleRemove = async (itemId) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/products/cart/remove/${itemId}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/products/cart/remove/${itemId}`, {
         method: "PATCH",
         headers: {
           Authorization: authorization

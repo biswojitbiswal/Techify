@@ -17,7 +17,7 @@ function MyOrder() {
 
     const getMyOrders = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/order/get`, {
+            const response = await fetch(`${BASE_URL}/api/techify/order/get`, {
                 method: "GET",
                 headers: {
                     Authorization: authorization

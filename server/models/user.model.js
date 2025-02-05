@@ -59,6 +59,12 @@ const userSchema = new mongoose.Schema({
             }
         }
     ],
+    recentlyView: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product"
+        }
+    ],
     role: {
         type: String,
         enum: ['User', 'Moderator', 'Admin'],

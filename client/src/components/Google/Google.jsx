@@ -50,7 +50,7 @@ function Google() {
 
     const handleUserData = async(name, email, phone) => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/user/google`, {
+            const response = await fetch(`${BASE_URL}/api/techify/user/google`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

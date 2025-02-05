@@ -7,11 +7,10 @@ import { BASE_URL } from '../../../config.js';
 function Social() {
   const [posts, setPosts] = useState([]);
 
-  const {darkMode} = useAuth();
 
   const getSocialMediaPost = async() => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/social/get-posts`, {
+      const response = await fetch(`${BASE_URL}/api/techify/social/get-posts`, {
         method: "GET"
       })
 
@@ -33,23 +32,24 @@ function Social() {
   return (
     <>
       <section id='social-page'>
-        <h2 className={`fs-1 ${darkMode ? "text-white" : "text-black"}`}>What People Are Saying About Us</h2>
-        <div className="social-media-posts" style={{backgroundColor: darkMode ? '#343434' : ''}}>
+        <h1>Testimonials</h1>
+        <p className='fs-4 text-secondary'>What People Are Saying About Us</p>
+        <div className="social-media-posts">
           <Carousel data-bs-theme="dark" className='post-carousel'>
             {
               posts.length > 0 ? 
               posts.map(post => {
                 return <Carousel.Item key={post._id} className='bg-transparent'>
-                <div className="customer-post" style={{backgroundColor: darkMode ? '#000' : '#fff'}}>
+                <div className="customer-post" style={{backgroundColor: '#fff'}}>
                   <div className="user-details">
                     <div className="customer-profile">
                       <img src={post.author.profileImage} alt="Hero" />
                     </div>
-                    <p className={`fs-2 ${darkMode ? 'text-white' : 'text-black'}`}><strong>{post.author.username}</strong></p>
+                    <p className='fs-2 text-black'><strong>{post.author.username}</strong></p>
                   </div>
                   <div className="post-details">
                     <div className="post-content">
-                      <p className={`fs-4 ${darkMode ? 'text-white' : 'text-black'}`}>{post.text}</p>
+                      <p className='fs-4 text-black'>{post.text}</p>
                     </div>
                     <div className="post-metrics">
                       <p className='text-primary'><i className="fa-solid fa-thumbs-up fs-2"></i> <span className='fs-4'>{post.metrics.likes}</span></p>

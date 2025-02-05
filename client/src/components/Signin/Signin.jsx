@@ -33,7 +33,7 @@ function Signin() {
   const handleSigninForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/user/signin`, {
+      const response = await fetch(`${BASE_URL}/api/techify/user/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -74,7 +74,7 @@ function Signin() {
               <Form.Control type="password" name='password' placeholder="Password" value={signinData.password} onChange={handleInput} required />
             </Form.Group>
             <Button variant="primary" type="submit">
-              Submit
+              Sign In
             </Button>
           </Form>
           <hr className={`${darkMode ? 'text-white' : 'text-black'}`} />

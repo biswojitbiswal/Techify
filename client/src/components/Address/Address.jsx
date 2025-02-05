@@ -72,7 +72,7 @@ function Address() {
 
     const handleSubmit = async() => {
         try {
-            const response = await fetch(`${BASE_URL}/api/yoga/user/address`, {
+            const response = await fetch(`${BASE_URL}/api/techify/user/address`, {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json",

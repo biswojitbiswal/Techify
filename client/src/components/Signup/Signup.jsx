@@ -38,7 +38,7 @@ function Signup() {
     e.preventDefault();
     // console.log(signupData)
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/user/signup`, {
+      const response = await fetch(`${BASE_URL}/api/techify/user/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

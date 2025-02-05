@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table';
-import { useAuth } from '../Store/Auth';
+import { useAuth } from '../Store/Auth.jsx';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/esm/Button';
 import { toast } from 'react-toastify';
@@ -15,7 +15,7 @@ function AdminUsers() {
 
   const getAllUsers = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/admin/get/users`, {
+      const response = await fetch(`${BASE_URL}/api/techify/admin/get/users`, {
         method: "GET",
         headers: {
           Authorization: authorization,
@@ -38,7 +38,7 @@ function AdminUsers() {
       toast.error("Access Denied");
     } else {
       try {
-        const response = await fetch(`${BASE_URL}/api/yoga/admin/user/delete/${userId}`, {
+        const response = await fetch(`${BASE_URL}/api/techify/admin/user/delete/${userId}`, {
           method: "DELETE",
           headers: {
             Authorization: authorization
@@ -60,7 +60,7 @@ function AdminUsers() {
 
   const handleRoleChange = async(userId, newRole) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/admin/assign/role/${userId}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/admin/assign/role/${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

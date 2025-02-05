@@ -21,7 +21,7 @@ function ProductEdit() {
 
   const getProductById = async() => {
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/admin/product/${productId}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/admin/product/${productId}`, {
         method: "GET",
         headers: {
           Authorization: authorization
