@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Button, Form, InputGroup, Spinner } from 'react-bootstrap';
 import './Product.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useAuth } from '../../Store/Auth';
-import { useCategories } from '../../Store/CategoryStore.jsx'
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../config.js';
 import FilterBrand from './FilterBrand.jsx';
@@ -13,11 +12,12 @@ import FilterCategory from './FilterCategory.jsx';
 
 
 function Product() {
+  const {categoryId} = useParams();
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(categoryId || "");
   const [brand, setBrand] = useState("");
   const [skip, setSkip] = useState(0);
   const limit = 9;
@@ -25,7 +25,7 @@ function Product() {
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
   const storedIds = useRef(new Set());
-  const isFetching = useRef(false); // ✅ Track ongoing requests
+  const isFetching = useRef(false);
   let timeOutId;
 
 
@@ -63,7 +63,7 @@ function Product() {
     setSkip(0);
     setProducts([]);
   }
-
+  console.log(category)
   const productData = useCallback(async () => {
     if(isFetching.current) return;
     isFetching.current = true;
