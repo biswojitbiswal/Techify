@@ -7,10 +7,10 @@ import Spinner from 'react-bootstrap/Spinner';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
 import { BASE_URL } from '../../config.js';
+import { useCategories } from '../Store/CategoryStore.jsx';
 
 
 function ProductAdd() {
-  const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [specKey, setSpecKey] = useState("");
   const [specValue, setSpecValue] = useState("");
@@ -27,6 +27,7 @@ function ProductAdd() {
   });
 
   const { authorization } = useAuth();
+  const {categories} = useCategories();
 
   const handleAddSpecification = (e) => {
     if (!specKey.trim() || !specValue.trim()) {
@@ -148,25 +149,7 @@ function ProductAdd() {
     }
   };
 
-  const fetchAllCategory = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/techify/category/get-all?fields=minimal`, {
-        method: "GET",
-      })
-      const data = await response.json();
-      // console.log(data);
-      if (response.ok) {
-        setCategories(data.categories);
-      }
-    } catch (error) {
-      toast.error("Error fetching categories:", error);
-      console.error("Error fetching categories:", error);
-    }
-  }
-
-  useEffect(() => {
-    fetchAllCategory()
-  }, [])
+  
 
   useEffect(() => {
     if (!productData.category) return;

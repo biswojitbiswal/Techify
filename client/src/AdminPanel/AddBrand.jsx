@@ -74,7 +74,8 @@ function AdminBrand() {
           description: '',
           categories: [],
           logo: null,
-        })
+        });
+        document.getElementById('logoInput').value = '';
       }
     } catch (error) {
       toast.error("Error occured while add brand", error);
@@ -99,9 +100,9 @@ function AdminBrand() {
 
           <Category handleCategory={handleCategory} selectedCategory={brandData.categories} />
 
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Logo</Form.Label>
-            <Form.Control type="file" name='logo' onChange={handleLogo} placeholder="Upload a File" />
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor='logoInput'>Logo</Form.Label>
+            <Form.Control type="file" id="logoInput" name='logo' onChange={handleLogo} placeholder="Upload a File" />
           </Form.Group>
 
           <Button className='fs-4' onClick={handleBrandData}>Submit</Button>

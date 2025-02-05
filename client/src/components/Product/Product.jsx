@@ -1,71 +1,108 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { Button, Form, InputGroup, Spinner } from 'react-bootstrap';
 import './Product.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../Store/Auth';
+import { useCategories } from '../../Store/CategoryStore.jsx'
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../config.js';
+import FilterBrand from './FilterBrand.jsx';
+import SortBtns from './SortBtns.jsx';
+import ProductListing from './ProductListing.jsx';
+import FilterCategory from './FilterCategory.jsx';
 
 
 function Product() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [sortOption, setSortOption] = useState('createdAt');
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [category, setCategory] = useState("");
+  const [brand, setBrand] = useState("");
   const [skip, setSkip] = useState(0);
-  const [limit] = useState(6);
+  const limit = 9;
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const observer = useRef();
   const storedIds = useRef(new Set());
+  const isFetching = useRef(false); // ✅ Track ongoing requests
+  let timeOutId;
 
 
-  const { user, authorization, darkMode, refreshUser } = useAuth();
-  const navigate = useNavigate();
+  const { authorization, refreshUser } = useAuth();
 
-  const productData = async () => {
-    setLoading(true)
+  const handleSort = (option) => {
+    setSortOption(option);
+    setSortOrder((prevOrder) => prevOrder === 'asc' ? 'desc' : 'asc');
+    setSkip(0);
+    setProducts([]);
+  }
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    setSkip(0);
+    setProducts([]);
+    if(timeOutId){
+      clearTimeout(timeOutId);
+    }
+
+    timeOutId = setTimeout(() => {
+      productData();
+    }, 1000)
+  }
+
+  const handleFilterCategory = (e) => {
+    setCategory(e.target.value);
+    setSkip(0);
+    setProducts([]);
+  }
+
+  const handleFilterBrand = (e) => {
+    setBrand(e.target.value);
+    setSkip(0);
+    setProducts([]);
+  }
+
+  const productData = useCallback(async () => {
+    if(isFetching.current) return;
+    isFetching.current = true;
+    setLoading(true);
+    console.log("called")
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     try {
-      const response = await fetch(`${BASE_URL}/api/techify/products/get?skip=${skip}&limit=${limit}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/products/get?skip=${skip}&limit=${limit}&sortOption=${sortOption}&sortOrder=${sortOrder}&category=${category}&brand=${brand}&searchTerm=${searchTerm}`, {
         method: "GET",
         headers: {
           Authorization: authorization
-        }
+        },
+        signal,
       })
 
       const data = await response.json();
-      console.log(data);
-
 
       if (response.ok) {
-        const newProducts = data.Allproducts.filter(product => !storedIds.current.has(product._id));
-
-        if (newProducts.length > 0) {
-          newProducts.forEach(product => storedIds.current.add(product._id));
-
-          setProducts(prevProducts => [...prevProducts, ...newProducts]);
-        }
-        setLoading(false);
+        // setProducts(prev => [...prev, ...data.Allproducts]);
+        setProducts(prev => (skip === 0 ? data.Allproducts : [...prev, ...data.Allproducts]));
+        setHasMore(data.Allproducts.length === limit);
       } else {
-        toast.error("No More Order Found");
+        setHasMore(false);
+        toast.error("No more products found.");
       }
     } catch (error) {
-      console.log(error);
+      if (error.name !== "AbortError") {
+        toast.error("Something went wrong. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+      isFetching.current = false;
     }
-  }
+    return () => controller.abort();
+  }, [skip, sortOption, sortOrder, category, brand, searchTerm]);
 
-  useEffect(() => {
-    productData();
-  }, [skip])
-
-  let filteredProducts = products?.filter((product) =>
-    product?.title?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  if (sortOrder === 'asc') {
-    filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
-  } else if (sortOrder === 'dsc') {
-    filteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
-  }
 
   const handleDelete = async (productId) => {
     try {
@@ -91,6 +128,32 @@ function Product() {
     }
   }
 
+
+
+  const lastProductRef = useCallback(node => {
+    if (loading || !hasMore) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setSkip(prevSkip => prevSkip + limit);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
+
+
+  useEffect(() => {
+    setSkip(0);
+    setProducts([]);
+    setHasMore(true);
+    productData();
+  }, [sortOption, sortOrder, category, brand, searchTerm]);
+
+  useEffect(() => {
+    if (skip > 0) {
+      productData();
+    }
+  }, [skip]);
   return (
     <>
       <section id="product-page">
@@ -98,67 +161,25 @@ function Product() {
           <Form.Control
             placeholder="Search Here"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearch}
             aria-label="Search"
-            aria-describedby="basic-addon2"
           />
-          <Button variant="primary" className='fs-3' id="button-addon2">
-            Search
-          </Button>
         </InputGroup>
-        <div className="sortBtns">
-          <Button onClick={() => setSortOrder('asc')}
-            active={sortOrder === 'asc'}
-            className='fs-5'>Low &rarr; High</Button>
-          <Button
-            onClick={() => setSortOrder('dsc')}
-            active={sortOrder === 'dsc'}
-            className='fs-5'>High &rarr; Low</Button>
-        </div>
-        <div className="card-container mt-4 d-flex flex-wrap gap-5 justify-content-center">
-          {
-            filteredProducts?.map((product) => {
-              return <div key={product._id} className="outer-card">
-                <div className="inner-card">
-                  <h5 className='text-primary product-title'>{product.title}</h5>
-                  <div className="product-image">
-                    <img src={product?.images[0]} alt={product.title} loading='lazy' />
-                  </div>
-                  <p className='product-description'>{product.description}</p>
-                  <h4 className='text-primary'>&#8377;{product.price}</h4>
-                  <p className='m-1'>
-                    {Array.from({ length: 5 }, (_, index) => (
-                      <span key={index}>
-                        <i className={`fa-solid fa-star ${index < product.averageRating ? 'text-warning' : 'text-secondary'}`}></i>
-                      </span>
-                    ))}
-                  </p>
-                  {
-                    user.role === 'Admin' && (
-                      <div className='edit-delete-buttons w-100 justify-content-between mb-4'>
-                        <Link to={`/admin/edit/${product._id}`} className='product-edit'><i className="fa-solid fa-pencil"></i>
-                        </Link>
 
-                        <button variant="danger" className='product-dlt-btn text-danger' onClick={(event) => {
-                          event.stopPropagation();
-                          handleDelete(product._id)
-                        }}><i className="fa-solid fa-trash ms-2"></i></button>
-                      </div>
-                    )
-                  }
-                  {
-                    user?.role === 'Moderator' && (
-                      <Link to={`/admin/edit/${product._id}`} className='product-edit edit-delete-buttons'><i className="fa-solid fa-pencil"></i>
-                      </Link>
-                    )
-                  }
-                  <button onClick={() => navigate(`/product/${product?._id}`)} className='cart-btn bg-warning'>Add To Cart</button>
-                </div>
-              </div>
-            })
-          }
+        <div className="sort-filter w-100">
+          <SortBtns handleSort={handleSort} sortOption={sortOption} />
+
+          <div className="filter-btns">
+            <FilterCategory handleFilterCategory={handleFilterCategory} />
+            <FilterBrand handleFilterBrand={handleFilterBrand} />
+          </div>
         </div>
-        {filteredProducts.length > 0 ? <Button variant='primary' onClick={() => setSkip((prev) => prev + limit)} className='mt-4'>More</Button> : ""}
+
+        <ProductListing products={products} handleDelete={handleDelete} />
+
+        {loading && <Spinner size='lg' variant='primary' />}
+
+        <div ref={lastProductRef}></div>
       </section>
     </>
   )

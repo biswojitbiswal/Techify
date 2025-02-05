@@ -1,30 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { useAuth } from '../../Store/Auth'
-import { BASE_URL } from '../../../config';
+import React from 'react'
+import { useCategories } from '../../Store/CategoryStore'
+
 
 function ShowCategory() {
-    const [categories, setCategories] = useState([]);
-
-    const fetchAllCategory = async() => {
-        try {
-           const response = await fetch(`${BASE_URL}/api/techify/category/get-all`, {
-            method: "GET",
-           }) 
-
-           const data = await response.json();
-        //    console.log(data);
-
-           if(response.ok){
-            setCategories(data.categories);
-           }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        fetchAllCategory();
-    }, [categories])
+    const {categories} = useCategories();
   return (
     <div className='my-3 home-category'>
       {

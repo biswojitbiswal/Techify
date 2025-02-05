@@ -1,5 +1,5 @@
 import React from "react";
-import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../config.js";
 

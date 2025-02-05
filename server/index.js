@@ -11,6 +11,7 @@ import reviewRouter from './routes/review.routes.js'
 import orderRouter from './routes/order.routes.js'
 import contactRouter from './routes/contact.routes.js'
 import categoryRouter from './routes/category.routes.js'
+import brandRouter from './routes/brands.routes.js';
 
 
 
@@ -44,6 +45,7 @@ app.use("/api/techify/review", reviewRouter);
 app.use("/api/techify/order", orderRouter);
 app.use("/api/techify/contact", contactRouter);
 app.use("/api/techify/category", categoryRouter);
+app.use("/api/techify/brands", brandRouter);
 
 
 
