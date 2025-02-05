@@ -173,9 +173,9 @@ function Order() {
 
   return (
     <section id="order-buy-page">
-      <div className="deliver-details mb-4">
+      <div className="deliver-details mb-2">
         <h3>Delivery Here</h3>
-        <hr />
+        <hr className='my-2' />
         <div>
           {address ? (
             <div className="address-details d-flex justify-content-between align-items-start">
@@ -184,7 +184,7 @@ function Order() {
                 <h5>
                   {address.orderByName} <span className="ms-3">{address.contact}</span>
                 </h5>
-                <p>{address.street}</p>
+                <p className='mb-1'>{address.street}</p>
                 <p>{`${address.city}, ${address.state}, ${address.zipcode}`}</p>
               </div>
               <Link to="/account/address" className="btn btn-outline-primary">
@@ -204,23 +204,28 @@ function Order() {
 
       <div className="mb-4">
         <h3>Product</h3>
-        <hr />
+        <hr className='my-2' />
         <div className="product-details">
           {orderState.products.length ? orderState.products.map((product) => {
-            return <div key={product._id} className="d-flex align-items-center bg-body-tertiary rounded-1 p-2 mb-2 gap-4">
-              <div className="product-img-quantity">
+            return <div key={product._id} className="order-prod-card bg-body-tertiary">
+              <div className="order-product-img">
                 <img
                   src={product.images[0]}
                   alt={product.title}
                   className="product-image"
-                  style={{ width: '170px', height: '170px', objectFit: 'cover', borderRadius: ".5rem" }}
+                  loading='lazy'
+                  style={{ objectFit: 'cover', borderRadius: ".5rem" }}
                 />
                 
               </div>
               <div className="product-info text-start">
+                <h5 className='text-secondary'>Techify</h5>
                 <h4>{product.title}</h4>
-                <p className="text-muted">{product.description}</p>
+                <p className="text-muted mb-1">{product.description}</p>
+                <p className='mb-1 fs-5 text-danger'>{product.stock < 10 ? `${product.stock} Left` : ""} </p>
+                
                 <div className="prod-qntity-price d-flex align-items-center">
+                <p className="text-primary me-4 mb-0 fs-3">Price: ₹{product.price * (orderState.quantity[product._id] || 1)}</p>
                   <div className="quantity-selector d-flex align-items-center gap-3">
                     <Button variant="outline-primary" onClick={() => handleQuantityChange('decrement', product._id)}>
                       -
@@ -230,7 +235,7 @@ function Order() {
                       +
                     </Button>
                   </div>
-                  <p className="text-primary ms-4 mb-0 fs-3">Price: ₹{product.price * (orderState.quantity[product._id] || 1)}</p>
+                  
                 </div>
               </div>
             </div>

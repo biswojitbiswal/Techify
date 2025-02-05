@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 import {Review} from "../models/review.model.js";
 
@@ -48,8 +49,28 @@ const addReview = async(req, res, next) => {
     }
 }
 
+const getAllReviews = async(req, res, next) => {
+    try {
+        const {productId} = req.params;
 
+        if(!mongoose.isValidObjectId(productId)){
+            return res.status(400).json({message: "Invalid Product Id"});
+        }
+
+        const reviews = await Review.find({reviewProduct: productId})
+        .populate("reviewBy", "name");
+
+        if(!reviews || reviews.length === 0){
+            return res.status(404).json({message: "Reviews Not Found"});
+        }
+
+        return res.status(200).json(reviews);
+    } catch (error) {
+        next(error);
+    }
+}
 
 export {
-    addReview
+    addReview,
+    getAllReviews,
 }

@@ -63,12 +63,12 @@ function Product() {
     setSkip(0);
     setProducts([]);
   }
-  console.log(category)
+  // console.log(category)
   const productData = useCallback(async () => {
     if(isFetching.current) return;
     isFetching.current = true;
     setLoading(true);
-    console.log("called")
+    // console.log("called")
 
     const controller = new AbortController();
     const signal = controller.signal;

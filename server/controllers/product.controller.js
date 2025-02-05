@@ -199,15 +199,8 @@ const prosuctShowCase = async (req, res, next) => {
 const getProductById = async (req, res, next) => {
   try {
     const { productId } = req.params;
-    // console.log(productId);
 
-    const product = await Product.findById(productId).populate({
-      path: "reviews",
-      populate: {
-        path: "reviewBy",
-        select: "name",
-      },
-    });
+    const product = await Product.findById(productId).select("-reviews -category -brand")
 
     if (!product) {
       return res.status(404).json({ message: "Product Not Found" });
@@ -233,7 +226,7 @@ const getOrderItem = async (req, res, next) => {
     const itemIds = productIds.map((id) => new mongoose.Types.ObjectId(id));
 
     const orders = await Product.find({ _id: { $in: itemIds } }).select(
-      "-reviews"
+      "-reviews -brand -category -specification -averageRating"
     );
 
     if (!orders || orders.length === 0) {

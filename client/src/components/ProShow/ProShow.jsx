@@ -7,10 +7,12 @@ import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
 import Review from '../Review/Review';
 import { BASE_URL } from '../../../config.js';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 function ProShow() {
   const [product, setProduct] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [imageClick, setImageClick] = useState(0);
 
 
@@ -31,15 +33,16 @@ function ProShow() {
       })
 
       const data = await response.json();
-      // console.log(data);
 
       if (response.ok) {
         setProduct(data.item);
-        // console.log("successful");
         setLoading(false)
       }
     } catch (error) {
       console.log(error);
+    }
+    finally{
+      setLoading(false)
     }
   }
 
@@ -63,11 +66,9 @@ function ProShow() {
         });
 
         const data = await response.json();
-        // console.log(data);
 
         if (response.ok) {
           toast.success("Item Added To Your Cart");
-          // setUser(data)
           refreshUser();
 
         } else {
@@ -86,7 +87,6 @@ function ProShow() {
 
   useEffect(() => {
     getProductById()
-    // console.log("hello");
   }, [])
 
 
@@ -94,51 +94,64 @@ function ProShow() {
   return (
     <>
       <section id="prod-details">
-        <div className="prod-card" style={{ backgroundColor: darkMode ? '#343434' : '#e3edf7' }}>
-            <div className="prod-look">
+        <div className="prod-card" style={{ backgroundColor: '#f1f1f1' }}>
+          <div className="prod-look mb-2">
 
-              {product.images && product.images.length > 0 && (
-                <div className="prod-img">
-                  <img src={product.images[imageClick]} alt="Main Image" id="mainimg" loading='lazy' />
-                </div>
-              )}
-
-              <div className="product-images">
-                {
-                  product?.images?.map((image, index) => {
-                    return <div className={`small-img-box ${imageClick === index ? 'imageSelected' : ''}`} key={index}>
-                      <img
-                        src={image}
-                        alt={`Product Image ${index + 1}`}
-                        className={`small-img`}
-                        onClick={() => handleHoverImage(index)}
-                      />
-                    </div>
-                  })
-                }
+            {product.images && product.images.length > 0 && (
+              <div className="prod-img">
+                <img src={product.images[imageClick] || <Skeleton />} alt="Main Image" id="mainimg" loading='lazy' style={{ opacity: loading ? 0.5 : 1, transition: "opacity 0.3s ease-in-out" }} />
               </div>
+            )}
 
+            <div className="product-images">
+              {
+                product?.images?.map((image, index) => {
+                  return <div className={`small-img-box ${imageClick === index ? 'imageSelected' : ''}`} key={index}>
+                    <img
+                      src={image}
+                      alt={`Product Image ${index + 1}`}
+                      className={`small-img`}
+                      onClick={() => handleHoverImage(index)}
+                      loading='lazy'
+                    />
+                  </div>
+                })
+              }
             </div>
 
-            <div className="details">
-              <p className={`fs-4 ${darkMode ? 'text-white' : 'text-black'}`}>Smart Yoga</p>
-              <h4 className="fs-3 text-primary">{product.title}</h4>
-              <h2 className={`fs-2 ${darkMode ? 'text-white' : 'text-black'}`}>₹{product.price}</h2>
-              <p className="ratings text-primary">{product?.averageRating?.toFixed(1)}<span><i className="fa-solid fa-star"></i></span></p>
-              <div>
-                <p className={`fs-4 ${darkMode ? 'text-white' : 'text-black'}`}>Product Details:</p>
-                <p className={`fs-5 ${darkMode ? 'text-white' : 'text-black'}`}>{product.description}</p>
-              </div>
+          </div>
 
-              <div className="order">
-                <Button variant="primary" onClick={handleAddToCart} className="fs-4 add-cart-btn"><span className='me-2'><i className="fa-solid fa-cart-shopping"></i></span>Add To Cart</Button>
-                <Link to="/order/buy-now" state={{ productIds: [product._id] }} className='btn btn-warning fs-4'><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Link>
-              </div>
+          <div className="details">
+            <p className='fs-4 text-secondary mb-1'>Techify</p>
+            <h4 className="fs-3 text-primary-emphasis">{loading ? <Skeleton /> : product.title}</h4>
+            <h2 className='fs-2 text-primary'>₹{loading ? <Skeleton  /> : product.price}</h2>
+            <p className="ratings mb-1 text-primary" style={{ marginLeft: "2rem" }}>
+              {Array.from({ length: 5 }, (_, index) => (
+                <span key={index}>
+                  <i className={`fa-solid fa-star fs-5 ${index < product.averageRating ? 'text-warning' : 'text-secondary'}`}></i>
+                </span>
+              ))}
+            </p>
+            <p className='fs-5 mb-3 text-primary-emphasis'>{product.description}</p>
+            <div className="specification">
+              <h4>Specifications :</h4>
+              {
+                product?.specification && Object.keys(product.specification).map(key => (
+                  <div className='mb-2 d-flex' key={key}><p className='fs-5 mb-2 text-secondary'>{key}</p> : <p className='fs-5 ms-3 mb-2 text-primary-emphasis'>{product.specification[key]}</p></div>
+                ))
+              }
+            </div>
+
+            <div className="order w-100">
+              <Button variant="primary" onClick={handleAddToCart} className="fs-5 add-cart-btn"><span className='me-2'><i className="fa-solid fa-cart-shopping"></i></span>Add To Cart</Button>
+
+              <Link to="/order/buy-now" state={{ productIds: [product._id] }} className='btn btn-warning buy-now-btn fs-5'><span className='me-2'><i className="fa-solid fa-fire-flame-curved"></i></span>Buy Now</Link>
             </div>
           </div>
+        </div>
       </section>
 
-      <Review product={product} />
+      <Review productId={product._id} />
 
 
     </>

@@ -1,12 +1,12 @@
 #prod-details {
-    padding: 4rem 8rem;
+    padding: 2rem 8rem;
 }
 
 
 #prod-details .prod-card{
     display: flex;
     width: auto;
-    height: 450px;
+    height: 600px;
     justify-content: space-between;
     align-items: center;
     border-radius: .25rem; 
@@ -89,7 +89,7 @@
 
 #prod-details .details .ratings {
     width: 60px;
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
     border-radius: 1rem;
     color: #ffffff;
     display: flex;
@@ -181,6 +181,12 @@
     }
     #prod-details .details{
         padding: 0rem;
+    }
+    .add-cart-btn{
+        width: 50%;
+    }
+    .buy-now-btn{
+        width: 50%;
     }
     
 }

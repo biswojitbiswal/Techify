@@ -4,13 +4,36 @@
     margin: 1rem auto;
     background-color: #e9ecef;
     padding: 1rem;
+    border-radius: .5rem;
     
+}
+.order-prod-card{
+    display: flex;
+    align-items: center;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    padding: .5rem;
 }
 @media (max-width: 1096px){
     #order-buy-page{
-        margin: .5rem;
-        padding: .5rem;
         width: 95%;
+    }    
+}
+@media (max-width: 596px) {
+    #order-buy-page{
+        width: 96%;
+        
+    } 
+    .order-prod-card{
+        display: flex;
+        flex-direction: column;
     }
-    
+    .order-product-img{
+        width: 100%;
+    }
+    .order-product-img img{
+        height: 170px;
+        width: 100%;
+    }
 }

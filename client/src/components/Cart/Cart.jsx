@@ -43,16 +43,6 @@ function Cart() {
     getCartItems();
   })
 
-  // useEffect(() => {
-  //   if (Array.isArray(user.cart)) {
-  //     const cartProductIds = user.cart;
-  //     const updateCartItems = cartProductIds.map(id => products.find(prduct => prduct._id === id)).filter(item => item !== undefined);
-
-  //     setCartItems(updateCartItems.reverse());
-  //   }
-
-  // }, [user.cart])
-
   useEffect(() => {
     if (cartItems.length > 0 && selectItems.size === 0) {
       setSelectItems(new Set(cartItems.map(item => item._id)));
@@ -112,8 +102,8 @@ function Cart() {
         <h1 className='text-primary text-decoration-underline'>My Cart</h1>
         {cartItems.length > 0 ? (
           cartItems.map((item) => (
-            <div key={item._id} className="cart-card" style={{ backgroundColor: darkMode ? '#343434' : '#fff' }}>
-              <img src={item.images[0]} alt="Product Image" />
+            <Link key={item._id} to={`/product/${item._id}`} className="cart-card text-decoration-none" style={{ backgroundColor: darkMode ? '#343434' : '#fff' }}>
+              <img src={item.images[0]} alt="Product Image" width={200} />
               <Card style={{ backgroundColor: darkMode ? '#a3a3a3' : '' }}>
                 <Card.Header className='d-flex justify-content-between align-items-center' style={{ backgroundColor: darkMode ? '#999999' : '' }}>
                   <h4>{item.title}</h4>
@@ -123,13 +113,13 @@ function Cart() {
                   <Card.Title>₹{item.price}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
                   {/* <div className="cart-btns"> */}
-                  <Button variant="secondary" onClick={() => handleRemove(item._id)} className='remove-btn me-4'>
+                  <Button variant="outline-danger" onClick={() => handleRemove(item._id)} className='remove-btn me-4'>
                     <span><i className="fa-solid fa-trash"></i></span>Remove</Button>
 
                   {/* </div> */}
                 </Card.Body>
               </Card>
-            </div>
+            </Link>
           ))
         ) : (
           <p className='text-primary fs-4 align-self-center'>Your cart is empty.</p>

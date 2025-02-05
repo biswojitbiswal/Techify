@@ -1,30 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Review.css';
 import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
 import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../../config.js';
+import { Spinner, Button, Modal, Form } from 'react-bootstrap';
 
 
 
-function Review(product) {
+function Review({ productId }) {
     const [show, setShow] = useState(false);
+    const [hover, setHover] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [allReviews, setAllReviews] = useState([]);
     const [review, setReview] = useState({
         rating: 0,
         comment: '',
     });
 
-    // console.log(product)
-    // console.log(product.product.averageRating)
-
     const { authorization } = useAuth();
-    const navigate = useNavigate();
-
-    const [hover, setHover] = useState(null);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -34,7 +28,6 @@ function Review(product) {
             ...prevState,
             rating: star
         }))
-        // console.log(product.product._id);
     };
 
     const handleReview = (e) => {
@@ -44,9 +37,31 @@ function Review(product) {
         }))
     }
 
+    const getAllReviews = async () => {
+        
+        if (!productId) return;
+        setLoading(true);
+        try {
+            const response = await fetch(`${BASE_URL}/api/techify/review/get-all/${productId}`, {
+                method: "GET",
+            })
+
+            const data = await response.json();
+            console.log(data);
+
+            if (response.ok) {
+                setAllReviews(data);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const handleSubmit = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/techify/review/add/${product.product._id}`, {
+            const response = await fetch(`${BASE_URL}/api/techify/review/add/${productId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -71,14 +86,21 @@ function Review(product) {
         }
     }
 
+    useEffect(() => {
+        if (productId) {
+            getAllReviews(); // Fetch reviews as soon as productId is available
+        }
+    }, [productId]);
+
     return (
         <>
             <section id="prod-review-page">
-                <div className='review-container'>
-                    <div className="review-form-container d-flex justify-content-between">
-                        <h2 className='m-0 d-flex justify-content-center'>All Reviews <span><p style={{ borderRadius: ".75rem", fontSize: "1.25rem" }} className='btn btn-success ms-2'>{product?.product?.averageRating?.toFixed(1)} <span><i className="fa-solid fa-star fs-5"></i></span></p></span></h2>
-                        <Button variant="primary" onClick={handleShow} className='fs-4'>
-                            Rate Product
+                <div>
+                    <div className="d-flex w-100 justify-content-between">
+                        <h2 className='m-0 d-flex justify-content-center align-items-center fs-3'>All Reviews</h2>
+
+                        <Button variant="primary" onClick={handleShow} className='review-btn'>
+                            Add Review
                         </Button>
 
                         <Modal
@@ -128,21 +150,22 @@ function Review(product) {
                     <hr />
                     <div className="review-car-contaner">
                         {
-                            product?.product?.reviews?.filter((review) => review.status === 'Approved').map((review) => {
+                            loading ? <Spinner size='lg' variant='primary' /> : allReviews?.filter((review) => review.status === 'Approved').map((review) => {
                                 return (
                                     <div key={review._id} className="review-card px-2">
-                                        <p>
-                                            <span className="btn btn-success me-4 p-1" style={{ borderRadius: ".75rem", fontSize: "1rem" }}>
-                                                {review.rating}
-                                                <i className="fa-solid fa-star ms-1"></i>
-                                            </span>
-                                            <span className="fs-4">{review.comment}</span>
+                                        <p className='fs-4 text-primary-emphasis mb-2'>{review.comment}</p>
+                                        <p className='mb-0'>
+                                            {Array.from({ length: 5 }, (_, index) => (
+                                                <span key={index}>
+                                                    <i className={`fa-solid fa-star fs-5 ${index < review.rating ? 'text-warning' : 'text-secondary'}`}></i>
+                                                </span>
+                                            ))}
                                         </p>
-                                        <p><span className="fs-3">&rarr;</span>{review.reviewBy.name}</p>
-                                        <p>{new Date(review.createdAt).toDateString()}</p>
+                                        <p className='mb-0'><span className="fs-3">&rarr;</span>{review.reviewBy.name}</p>
+                                        <p className='mb-2'>{new Date(review.createdAt).toDateString()}</p>
                                         <hr />
                                     </div>
-                                );
+                                )
                             })
                         }
 
