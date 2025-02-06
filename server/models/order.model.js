@@ -1,63 +1,76 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema } from "mongoose";
 
-const orderSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema(
+  {
     orderBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }, 
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     contact: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     orderedItem: [
-        {
-            product: {
-                type: Schema.Types.ObjectId,
-                ref: "Product"
-            },
-            quantity: {
-                type: Number,
-                required: true
-            }
-        }
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        status: {
+          type: String,
+          enum: ["Pending", "Confirmed", "Completed", "Canceled"],
+          default: "Confirmed",
+        },
+        cancellationReason: {
+          type: String,
+          default: null,
+        },
+        payStatus: {
+          type: String,
+          enum: ["Pending", "Paid", "Failed", "Refunded"],
+          default: "Pending",
+        },
+      },
     ],
     totalAmount: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     address: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
     },
     orderId: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     paymentId: {
-        type: String
+      type: String,
     },
     paymentSignature: {
-        type: String
+      type: String,
     },
     orderStatus: {
-        type: String,
-        enum: ["Pending","Confirmed", "Completed", "Canceled"],
-        default: "Pending"
-    },
-    cancellationReason: {
-        type: String,
-        default: null,
+      type: String,
+      enum: ["Pending", "Confirmed", "Completed", "Canceled"],
+      default: "Pending",
     },
     paymentStatus: {
-        type: String,
-        enum: ["Pending", "Paid", "Failed", "Refunded"],
-        default: "Pending"
-    }
+      type: String,
+      enum: ["Pending", "Paid", "Failed", "Refunded"],
+      default: "Pending",
+    },
     // paymentMethod, paymentFailureReason, statusHistory
-}, {timestamps: true});
+  },
+  { timestamps: true }
+);
 
 export const Order = mongoose.model("Order", orderSchema);

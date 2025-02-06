@@ -18,29 +18,29 @@ function Order() {
   });
 
   const location = useLocation();
-  const {productIds} = location.state;
+  const { productIds } = location.state;
   const { user, authorization } = useAuth();
   const navigate = useNavigate();
 
   const address = orderState.orderDetails.user?.addresses?.find((address) => address.isPrimary);
 
 
-  const getOrderProducts = async() => {
+  const getOrderProducts = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/techify/products/order/buy-now`, {
         method: "POST",
-        headers:{
+        headers: {
           'Content-Type': 'application/json',
           Authorization: authorization,
         },
-        body: JSON.stringify({productIds}),
+        body: JSON.stringify({ productIds }),
       })
 
       const data = await response.json();
       // console.log(data);
 
-      if(response.ok){
-        setOrderState(prev => ({...prev, products: data.orders}))
+      if (response.ok) {
+        setOrderState(prev => ({ ...prev, products: data.orders }))
       }
     } catch (error) {
       console.log(error);
@@ -51,17 +51,17 @@ function Order() {
   const handleQuantityChange = (action, productId) => {
     // console.log(action);
     setOrderState((prev) => {
-      const updatedQuantity = {...prev.quantity};
+      const updatedQuantity = { ...prev.quantity };
       const currectQuantity = updatedQuantity[productId] || 1;
 
-      if(action === 'increment'){
+      if (action === 'increment') {
         updatedQuantity[productId] = currectQuantity + 1;
-      } else if(action === "decrement") {
-        if(updatedQuantity[productId] > 1){
+      } else if (action === "decrement") {
+        if (updatedQuantity[productId] > 1) {
           updatedQuantity[productId] = currectQuantity - 1;
         }
       }
-      return {...prev, quantity: updatedQuantity};
+      return { ...prev, quantity: updatedQuantity };
     })
   };
 
@@ -77,7 +77,7 @@ function Order() {
       const productQuantity = orderState.quantity[product._id] || 1;
       total += productQuantity * product.price;
     })
-    setOrderState(prev => ({...prev, totalAmount: total}))
+    setOrderState(prev => ({ ...prev, totalAmount: total }))
   }, [orderState.products, orderState.quantity]);
 
 
@@ -91,13 +91,13 @@ function Order() {
 
 
   const handlePayment = async () => {
-    
+
     try {
       const orderedItems = orderState.products.map((product) => ({
         product: product._id,
         quantity: orderState.quantity[product._id] || 1,
       }));
-      
+
       const paymentData = {
         name: address.orderByName,
         contact: address.contact,
@@ -128,11 +128,17 @@ function Order() {
 
   const handlePaymentVerify = async (data) => {
     console.log(data);
+
+    if (typeof window.Razorpay === 'undefined') {
+      console.error("Razorpay script not loaded properly");
+      return;
+    }
+
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: data.order.totalAmount * 100,
       currency: "INR",
-      name: "Smart Yoga",
+      name: "Techify",
       description: "Test Mode",
       order_id: data.order.orderId,
       handler: async (response) => {
@@ -216,16 +222,16 @@ function Order() {
                   loading='lazy'
                   style={{ objectFit: 'cover', borderRadius: ".5rem" }}
                 />
-                
+
               </div>
               <div className="product-info text-start">
                 <h5 className='text-secondary'>Techify</h5>
                 <h4>{product.title}</h4>
                 <p className="text-muted mb-1">{product.description}</p>
                 <p className='mb-1 fs-5 text-danger'>{product.stock < 10 ? `${product.stock} Left` : ""} </p>
-                
+
                 <div className="prod-qntity-price d-flex align-items-center">
-                <p className="text-primary me-4 mb-0 fs-3">Price: ₹{product.price * (orderState.quantity[product._id] || 1)}</p>
+                  <p className="text-primary me-4 mb-0 fs-3">Price: ₹{product.price * (orderState.quantity[product._id] || 1)}</p>
                   <div className="quantity-selector d-flex align-items-center gap-3">
                     <Button variant="outline-primary" onClick={() => handleQuantityChange('decrement', product._id)}>
                       -
@@ -235,17 +241,17 @@ function Order() {
                       +
                     </Button>
                   </div>
-                  
+
                 </div>
               </div>
             </div>
           }
-        ) : (
+          ) : (
             <p>No product found. Please check the product ID.</p>
           )}
         </div>
       </div>
-
+      <p><strong>Remeber:</strong> The Payment Mode Is In <strong>Test Mode</strong>.So, Total Amount Should Be Less Than <strong>10,000</strong> </p>
       <div className="text-center">
         <Button variant="warning" onClick={handlePayment} className="fs-4">
           Pay Now ₹{orderState.totalAmount}

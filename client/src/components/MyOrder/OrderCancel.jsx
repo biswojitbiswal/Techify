@@ -4,15 +4,16 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../config';
 import { useAuth } from '../../Store/Auth';
 
-function CancelOrderModal({ orderId }) {
+function CancelOrderModal({ orderId, productId }) {
     const [show, setShow] = useState(false);
     const [reason, setReason] = useState("");
 
     const {authorization} = useAuth();
 
     const handleCancel = async () => {
+        // console.log(productId)
         try {
-            const response = await fetch(`${BASE_URL}/api/techify/order/${orderId}/cancel`, {
+            const response = await fetch(`${BASE_URL}/api/techify/order/${orderId}/${productId}/cancel`, {
                 method: "PATCH",
                 headers: {
                     'Content-Type': 'application/json',
@@ -20,6 +21,8 @@ function CancelOrderModal({ orderId }) {
                 },
                 body: JSON.stringify({ reason })
             });
+            const data = await response.json()
+            console.log(data);
 
             if (response.ok) {
                 toast.success("Order canceled");

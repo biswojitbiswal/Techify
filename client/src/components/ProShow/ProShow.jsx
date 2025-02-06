@@ -132,6 +132,8 @@ function ProShow() {
                 </span>
               ))}
             </p>
+            <p className='mb-1 fs-4 text-danger'>{product.stock < 50 ? `${product.stock} Left` : ""} </p>
+
             <p className='fs-5 mb-3 text-primary-emphasis'>{product.description}</p>
             <div className="specification">
               <h4>Specifications :</h4>

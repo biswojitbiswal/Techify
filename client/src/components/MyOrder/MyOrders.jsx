@@ -25,7 +25,7 @@ function MyOrder() {
             })
             const data = await response.json();
             // console.log(response);
-            // console.log(data);
+            console.log(data);
 
             if (response.ok) {
                 setMyOrders(data.orders)
@@ -37,12 +37,7 @@ function MyOrder() {
 
     useEffect(() => {
         getMyOrders();
-    }, [myOrders])
-
-
-
-    const orders = myOrders?.filter((order) => order.orderStatus !== 'Pending')
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    }, [])
 
 
     return (
@@ -51,8 +46,8 @@ function MyOrder() {
                 <h3>My Orders</h3>
                 <hr />
                 <div className="text-black">
-                    {orders && orders.length > 0 ?
-                        orders.flatMap(order =>
+                    {myOrders && myOrders.length > 0 ?
+                        myOrders.flatMap(order =>
                             order.orderedItem.map((item) => {
                                 const address = order.userDetails.addresses.find(
                                     (addr) => addr._id === order.address
@@ -61,7 +56,7 @@ function MyOrder() {
                                     <Card.Body>
                                         <div className='d-flex justify-content-between'>
                                             <p className='mb-0'>{order.orderId}</p>
-                                            <p className={`${order.orderStatus === 'Completed' ? 'bg-success' : order.orderStatus === 'Confirmed' ? 'bg-primary' : 'bg-danger'} text-white px-2 py-1 mb-0`} style={{ borderRadius: '.5rem', fontWeight: '500' }}>{order.orderStatus}</p>
+                                            <p className={`${item.status === 'Completed' ? 'bg-success' : item.status === 'Confirmed' ? 'bg-primary' : 'bg-danger'} text-white px-2 py-1 mb-0`} style={{ borderRadius: '.5rem', fontWeight: '500' }}>{item.status}</p>
 
                                         </div>
                                         <hr className='m-1' />
@@ -70,7 +65,7 @@ function MyOrder() {
                                                 <img src={item.image} alt={item.title} className="p-2 bg-body-secondary ordered-img" />
                                                 <div className="item-details">
                                                     <h6>{item.title}</h6>
-                                                    <p className='mb-2 fs-5'>₹{item.price * item.quantity} <Badge className='bg-success'>{order.paymentStatus}</Badge></p>
+                                                    <p className='mb-2 fs-5'>₹{item.price * item.quantity} <Badge className={item.payStatus === "Paid" ? "bg-success" : "bg-danger"}>{item.payStatus}</Badge></p>
                                                     <p className='mb-2 fs-5'>{item.quantity}</p>
 
                                                 </div>
@@ -85,18 +80,18 @@ function MyOrder() {
                                             </div>
                                         </div>
                                         
-                                        {order?.orderStatus === 'Canceled' ? <p className='text-danger'>Cancellation Reason: {order.cancellationReason}</p> : ""}
+                                        {item?.status === 'Canceled' ? <p className='text-danger'>Cancellation Reason: {item.cancellationReason}</p> : ""}
                                         
 
                                         <hr className='m-2' />
                                         <div className="ordered-btn d-flex justify-content-between">
                                             {
-                                                order.orderStatus !== 'Completed' && order.orderStatus !== 'Canceled' ?
+                                                item.status !== 'Completed' && item.status !== 'Canceled' ?
                                                     <div className='d-flex w-100 gap-2'>
-                                                        <OrderCancel orderId={order._id} />
+                                                        <OrderCancel orderId={order._id} productId={item.productId} />
 
-                                                        <Button className='fs-5' style={{ width: "50%" }} variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
-                                                    </div> : <Button className='w-100 fs-5' variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat With Us</Button>
+                                                        <Button className='fs-5' style={{ width: "50%" }} variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat</Button>
+                                                    </div> : <Button className='w-100 fs-5' variant="outline-secondary" onClick={() => navigate("/contact")}><i className="fa-regular fa-comment"></i> Chat</Button>
                                             }
 
                                         </div>

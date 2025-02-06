@@ -505,6 +505,13 @@ const orderStatusUpdate = async(req, res, next) => {
         }
 
         order.orderStatus = newStatus;
+
+        order.orderedItem.forEach((item) => {
+            if (item.status !== "Canceled") {
+                item.status = newStatus;
+            }
+        });
+        
         await order.save();
 
         return res.status(200).json({message: "Order status updated successfully"});

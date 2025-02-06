@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+import { v4 } from 'uuid'
 import crypto from "crypto";
 import { Order } from "../models/order.model.js";
 import Razorpay from "razorpay";
+import { Product } from "../models/product.model.js";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -23,8 +25,9 @@ const createOrder = async (req, res, next) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
+
     const options = {
-      amount: totalAmount * 100, // Razorpay accepts amount in paise
+      amount: totalAmount * 100,
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
       payment_capture: 1,
@@ -105,6 +108,8 @@ const verifyOrderPayment = async (req, res, next) => {
             paymentSignature: razorpay_signature,
             paymentStatus: "Paid",
             orderStatus: "Confirmed",
+            "orderedItem.$[].status": 'Confirmed',
+            "orderedItem.$[].payStatus": 'Paid'
           },
         }
       );
@@ -113,6 +118,28 @@ const verifyOrderPayment = async (req, res, next) => {
         return res.status(400).json({
           success: false,
           message: "Booking not found or already updated",
+        });
+      }
+
+      for(let item of order.orderedItem){
+        const product = await Product.findById(item.product);
+
+        if (!product) {
+          return res.status(400).json({
+            success: false,
+            message: `Product not found`,
+          });
+        }
+
+        if (product.stock < item.quantity) {
+          return res.status(400).json({
+            success: false,
+            message: `Insufficient stock for ${item.name}. Available stock: ${product.stock}`,
+          });
+        }
+
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: { stock: -item.quantity },
         });
       }
 
@@ -133,7 +160,7 @@ const verifyOrderPayment = async (req, res, next) => {
 
 const getUserOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find({ orderBy: req.userId })
+    const orders = await Order.find({ orderBy: req.userId, orderStatus: {$ne: 'Pending'} })
       .populate({
         path: 'orderBy',
         select: 'name phone addresses',
@@ -153,19 +180,21 @@ const getUserOrders = async (req, res, next) => {
       orderStatus: order.orderStatus,
       totalAmount: order.totalAmount,
       paymentStatus: order.paymentStatus,
-      cancellationReason: order.cancellationReason,
       address: order.address,
       orderedItem: order.orderedItem.map(item => ({
-        productId: item.product._id,
+        productId: item.product?._id,
         quantity: item.quantity,
-        title: item.product.title,
-        price: item.product.price,
-        image: item.product.images[0],
+        title: item.product?.title,
+        status: item.status,
+        payStatus: item.payStatus,
+        cancellationReason: item.cancellationReason,
+        price: item.product?.price,
+        image: item.product?.images[0],
       })),
       userDetails: {
-        name: order.orderBy.name,
-        phone: order.orderBy.phone,
-        addresses: order.orderBy.addresses,
+        name: order.orderBy?.name,
+        phone: order.orderBy?.phone,
+        addresses: order.orderBy?.addresses,
       },
     }));
 
@@ -180,11 +209,16 @@ const getUserOrders = async (req, res, next) => {
 
 const cancelOrder = async(req, res, next) => {
   try {
-    const {orderId} = req.params;
+    const {orderId, productId} = req.params;
     const {reason} = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(orderId)) {
-      return res.status(400).json({message: "Something Wrong"});
+      return res.status(400).json({message: "Something Wrong in orderId"});
+    }
+
+    // console.log(productId)
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({message: "Something Wrong in productID"});
     }
 
     if(!reason){
@@ -201,19 +235,31 @@ const cancelOrder = async(req, res, next) => {
       return res.status(400).json({message: "Can't Cancel!, Too Late"})
     }
 
-    await Order.findByIdAndUpdate(
-      orderId,
-      {
-        $set: {
-          cancellationReason: reason,
-          orderStatus: "Canceled",
-          paymentStatus: "Refunded",
-        }
-      },
-      {new: true}
-    )
+    const itemIndex = order.orderedItem.findIndex((item) => item.product.toString() === productId);
 
-    return res.status(200).json({message: "Order Canceled"})
+    if (itemIndex === -1) {
+      return res.status(404).json({ message: "Product not found in this order" });
+    }
+
+    order.orderedItem[itemIndex].status = "Canceled";
+    order.orderedItem[itemIndex].cancellationReason = reason;
+    order.orderedItem[itemIndex].payStatus = 'Refunded';
+
+    const allCanceled = order.orderedItem.every((item) => item.status === "Canceled");
+    if (allCanceled) {
+      order.orderStatus = "Canceled";
+    }
+
+    await order.save();
+
+    const product = await Product.findById(productId);
+    if (product) {
+      product.stock += order.orderedItem[itemIndex].quantity;
+      await product.save();
+    }
+
+
+    return res.status(200).json({ message: "Order canceled successfully", order});
   } catch (error) {
     console.log(error);
     next(error)
