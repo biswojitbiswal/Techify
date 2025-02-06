@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^5.23.4",
     "bootstrap": "^5.3.3",
     "browser-image-compression": "^2.0.2",
     "colorthief": "^2.6.0",

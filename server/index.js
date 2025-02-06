@@ -12,7 +12,7 @@ import orderRouter from './routes/order.routes.js'
 import contactRouter from './routes/contact.routes.js'
 import categoryRouter from './routes/category.routes.js'
 import brandRouter from './routes/brands.routes.js';
-// import cleanUpExpiredOrders from "./utils/deleteService.utils.js";
+import cleanUpExpiredOrders from "./utils/deleteService.utils.js";
 
 
 const app = express();
@@ -55,7 +55,7 @@ app.get("/", (req, res) => {
 
 connectDb()
 .then(() => {
-    // setInterval(cleanUpExpiredOrders, 5 * 60 * 1000);
+    setInterval(cleanUpExpiredOrders, 5 * 60 * 1000);
 
     app.on("error", (error) => {
         console.log("Error", error);

@@ -19,7 +19,7 @@ const addRecentlyView = async(req, res, next) => {
 
         user.recentlyView.unshift(productId);
 
-        if(user.recentlyView.length > 10){
+        if(user.recentlyView.length > 12){
             user.recentlyView.pop();
         }
 

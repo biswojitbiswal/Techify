@@ -1,0 +1,22 @@
+#recently-view-page{
+    margin: 2rem 6rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(248, 248, 248);
+}
+.recently-view-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+@media (max-width: 696px) {
+    #recently-view-page{
+        margin: 1rem;
+    }
+}

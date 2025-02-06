@@ -523,7 +523,7 @@ const orderStatusUpdate = async(req, res, next) => {
 const deleteOrder = async(req, res, next) => {
     try {
         const {orderId} = req.params
-        // console.log(orderId)
+        console.log("delete order",orderId)
         if (!mongoose.Types.ObjectId.isValid(orderId)) {
             return res.status(400).json({ message: "Invalid Order ID" });
         }

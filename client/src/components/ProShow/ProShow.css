@@ -1,12 +1,12 @@
 #prod-details {
-    padding: 2rem 8rem;
+    padding: 2rem 6rem;
 }
 
 
 #prod-details .prod-card{
     display: flex;
     width: auto;
-    height: 600px;
+    height: 650px;
     justify-content: space-between;
     align-items: center;
     border-radius: .25rem; 
@@ -14,7 +14,7 @@
 }
 
 #prod-details .prod-look {
-    width: 50%;
+    width: 60%;
     height: 100%;
     display: flex;
     /* padding: 1rem .5rem; */

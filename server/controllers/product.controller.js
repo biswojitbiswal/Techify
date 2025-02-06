@@ -239,6 +239,26 @@ const getOrderItem = async (req, res, next) => {
   }
 };
 
+const getRecentlyViewProduct = async(req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if(user.recentlyView.length === 0){
+      return res.status(404).json({message: "No Recently Viewed Product"});
+    }
+
+    const products = await Product.find({_id: {$in: user.recentlyView}});
+
+    if(products.length === 0){
+      return res.status(404).json({message: "Products Not Found"});
+    }
+
+    return res.status(200).json(products);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export {
   getAllProducts,
   addToCart,
@@ -247,4 +267,5 @@ export {
   prosuctShowCase,
   getProductById,
   getOrderItem,
+  getRecentlyViewProduct,
 };

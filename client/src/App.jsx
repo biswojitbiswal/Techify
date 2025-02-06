@@ -22,6 +22,7 @@ import Error from './components/Error/Error'
 import Signout from './components/Signout/Signout'
 import Footer from './components/Footer/Footer'
 import Contact from './components/Contact/Contact'
+import RecentlyView from './components/RecentlyView/RecentlyView'
 import AddCategory from './AdminPanel/AddCategory'
 import AddBrand from './AdminPanel/AddBrand'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -42,6 +43,9 @@ const ProtectedOrder = ProtectedRoute(MyOrders, ['User', 'Admin', 'Moderator']);
 const ProtectedCart = ProtectedRoute(Cart, ['User', 'Admin', 'Moderator']);
 const ProtectedOrderNow = ProtectedRoute(Order, ['User', 'Admin', 'Moderator']);
 const ProductedContact = ProtectedRoute(Contact, ['User', 'Admin', 'Moderator']);
+const ProductRecently = ProtectedRoute(RecentlyView, ['User', 'Admin', 'Moderator']);
+
+
 function App() {
 
   return (
@@ -58,6 +62,8 @@ function App() {
           <Route path='/account' element={<ProtectedAccount />} />
           <Route path='/account/address' element={<ProtectedAddress />} />
           <Route path='/account/myorders' element={<ProtectedOrder />} />
+          <Route path='/account/recently-view' element={<ProductRecently />} />
+
           <Route path='/contact' element={<ProductedContact />} />
           {/* </Route> */}
 
