@@ -10,7 +10,7 @@ const cleanUpExpiredOrders = async () => {
         createdAt: { $lt: fiveMinutesAgo  },
       });
   
-      console.log(`Deleted ${result.deletedCount} expired pending orders`);
+      // console.log(`Deleted ${result.deletedCount} expired pending orders`);
     } catch (error) {
       console.error("Error deleting expired orders:", error);
     }
