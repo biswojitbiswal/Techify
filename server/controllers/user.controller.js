@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import {uploadFileOnCloudinary} from '../utils/cloudinary.utils.js'
 
 
 const generateAccessToken = async(userId) => {
@@ -299,6 +300,54 @@ const handlePrimaryAddress = async(req, res, next) => {
 };
 
 
+const profileImageUpdate = async(req, res, next) => {
+    try {
+        const file = req.files?.profile[0].path;
+        console.log(file)
+        if (!file) {
+            return res.status(400).json({ message: "Image file is required!" });
+        }
+
+        const uploadedFile = await uploadFileOnCloudinary(file);
+        console.log(uploadedFile)
+        if (!uploadedFile || !uploadedFile.data.secure_url) {
+            return res.status(500).json({ message: "File Upload Failed" });
+        }
+
+        const profile = uploadedFile.data.secure_url;
+
+        await User.findByIdAndUpdate(req.user._id, { profile });
+
+        return res.status(201).json({message: "Profile Image Updated"});
+    } catch (error) {
+        next(error);
+    }
+}
+
+const changeUsername = async(req, res, next) => {
+    try {
+        const {username} = req.body;
+
+        if(!username){
+            return res.status(400).json({message: "Username Required"});
+        }
+
+        const user = req.user;
+
+        if(!user){
+            return res.status(400).json({message: "Unauthorized User"});
+        }
+
+        user.name = username;
+        await user.save();
+
+        return res.status(201).json({message: "Username Changed"});
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 export {
     registerUser,
     loginUser,
@@ -307,5 +356,7 @@ export {
     addAddresses,
     deleteAddressById,
     updateAddress,
-    handlePrimaryAddress
+    handlePrimaryAddress,
+    profileImageUpdate,
+    changeUsername,
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Table from 'react-bootstrap/Table';
-import { BASE_URL } from "../../config.js";
-import { useAuth } from "../Store/Auth.jsx";
+import { BASE_URL } from "../../../config.js";
+import { useAuth } from "../../Store/Auth.jsx";
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -26,7 +26,7 @@ function AdminOrder() {
             })
 
             const data = await response.json();
-            // console.log(data);
+            console.log(data);
 
             if (response.ok) {
                 const newOrders = data.orders.filter(order => !storedIds.current.has(order._id));
@@ -123,7 +123,10 @@ function AdminOrder() {
         <>
             <div className="order-container text-center">
                 <div className="table-caption bg-primary d-flex align-items-center">
-                    <h3 className='fs-3 text-white ps-2'>Orders</h3>
+                    <h3 className='fs-3 text-white ps-2'>Order Management</h3>
+                </div>
+                <div className="order-sort-filter">
+                    
                 </div>
                 <div className="order-table">
                     <Table responsive="sm" bordered striped hover>

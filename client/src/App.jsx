@@ -9,9 +9,10 @@ import Cart from './components/Cart/Cart'
 import Account from './components/Account/Account'
 import MyOrders from './components/MyOrder/MyOrders'
 import Address from './components/Address/Address'
+import Profile from './components/Profile/Profile'
 import Signin from './components/Signin/Signin'
 import Signup from './components/Signup/Signup'
-import AdminHome from './AdminPanel/AdminHome'
+import AdminHome from './AdminPanel/OrderMng.jsx/AdminHome'
 import Users from './AdminPanel/Users'
 import UserEdit from './AdminPanel/UserEdit'
 import AddReview from './AdminPanel/AddReview'
@@ -44,6 +45,7 @@ const ProtectedCart = ProtectedRoute(Cart, ['User', 'Admin', 'Moderator']);
 const ProtectedOrderNow = ProtectedRoute(Order, ['User', 'Admin', 'Moderator']);
 const ProductedContact = ProtectedRoute(Contact, ['User', 'Admin', 'Moderator']);
 const ProductRecently = ProtectedRoute(RecentlyView, ['User', 'Admin', 'Moderator']);
+const ProtectedProfile = ProtectedRoute(Profile, ['User', 'Admin', 'Moderator']);
 
 
 function App() {
@@ -63,6 +65,7 @@ function App() {
           <Route path='/account/address' element={<ProtectedAddress />} />
           <Route path='/account/myorders' element={<ProtectedOrder />} />
           <Route path='/account/recently-view' element={<ProductRecently />} />
+          <Route path='/account/profile' element={<ProtectedProfile />} />
 
           <Route path='/contact' element={<ProductedContact />} />
           {/* </Route> */}

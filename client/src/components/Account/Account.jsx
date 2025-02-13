@@ -4,10 +4,10 @@ import './Account.css'
 import { Link } from 'react-router-dom'
 
 function Account() {
-  const { darkMode, user } = useAuth();
+  const { user } = useAuth();
   return (
     <>
-      <section id='account-page' style={{ backgroundColor: darkMode ? '#000' : '#fff' }}>
+      <section id='account-page' style={{ backgroundColor: '#fff' }}>
         <div className="account-container">
           <div className="user-info">
             <h2 className='ms-2 text-primary fs-3'><span className='fs-5 text-secondary'>Welcome </span>{user.name}</h2>
@@ -18,7 +18,7 @@ function Account() {
           </div>
           <div className="account-box-container">
 
-            <Link className='acc-box fs-4 fw-semibold m-0 p-0 text-decoration-none text-black'><span><i className="fa-solid fa-user text-primary me-2"></i></span> Profile</Link>
+            <Link to="/account/profile" className='acc-box fs-4 fw-semibold m-0 p-0 text-decoration-none text-black'><span><i className="fa-solid fa-user text-primary me-2"></i></span> Profile</Link>
 
 
             <Link to="/account/myorders" className='acc-box fs-4 fw-semibold m-0 p-0 text-decoration-none text-black'><span><i className="fa-solid fa-gift text-primary me-2"></i></span>Orders</Link>

@@ -7,11 +7,12 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import '../../App.css'
 
 function MyNavbar() {
   const expandValue = ['sm', 'md', 'lg', 'xl', 'xxl'][3];
 
-  const { isLoggedInuser, user, darkMode, handleDarkMode } = useAuth();
+  const { isLoggedInuser, user } = useAuth();
 
   const [showOffCanvas, setShowOffCanvas] = useState(false);
 
@@ -105,19 +106,19 @@ function MyNavbar() {
                     id="admin-dashboard-dropdown"
                     className='fs-5 text-primary'
                   >
-                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin">Manage Order</NavDropdown.Item>
+                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin">Manage Order</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/users">Manage User</NavDropdown.Item>
+                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/users">Manage User</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/reviews">Manage Review</NavDropdown.Item>
+                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/reviews">Manage Review</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/add/product">Add Products</NavDropdown.Item>
+                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/product">Add Products</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/add/category">Add Category</NavDropdown.Item>
+                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/category">Add Category</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/add/brand">Add Brand</NavDropdown.Item>
+                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/brand">Add Brand</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5' onClick={handleCloseOffCanvas} href="/admin/add/testimonial">Add Testimonials</NavDropdown.Item>
+                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/testimonial">Add Testimonials</NavDropdown.Item>
                     
                   </NavDropdown>
                 )}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAuth } from '../Store/Auth'
+import { useAuth } from '../../Store/Auth'
 import AdminOrder from './AdminOrder';
 
 function AdminHome() {

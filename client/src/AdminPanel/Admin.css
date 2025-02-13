@@ -46,7 +46,12 @@
 #admin-dashboard-dropdown.dropdown-toggle::after{
     color: #007bff;
 }
-
+.nav-underline .nav-link.active, .nav-underline .show>.nav-link {
+    border-bottom-color: #007bff !important;
+}
+.nav-item:hover{
+    border-bottom-color: #007bff !important;
+}
 
 
 @media (max-width: 1096px){

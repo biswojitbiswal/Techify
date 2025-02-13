@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profile: {
+        type: String,
+    },
     cart: [
         {
             type: mongoose.Schema.Types.ObjectId,
