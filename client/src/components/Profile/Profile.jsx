@@ -6,6 +6,7 @@ import { BASE_URL } from '../../../config'
 import { useAuth } from '../../Store/Auth'
 import { toast } from 'react-toastify';
 import Username from './Username';
+import PasswordReset from './PasswordReset';
 
 function Profile() {
   const [file, setFile] = useState("");
@@ -80,7 +81,11 @@ function Profile() {
             </div>
           </div>
 
-          <Username />
+          <div className="profile-options">
+            <Username />
+            <PasswordReset />
+          </div>
+          
           
         </div>
       </div>

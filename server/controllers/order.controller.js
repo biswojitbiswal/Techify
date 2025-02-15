@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { v4 } from 'uuid'
 import crypto from "crypto";
 import { Order } from "../models/order.model.js";
 import Razorpay from "razorpay";
@@ -25,6 +24,23 @@ const createOrder = async (req, res, next) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
+    const productIds = orderedItem.map(item => item.product);
+    const products = await Product.find({ _id: { $in: productIds } });
+
+    if (products.length !== orderedItem.length) {
+      return res.status(400).json({ message: "Some products not found." });
+    }
+
+    const updatedOrderedItems = orderedItem.map(item => {
+      const product = products.find(p => p._id.toString() === item.product);
+      if (!product) {
+        throw new Error(`Product with ID ${item.product} not found.`);
+      }
+      return {
+        ...item,
+        amount: product.price * item.quantity,
+      };
+    });
 
     const options = {
       amount: totalAmount * 100,
@@ -45,7 +61,7 @@ const createOrder = async (req, res, next) => {
       orderBy: req.userId,
       name,
       contact,
-      orderedItem,
+      orderedItem: updatedOrderedItems,
       address: addressId,
       totalAmount,
       orderId: razorpayOrder.id,

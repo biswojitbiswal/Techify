@@ -488,9 +488,9 @@ const isValidStatusTransition = (currentStatus, newStatus) => {
 
 const orderStatusUpdate = async(req, res, next) => {
     try {
-        const {orderId} = req.params;
+        const {productId, orderId} = req.params;
         const {newStatus} = req.body;
-
+        console.log(productId)
         // console.log(typeof newStatus);
 
         if(!newStatus){
@@ -498,20 +498,32 @@ const orderStatusUpdate = async(req, res, next) => {
         }
 
         const order = await Order.findById(orderId);
-        // console.log(order);
 
-        if(!isValidStatusTransition(order.orderStatus, newStatus)){
-            return res.status(400).json({message: "Invalid Status Update"});
+        if (!order) {
+            return res.status(404).json({ message: "Order not found" });
         }
 
-        order.orderStatus = newStatus;
+        const productIndex = order.orderedItem.findIndex(
+            (item) => item.product.toString() === productId
+        );
 
-        order.orderedItem.forEach((item) => {
-            if (item.status !== "Canceled") {
-                item.status = newStatus;
-            }
-        });
-        
+        if (productIndex === -1) {
+            return res.status(404).json({ message: "Product not found in the order" });
+        }
+
+        if (!isValidStatusTransition(order.orderedItem[productIndex].status, newStatus)) {
+            return res.status(400).json({ message: "Invalid Status Update" });
+        }
+
+        order.orderedItem[productIndex].status = newStatus;
+        if(newStatus === 'Canceled'){
+            order.orderedItem[productIndex].payStatus = 'Refunded';
+            order.orderedItem[productIndex].cancellationReason = "Canceled By Admin";
+        }
+
+        const updatedOrderStatus = determineOrderStatus(order.orderedItem);
+        order.orderStatus = updatedOrderStatus;
+
         await order.save();
 
         return res.status(200).json({message: "Order status updated successfully"});
@@ -519,6 +531,29 @@ const orderStatusUpdate = async(req, res, next) => {
         next(error);
     }
 }
+
+const determineOrderStatus = (orderedItems) => {
+    const statuses = orderedItems.map((item) => item.status);
+
+    if (statuses.every((status) => status === "Completed")) {
+        return "Completed";
+    }
+    
+    if (statuses.every((status) => status === "Canceled")) {
+        return "Canceled";
+    }
+    
+    if (statuses.every((status) => status === "Confirmed")) {
+        return "Confirmed";
+    }
+
+    if (statuses.some((status) => status === "Completed")) {
+        return "Completed";
+    }
+
+    return "Confirmed";
+};
+
 
 const deleteOrder = async(req, res, next) => {
     try {

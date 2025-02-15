@@ -46,10 +46,10 @@ function AdminOrder() {
     }
 
 
-    const handleOrderStatus = async (orderId, newStatus) => {
+    const handleOrderStatus = async (orderId, productId, newStatus) => {
         if (confirm(`Are You Sure You Want Change Order Status To ${newStatus}`)) {
             try {
-                const response = await fetch(`${BASE_URL}/api/techify/admin/order/status/${orderId}`, {
+                const response = await fetch(`${BASE_URL}/api/techify/admin/order/status/${productId}/${orderId}`, {
                     method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
@@ -126,7 +126,7 @@ function AdminOrder() {
                     <h3 className='fs-3 text-white ps-2'>Order Management</h3>
                 </div>
                 <div className="order-sort-filter">
-                    
+
                 </div>
                 <div className="order-table">
                     <Table responsive="sm" bordered striped hover>
@@ -147,64 +147,70 @@ function AdminOrder() {
                         </thead>
                         <tbody>
                             {
-                                orders && orders?.length > 0 ?
-                                    orders?.map(order => {
-                                        return <tr key={order._id}>
-                                            <td>{`${order?._id?.slice(0, 2)}...${order?._id?.slice(-4)}`}</td>
+                                orders && orders.length > 0 ? (
+                                    orders.flatMap(order =>
+                                        order.orderedItem.map((item, index) => ({
+                                            ...item,
+                                            order,
+                                            key: `${order._id}-${index}`,  // Unique key for each row
+                                        }))
+                                    ).map(({ order, product, amount, quantity, status, payStatus, key }) => (
+                                        <tr key={key}>
+                                            <td>{`${order._id.slice(0, 2)}...${order._id.slice(-4)}`}</td>
                                             <td>{order.name}</td>
                                             <td>{user.role === 'Admin' ? order.contact : 'xxxxxxxxxx'}</td>
-                                            <td style={{ width: "300px" }}>{order?.orderedItem?.map((item, index) => {
-                                                return <p key={index}>{item.product.title}</p>
-                                            })}</td>
-                                            <td>{order?.orderedItem?.reduce((acc, item) => acc + item.quantity, 0)}</td>
-                                            <td>{order.totalAmount}</td>
-                                            {
-                                                user.role === 'Admin' ? <td>
-                                                    {
-                                                        `${order?.address?.street}, ${order?.address?.city}, ${order?.address?.state}, ${order?.address?.zipcode}`
-                                                    }
-                                                </td> : ""
-                                            }
+                                            <td>{product.title}</td>
+                                            <td>{quantity}</td>
+                                            <td>{amount}</td>
+                                            {user.role === 'Admin' && (
+                                                <td>{`${order.address.street}, ${order.address.city}, ${order.address.state}, ${order.address.zipcode}`}</td>
+                                            )}
                                             <td>
-                                                {
-                                                    user?.role === 'Admin' ? (
-                                                        ['Completed', 'Canceled'].includes(order.orderStatus) ? (
-                                                            <span className='btn btn-primary' style={{ fontSize: "1rem" }}>
-                                                                {order.orderStatus}
-                                                            </span>
-                                                        ) : (
-                                                            <DropdownButton
-                                                                id={`dropdown-item-${order._id}`}
-                                                                title={order.orderStatus}
-                                                                onSelect={(newStatus) => handleOrderStatus(order._id, newStatus)}
-                                                                disabled={['Completed', 'Canceled'].includes(order.orderStatus)}
-                                                            >
-                                                                {showDropDownOptions(order.orderStatus)}
-                                                            </DropdownButton>
-                                                        )
-                                                    ) : (
-                                                        <span className={order.orderStatus === 'Completed' ? 'text-success' : order.orderStatus === 'Confirmed' ? 'text-primary' : 'text-danger'} style={{ fontWeight: "600", fontSize: "1.25rem" }}>
-                                                            {order.orderStatus}
+                                                {user?.role === 'Admin' ? (
+                                                    ['Completed', 'Canceled'].includes(status) ? (
+                                                        <span className={`btn ${status === 'Completed' ? 'btn-success' :
+                                                            status === 'Confirmed' ? 'btn-primary' :
+                                                                'btn-danger'}`} style={{ fontSize: "1rem" }}>
+                                                            {status}
                                                         </span>
-                                                       
+                                                    ) : (
+                                                        <DropdownButton
+                                                            id={`dropdown-item-${order._id}`}
+                                                            title={status}
+                                                            onSelect={(newStatus) => handleOrderStatus(order._id, product._id, newStatus)}
+                                                            disabled={['Completed', 'Canceled'].includes(status)}
+                                                        >
+                                                            {showDropDownOptions(status)}
+                                                        </DropdownButton>
                                                     )
-                                                }
+                                                ) : (
+                                                    <span className={
+                                                        status === 'Completed' ? 'text-success' :
+                                                            status === 'Confirmed' ? 'text-primary' :
+                                                                'text-danger'
+                                                    } style={{ fontWeight: "600", fontSize: "1.25rem" }}>
+                                                        {status}
+                                                    </span>
+                                                )}
                                             </td>
-
-                                            <td className={order.paymentStatus === 'Paid' ? 'text-success' : 'text-danger'} style={{ fontWeight: "600" }}>
-                                                {order.paymentStatus}
+                                            <td className={payStatus === 'Paid' ? 'text-success' : 'text-danger'} style={{ fontWeight: "600" }}>
+                                                {payStatus}
                                             </td>
-                                            <td style={{ width: "120px" }}>{order?.createdAt?.split('T')[0]}</td>
-                                            {
-                                                user.role == 'Admin' && (<td style={{ width: "120px" }}><Button variant='danger' onClick={() => handleOrderDelete(order._id)}>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>)
-                                            }
+                                            <td style={{ width: "120px" }}>{order.createdAt.split('T')[0]}</td>
+                                            {user.role === 'Admin' && (
+                                                <td style={{ width: "120px" }}>
+                                                    <Button variant='danger' onClick={() => handleOrderDelete(order._id)}>
+                                                        <i className="fa-solid fa-trash"></i>
+                                                    </Button>
+                                                </td>
+                                            )}
                                         </tr>
-
-                                    }) : <tr>
-                                        <td colSpan={11} className="text-center fs-3">
-                                            Orders Not Found
-                                        </td>
-                                    </tr>
+                                    ))
+                                ) : <tr>
+                                    <td colSpan={11} className="text-center fs-3">
+                                        Orders Not Found
+                                    </td>
+                                </tr>
                             }
 
                         </tbody>

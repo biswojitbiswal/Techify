@@ -30,7 +30,7 @@ router.route("/status/:reviewId").patch(authVerify, verifyRole(['Admin', 'Modera
 router.route("/delete/review/:reviewId").delete(authVerify, verifyRole(['Admin']), deleteReviewById)
 router.route("/assign/role/:userId").patch(authVerify, verifyRole(['Admin']), AccessToRole)
 router.route("/orders").get(authVerify, verifyRole(['Admin', 'Moderator']), getAllOrders)
-router.route("/order/status/:orderId").patch(authVerify, verifyRole(['Admin']), orderStatusUpdate)
+router.route("/order/status/:productId/:orderId").patch(authVerify, verifyRole(['Admin']), orderStatusUpdate)
 router.route("/order/:orderId/delete").delete(authVerify, verifyRole(['Admin']), deleteOrder);
 router.route("/product/:productId").get(authVerify, verifyRole(['Admin', 'Moderator']), getProductById)
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import authVerify from "../middleware/auth.middleware.js";
-import {registerUser, loginUser, authnticateWithGoogle, getCurrUser, profileImageUpdate, addAddresses, deleteAddressById, updateAddress, handlePrimaryAddress, changeUsername} from '../controllers/user.controller.js'
+import {registerUser, loginUser, authnticateWithGoogle, getCurrUser, profileImageUpdate, addAddresses, deleteAddressById, updateAddress, handlePrimaryAddress, changeUsername, resetPassword} from '../controllers/user.controller.js'
 import {upload} from '../middleware/multer.middleware.js'
 const router = Router();
 
@@ -24,7 +24,7 @@ router.route("/profile/image").patch(
 );
 
 router.route("/username").patch(authVerify, changeUsername);
-
+router.route("/reset-password").patch(authVerify, resetPassword)
 
 
 export default router;

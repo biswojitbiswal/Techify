@@ -50,7 +50,9 @@ function Cart() {
   }, [cartItems, selectItems]);
 
 
-  const handleSelectItem = (productId) => {
+  const handleSelectItem = (event, productId) => {
+    event.stopPropagation();
+    event.preventDefault();
     setSelectItems((prevItems) => {
       const updatedItems = new Set(prevItems);
       if (updatedItems.has(productId)) {
@@ -102,13 +104,14 @@ function Cart() {
         <h1 className='text-primary text-decoration-underline'>My Cart</h1>
         {cartItems.length > 0 ? (
           cartItems.map((item) => (
-            <Link key={item._id} to={`/product/${item._id}`} className="cart-card text-decoration-none" style={{ backgroundColor: darkMode ? '#343434' : '#fff' }}>
-              <img src={item.images[0]} alt="Product Image" width={200} />
+            <div key={item._id} className="cart-card text-decoration-none" style={{ backgroundColor: darkMode ? '#343434' : '#fff' }}>
+              <Link to={`/product/${item._id}`}><img src={item.images[0]} alt="Product Image" width={200} /></Link>
               <Card style={{ backgroundColor: darkMode ? '#a3a3a3' : '' }}>
                 <Card.Header className='d-flex justify-content-between align-items-center' style={{ backgroundColor: darkMode ? '#999999' : '' }}>
                   <h4>{item.title}</h4>
-                  <Form.Check aria-label={item._id} checked={selectItems.has(item._id)} onChange={() => handleSelectItem(item._id)} />
+                  <Form.Check aria-label={item._id} checked={selectItems.has(item._id)} onChange={(e) => handleSelectItem(e, item._id)} />
                 </Card.Header>
+                <Link to={`/product/${item._id}`} className='text-decoration-none text-black'>
                 <Card.Body>
                   <Card.Title>₹{item.price}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
@@ -118,8 +121,9 @@ function Cart() {
 
                   {/* </div> */}
                 </Card.Body>
+                </Link>
               </Card>
-            </Link>
+            </div>
           ))
         ) : (
           <p className='text-primary fs-4 align-self-center'>Your cart is empty.</p>
