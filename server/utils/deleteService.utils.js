@@ -6,7 +6,7 @@ const cleanUpExpiredOrders = async () => {
   
       
       const result = await Order.deleteMany({
-        orderStatus: "Pending",
+        "orderedItem.status": "Pending",
         createdAt: { $lt: fiveMinutesAgo  },
       });
   

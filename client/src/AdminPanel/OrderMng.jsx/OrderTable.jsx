@@ -1,6 +1,8 @@
 import React from 'react'
 import {Table, Button, Dropdown, DropdownButton} from 'react-bootstrap';
 import { useAuth } from '../../Store/Auth';
+import { BASE_URL } from '../../../config';
+import {toast} from 'react-toastify'
 
 function OrderTable({orders, setOrders, handleAllOrder}) {
     const {user, authorization} = useAuth();
@@ -86,65 +88,63 @@ function OrderTable({orders, setOrders, handleAllOrder}) {
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Amount</th>
+                        <th>Date</th>
                         {user.role === 'Admin' ? <th>Address</th> : ""}
                         <th>Order Status</th>
                         <th>Payment Status</th>
-                        <th>Date</th>
+                        
                         {user.role === 'Admin' && <th>Delete</th>}
                     </tr>
                 </thead>
                 <tbody>
                     {
                         orders && orders.length > 0 ? (
-                            orders.flatMap(order =>
-                                order.orderedItem.map((item, index) => ({
-                                    ...item,
-                                    order,
-                                    key: `${order._id}-${index}`,  // Unique key for each row
-                                }))
-                            ).map(({ order, product, amount, quantity, status, payStatus, key }) => (
-                                <tr key={key}>
+                            orders.map(order => (
+                                order?.orderedItem?.map((item, index) => (
+                                <tr key={`${order._id}-${index}`}>
                                     <td>{`${order._id.slice(0, 2)}...${order._id.slice(-4)}`}</td>
                                     <td>{order.name}</td>
                                     <td>{user.role === 'Admin' ? order.contact : 'xxxxxxxxxx'}</td>
-                                    <td>{product.title}</td>
-                                    <td>{quantity}</td>
-                                    <td>{amount}</td>
+                                    <td>{item.productTitle}</td>
+                                    <td>{item.quantity}</td>
+                                    <td>{item.amount}</td>
+                                    <td style={{ width: "120px" }}>{order.createdAt.split('T')[0]}</td>
+
                                     {user.role === 'Admin' && (
                                         <td>{`${order.address.street}, ${order.address.city}, ${order.address.state}, ${order.address.zipcode}`}</td>
                                     )}
                                     <td>
                                         {user?.role === 'Admin' ? (
-                                            ['Completed', 'Canceled'].includes(status) ? (
-                                                <span className={`btn ${status === 'Completed' ? 'btn-success' :
-                                                    status === 'Confirmed' ? 'btn-primary' :
+                                            ['Completed', 'Canceled'].includes(item.status) ? (
+                                                <span className={`btn ${item.status === 'Completed' ? 'btn-success' :
+                                                    item.status === 'Confirmed' ? 'btn-primary' :
                                                         'btn-danger'}`} style={{ fontSize: "1rem" }}>
-                                                    {status}
+                                                    {item.status}
                                                 </span>
                                             ) : (
                                                 <DropdownButton
                                                     id={`dropdown-item-${order._id}`}
-                                                    title={status}
-                                                    onSelect={(newStatus) => handleOrderStatus(order._id, product._id, newStatus)}
-                                                    disabled={['Completed', 'Canceled'].includes(status)}
+                                                    title={item.status}
+                                                    onSelect={(newStatus) => handleOrderStatus(order._id, item.productId
+                                                        , newStatus)}
+                                                    disabled={['Completed', 'Canceled'].includes(item.status)}
                                                 >
-                                                    {showDropDownOptions(status)}
+                                                    {showDropDownOptions(item.status)}
                                                 </DropdownButton>
                                             )
                                         ) : (
                                             <span className={
-                                                status === 'Completed' ? 'text-success' :
-                                                    status === 'Confirmed' ? 'text-primary' :
+                                                item.status === 'Completed' ? 'text-success' :
+                                                item.status === 'Confirmed' ? 'text-primary' :
                                                         'text-danger'
                                             } style={{ fontWeight: "600", fontSize: "1.25rem" }}>
-                                                {status}
+                                                {item.status}
                                             </span>
                                         )}
                                     </td>
-                                    <td className={payStatus === 'Paid' ? 'text-success' : 'text-danger'} style={{ fontWeight: "600" }}>
-                                        {payStatus}
+                                    <td className={item.payStatus === 'Paid' ? 'text-success' : 'text-danger'} style={{ fontWeight: "600" }}>
+                                        {item.payStatus}
                                     </td>
-                                    <td style={{ width: "120px" }}>{order.createdAt.split('T')[0]}</td>
                                     {user.role === 'Admin' && (
                                         <td style={{ width: "120px" }}>
                                             <Button variant='danger' onClick={() => handleOrderDelete(order._id)}>
@@ -154,7 +154,8 @@ function OrderTable({orders, setOrders, handleAllOrder}) {
                                     )}
                                 </tr>
                             ))
-                        ) : <tr>
+                        ))
+                    ) : <tr>
                             <td colSpan={11} className="text-center fs-3">
                                 Orders Not Found
                             </td>

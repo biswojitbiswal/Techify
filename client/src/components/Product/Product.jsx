@@ -24,7 +24,6 @@ function Product() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
-  const storedIds = useRef(new Set());
   const isFetching = useRef(false);
   let timeOutId;
 
@@ -85,7 +84,6 @@ function Product() {
       const data = await response.json();
 
       if (response.ok) {
-        // setProducts(prev => [...prev, ...data.Allproducts]);
         setProducts(prev => (skip === 0 ? data.Allproducts : [...prev, ...data.Allproducts]));
         setHasMore(data.Allproducts.length === limit);
       } else {
@@ -147,7 +145,7 @@ function Product() {
     setProducts([]);
     setHasMore(true);
     productData();
-  }, [sortOption, sortOrder, category, brand, searchTerm]);
+  }, [sortOption, sortOrder, category, brand]);
 
   useEffect(() => {
     if (skip > 0) {

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import { BASE_URL } from '../../../config';
 import Form from 'react-bootstrap/Form'
+import './Google.css'
 
 function Google() {
     const [showModal, setShowModal] = useState(false);
@@ -73,8 +74,8 @@ function Google() {
     }
   return (
     <>
-        <Button onClick={handleGoogleClick} variant="light" className='d-flex align-items-center justify-content-center border-primary' style={{height: "60px", width: "70%"}}>
-            <img src={google} alt="google" width="60px" height="60px" />
+        <Button onClick={handleGoogleClick} variant="light" className='d-flex align-items-center justify-content-center border-primary google-image' style={{height: "60px", width: "70%"}}>
+        <img src={google} className='me-2' alt="google" height="60px" width="60px" />
             <span>CONTINUE WITH GOOGLE</span>
         </Button>
         

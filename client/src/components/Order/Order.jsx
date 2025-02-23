@@ -252,6 +252,7 @@ function Order() {
         </div>
       </div>
       <p><strong>Remeber:</strong> The Payment Mode Is In <strong>Test Mode</strong>.So, Total Amount Should Be Less Than <strong>10,000</strong> </p>
+      <p>Use This Card No. - <strong>5267 3181 8797 5449</strong></p>
       <div className="text-center">
         <Button variant="warning" onClick={handlePayment} className="fs-4">
           Pay Now ₹{orderState.totalAmount}

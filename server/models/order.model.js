@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { type } from "os";
 
 const orderSchema = new mongoose.Schema(
   {
@@ -32,7 +31,7 @@ const orderSchema = new mongoose.Schema(
         status: {
           type: String,
           enum: ["Pending", "Confirmed", "Completed", "Canceled"],
-          default: "Confirmed",
+          default: "Pending",
         },
         cancellationReason: {
           type: String,
@@ -63,16 +62,16 @@ const orderSchema = new mongoose.Schema(
     paymentSignature: {
       type: String,
     },
-    orderStatus: {
-      type: String,
-      enum: ["Pending", "Confirmed", "Completed", "Canceled"],
-      default: "Pending",
-    },
-    paymentStatus: {
-      type: String,
-      enum: ["Pending", "Paid", "Failed", "Refunded"],
-      default: "Pending",
-    },
+    // orderStatus: {
+    //   type: String,
+    //   enum: ["Pending", "Confirmed", "Completed", "Canceled"],
+    //   default: "Pending",
+    // },
+    // paymentStatus: {
+    //   type: String,
+    //   enum: ["Pending", "Paid", "Failed", "Refunded"],
+    //   default: "Pending",
+    // },
     // paymentMethod, paymentFailureReason, statusHistory
   },
   { timestamps: true }

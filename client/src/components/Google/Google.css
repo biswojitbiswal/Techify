@@ -2,3 +2,8 @@
     height: 40px;
     background-color: red;
 }
+
+.google-image, img {
+    height: 100%;
+    width: 40px;
+}
