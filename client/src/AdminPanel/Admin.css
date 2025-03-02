@@ -53,6 +53,23 @@
     border-bottom-color: #007bff !important;
 }
 
+.custom-card:hover{
+    transform: scale(1.05);
+  transition: 0.3s ease-in-out;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.chart-container {
+    border-radius: 10px;
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    padding: .5rem;
+    transition: transform 0.3s ease-in-out;
+}
+.chart-container:hover {
+    transform: scale(1.02);
+}
+
 
 @media (max-width: 1096px){
     .admin-product-form,.admin-edit-form,.admin-publish-form,.admin-social-forms,.admin-edit-user{

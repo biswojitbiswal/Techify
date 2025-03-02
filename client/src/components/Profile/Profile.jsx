@@ -75,7 +75,7 @@ function Profile() {
         <div className="profile-box" >
           <div className="profile-circle">
             <div className="inner-circle">
-              <Image src={user.profile || preview} className='profile-img' style={{ cursor: 'pointer' }} onClick={handleImageClick} loading='lazy' roundedCircle />
+              <Image src={user.profile || preview} className='profile-img' style={{ cursor: 'pointer', width: "100%" }} onClick={handleImageClick} loading='lazy' roundedCircle />
 
               <input onChange={handleFile} type="file" id='profile_img' className='d-none' ref={fileInputRef} />
             </div>

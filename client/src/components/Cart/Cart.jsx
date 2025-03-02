@@ -65,7 +65,9 @@ function Cart() {
   };
 
 
-  const handleRemove = async (itemId) => {
+  const handleRemove = async (event, itemId) => {
+    event.stopPropagation();
+    event.preventDefault();
     try {
       const response = await fetch(`${BASE_URL}/api/techify/products/cart/remove/${itemId}`, {
         method: "PATCH",
@@ -116,7 +118,7 @@ function Cart() {
                   <Card.Title>₹{item.price}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
                   {/* <div className="cart-btns"> */}
-                  <Button variant="outline-danger" onClick={() => handleRemove(item._id)} className='remove-btn me-4'>
+                  <Button variant="outline-danger" onClick={(e) => handleRemove(e, item._id)} className='remove-btn me-4'>
                     <span><i className="fa-solid fa-trash"></i></span>Remove</Button>
 
                   {/* </div> */}

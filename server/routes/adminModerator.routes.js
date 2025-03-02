@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { addProducts, editProductDetails, deleteProduct, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole, getAllOrders, orderStatusUpdate,deleteOrder, getProductById, addCategory, addBrand,  getBrandByCategory} from "../controllers/admin.controller.js";
+import { addProducts, editProductDetails, deleteProduct, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole, getAllOrders, orderStatusUpdate,deleteOrder, getProductById, addCategory, addBrand,  getBrandByCategory, getAllAnalyticsForOrders, getOrderDataLine, getOrderPieData} from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
 import verifyRole from "../middleware/verifyRole.middleware.js";
 
@@ -30,8 +30,8 @@ router.route("/status/:reviewId").patch(authVerify, verifyRole(['Admin', 'Modera
 router.route("/delete/review/:reviewId").delete(authVerify, verifyRole(['Admin']), deleteReviewById)
 router.route("/assign/role/:userId").patch(authVerify, verifyRole(['Admin']), AccessToRole)
 router.route("/orders").get(authVerify, verifyRole(['Admin', 'Moderator']), getAllOrders)
-router.route("/order/status/:productId/:orderId").patch(authVerify, verifyRole(['Admin']), orderStatusUpdate)
-router.route("/order/:orderId/delete").delete(authVerify, verifyRole(['Admin']), deleteOrder);
+router.route("/status/:productId/:orderId").patch(authVerify, verifyRole(['Admin']), orderStatusUpdate)
+router.route("/:orderId/:productId/delete").delete(authVerify, verifyRole(['Admin']), deleteOrder);
 router.route("/product/:productId").get(authVerify, verifyRole(['Admin', 'Moderator']), getProductById)
 
 router.route("/add/category").post(
@@ -59,5 +59,11 @@ router.route("/add/brand").post(
 )
 
 router.route("/brand").get(authVerify, verifyRole(['Admin', 'Moderator']), getBrandByCategory)
+
+router.route("/get-analytics").get(authVerify, verifyRole(["Admin"]), getAllAnalyticsForOrders)
+
+router.route("/get-linedata/:timeRange").get(authVerify, verifyRole(['Admin']), getOrderDataLine)
+
+router.route("/get-piedata/:timeRange").get(authVerify, verifyRole(['Admin']), getOrderPieData)
 
 export default router

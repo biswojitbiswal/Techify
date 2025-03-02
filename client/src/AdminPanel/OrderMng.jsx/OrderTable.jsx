@@ -6,11 +6,12 @@ import {toast} from 'react-toastify'
 
 function OrderTable({orders, setOrders, handleAllOrder}) {
     const {user, authorization} = useAuth();
+    // console.log(orders)
 
     const handleOrderStatus = async (orderId, productId, newStatus) => {
         if (confirm(`Are You Sure You Want Change Order Status To ${newStatus}`)) {
             try {
-                const response = await fetch(`${BASE_URL}/api/techify/admin/order/status/${productId}/${orderId}`, {
+                const response = await fetch(`${BASE_URL}/api/techify/admin/status/${productId}/${orderId}`, {
                     method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
@@ -54,11 +55,11 @@ function OrderTable({orders, setOrders, handleAllOrder}) {
         ));
     };
 
-    const handleOrderDelete = async (orderId) => {
+    const handleOrderDelete = async (orderId, productId) => {
         if (confirm("Are Sure You Want To Delete The Order")) {
-            // console.log(orderId);
+            console.log(productId);
             try {
-                const response = await fetch(`${BASE_URL}/api/techify/admin/order/${orderId}/delete`, {
+                const response = await fetch(`${BASE_URL}/api/techify/admin/${orderId}/${productId}/delete`, {
                     method: "DELETE",
                     headers: {
                         Authorization: authorization,
@@ -102,6 +103,7 @@ function OrderTable({orders, setOrders, handleAllOrder}) {
                             orders.map(order => (
                                 order?.orderedItem?.map((item, index) => (
                                 <tr key={`${order._id}-${index}`}>
+                                    {/* <td>{item.productId}</td> */}
                                     <td>{`${order._id.slice(0, 2)}...${order._id.slice(-4)}`}</td>
                                     <td>{order.name}</td>
                                     <td>{user.role === 'Admin' ? order.contact : 'xxxxxxxxxx'}</td>
@@ -146,8 +148,8 @@ function OrderTable({orders, setOrders, handleAllOrder}) {
                                         {item.payStatus}
                                     </td>
                                     {user.role === 'Admin' && (
-                                        <td style={{ width: "120px" }}>
-                                            <Button variant='danger' onClick={() => handleOrderDelete(order._id)}>
+                                        <td className='px-2'>
+                                            <Button variant='danger' onClick={() => handleOrderDelete(order._id, item.productId)}>
                                                 <i className="fa-solid fa-trash"></i>
                                             </Button>
                                         </td>

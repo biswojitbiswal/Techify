@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { BASE_URL } from "../../../config.js";
 import { useAuth } from "../../Store/Auth.jsx";
-import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import FilterBar from './FilterBar.jsx';
 import OrderTable from './OrderTable.jsx';
@@ -13,7 +12,6 @@ function AdminOrder() {
     const [sortOrder, setSortOrder] = useState('desc');
     const [status, setStatus] = useState("");
     const [skip, setSkip] = useState(0);
-    // const [totalOrders, setTotalOrders] = useState(0);
     const limit = 5;
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -58,7 +56,7 @@ function AdminOrder() {
             })
 
             const data = await response.json();
-            console.log(data.orders);
+            // console.log(data.orders);
 
             if (response.ok) {
                 setOrders(prev => (skip === 0 ? data.orders : [...prev, ...data.orders]));

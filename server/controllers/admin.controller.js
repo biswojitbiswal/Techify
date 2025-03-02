@@ -691,13 +691,18 @@ const determineOrderStatus = (orderedItems) => {
 
 const deleteOrder = async (req, res, next) => {
   try {
-    const { orderId } = req.params;
-    console.log("delete order", orderId);
-    if (!mongoose.Types.ObjectId.isValid(orderId)) {
-      return res.status(400).json({ message: "Invalid Order ID" });
+    const {orderId, productId} = req.params;
+
+    // console.log("delete order", orderId, productId);
+    if (!mongoose.Types.ObjectId.isValid(orderId) || !mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ message: "Invalid Order ID or Product ID" });
     }
 
-    const order = await Order.findByIdAndDelete(orderId);
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      {$pull: {orderedItem : {product: productId}}},
+      {new: true},
+    );
 
     if (!order) {
       return res.status(404).json({ mesage: "Order Not Found" });
@@ -729,6 +734,135 @@ const getProductById = async (req, res, next) => {
   }
 };
 
+const getAllAnalyticsForOrders = async(req, res, next) => {
+  try {
+    const data = await Order.aggregate([
+      {$unwind: "$orderedItem"},
+
+      {
+        $group: {
+          _id: null,
+          totalRevenue: {$sum: {$cond: [{$eq: ["$orderedItem.payStatus", "Paid"]}, "$orderedItem.amount", 0]}},
+          totalOrder: { $sum: 1 },
+          totalConfirmed: {$sum: {$cond: [{$eq: ["$orderedItem.status", "Confirmed"]}, 1, 0]}},
+          totalCanceled: {$sum: {$cond: [{$eq: ["$orderedItem.status", "Canceled"]}, 1, 0]}},
+          totalCompleted: {$sum: {$cond: [{$eq: ["$orderedItem.status", "Completed"]}, 1, 0]}}
+        }
+      }
+    ])
+
+    if(!data){
+      return res.status(500).json({message: "Internal Server Error!"});
+    }
+
+    return res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+}
+
+const getOrderDataLine = async (req, res, next) => {
+  try {
+      const { timeRange } = req.params;
+
+      let startDate;
+      if (timeRange === "weekly") {
+          startDate = new Date();
+          startDate.setDate(startDate.getDate() - 7);
+      } else if (timeRange === "monthly") {
+          startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 1);
+      } else if (timeRange === "yearly") {
+          startDate = new Date();
+          startDate.setFullYear(startDate.getFullYear() - 1);
+      } else {
+          return res.status(400).json({ message: "Invalid time range" });
+      }
+      
+      const orderData = await Order.aggregate([
+          {
+              $match: {
+                  createdAt: { $gte: startDate },
+              },
+          },
+          {
+              $group: {
+                  _id: {
+                      year: { $year: "$createdAt" },
+                      month: { $month: "$createdAt" },
+                      day: { $dayOfMonth: "$createdAt" },
+                  },
+                  totalOrders: { $sum: 1 },
+              },
+          },
+          { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } },
+          {
+              $project: {
+                  _id: 0,
+                  x: {
+                      $dateFromParts: {
+                          year: "$_id.year",
+                          month: "$_id.month",
+                          day: "$_id.day",
+                      },
+                  },
+                  y: "$totalOrders",
+              },
+          },
+      ]);
+
+      return res.status(200).json({ chartData: orderData });
+  } catch (error) {
+      next(error);
+  }
+};
+
+const getOrderPieData = async(req, res, next) => {
+  try {
+    const {timeRange} = req.params;
+
+    let startDate;
+
+    if (timeRange === "weekly") {
+      startDate = new Date();
+      startDate.setDate(startDate.getDate() - 7);
+    } else if (timeRange === "monthly") {
+      startDate = new Date();
+      startDate.setMonth(startDate.getMonth() - 1);
+    } else if (timeRange === "yearly") {
+      startDate = new Date();
+      startDate.setFullYear(startDate.getFullYear() - 1);
+    }
+
+    const orderData = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+        },
+      },
+      {$unwind: "$orderedItem"},
+      {
+        $group: {
+          _id: "$orderedItem.status",
+          totalItems: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          label: "$_id",
+          value: "$totalItems",
+          _id: 0,
+        },
+      },
+    ]);
+
+    return res.status(200).json({ chartData: orderData });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 export {
   addProducts,
   editProductDetails,
@@ -748,4 +882,7 @@ export {
   getProductById,
   addBrand,
   getBrandByCategory,
+  getAllAnalyticsForOrders,
+  getOrderDataLine,
+  getOrderPieData
 };

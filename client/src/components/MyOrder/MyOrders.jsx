@@ -28,7 +28,7 @@ function MyOrder() {
             console.log(data);
 
             if (response.ok) {
-                setMyOrders(data.orders)
+                setMyOrders(data.orders.reverse())
             }
         } catch (error) {
             console.log(error);
