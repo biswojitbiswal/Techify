@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useAuth } from '../Store/Auth';
+import { useAuth } from '../../Store/Auth.jsx';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import './Admin.css'
+import '../Admin.css'
 import { toast } from 'react-toastify';
-import { BASE_URL } from '../../config.js';
+import { BASE_URL } from '../../../config.js';
 
 function UserEdit() {
     const [userDetail, setUserDetail] = useState({ name: '', email: '', phone: '' });
