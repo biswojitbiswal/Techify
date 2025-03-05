@@ -112,14 +112,22 @@ function MyNavbar() {
                     <NavDropdown.Divider />
                     <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/reviews">Manage Review</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/product">Add Products</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/category">Add Category</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/brand">Add Brand</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/testimonial">Add Testimonials</NavDropdown.Item>
+                    {
+                      user?.role === 'Admin' ? <><NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/product">Add Products</NavDropdown.Item>
+                        <NavDropdown.Divider />
+
+                        <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/category">Add Category</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        
+                        <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/brand">Add Brand</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                      </> : ""
+                    }
+
+
                     
+                    <NavDropdown.Item className='text-primary m-2 fs-5 bg-white' onClick={handleCloseOffCanvas} href="/admin/add/testimonial">Add Testimonials</NavDropdown.Item>
+
                   </NavDropdown>
                 )}
 

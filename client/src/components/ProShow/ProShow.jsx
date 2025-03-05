@@ -183,7 +183,7 @@ function ProShow() {
               }
               {
                 user?.role === 'Moderator' && (
-                  <Link to={`/admin/edit/${product._id}`}><i className="fa-solid fa-pen-to-square"></i>
+                  <Link to={`/admin/edit/${product._id}`}  className='btn btn-primary'><i className="fa-solid fa-pen-to-square fs-5"></i>
                   </Link>
                 )
               }

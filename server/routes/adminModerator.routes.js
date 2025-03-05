@@ -35,7 +35,7 @@ router.route("/get/reviews").get(authVerify, verifyRole(['Admin', 'Moderator']),
 
 router.route("/status/:reviewId").patch(authVerify, verifyRole(['Admin', 'Moderator']), handleStatus)
 
-router.route("/delete/review/:reviewId").delete(authVerify, verifyRole(['Admin']), deleteReviewById)
+router.route("/delete/review/:reviewId").delete(authVerify, verifyRole(['Admin', 'Moderator']), deleteReviewById)
 
 router.route("/assign/role/:userId").patch(authVerify, verifyRole(['Admin']), AccessToRole)
 
@@ -50,7 +50,7 @@ router.route("/product/:productId").get(authVerify, verifyRole(['Admin', 'Modera
 
 router.route("/add/category").post(
     authVerify, 
-    verifyRole(['Admin', 'Moderator']),
+    verifyRole(['Admin']),
     upload.fields([
         {
             name: 'image',
@@ -62,7 +62,7 @@ router.route("/add/category").post(
 
 router.route("/add/brand").post(
     authVerify,
-    verifyRole(['Admin', 'Moderator']),
+    verifyRole(['Admin']),
     upload.fields([
         {
             name: 'logo',
@@ -72,7 +72,7 @@ router.route("/add/brand").post(
     addBrand
 )
 
-router.route("/brand").get(authVerify, verifyRole(['Admin', 'Moderator']), getBrandByCategory)
+router.route("/brand").get(authVerify, verifyRole(['Admin']), getBrandByCategory)
 
 router.route("/get-analytics").get(authVerify, verifyRole(["Admin"]), getAllAnalyticsForOrders)
 

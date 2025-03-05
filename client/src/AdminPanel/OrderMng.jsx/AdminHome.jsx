@@ -73,9 +73,9 @@ function AdminHome() {
               </Card>
             </div>
 
+            <OrderChart />
           </div> : ""
         }
-        <OrderChart />
         <AdminOrder />
       </div>
     </>
