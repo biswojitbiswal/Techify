@@ -28,7 +28,7 @@ function Product() {
   let timeOutId;
 
 
-  const { authorization, refreshUser } = useAuth();
+  const { authorization } = useAuth();
 
   const handleSort = (option) => {
     setSortOption(option);
@@ -100,9 +100,6 @@ function Product() {
     }
     return () => controller.abort();
   }, [skip, sortOption, sortOrder, category, brand, searchTerm]);
-
-
-  
 
 
 

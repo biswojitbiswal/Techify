@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 import {Review} from "../models/review.model.js";
+import { Order } from "../models/order.model.js";
 
 const addReview = async(req, res, next) => {
     try {
@@ -49,6 +50,45 @@ const addReview = async(req, res, next) => {
     }
 }
 
+const checkOrdesForReview = async(req, res, next) => {
+    try {
+        const productId = req.params.productId;
+        const userId = req.user._id;
+        // console.log(productId)
+        // console.log(userId)
+
+        if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({ message: "Invalid User ID or Product ID" });
+        }
+
+        const userObjectId = new mongoose.Types.ObjectId(userId);
+        const productObjectId = new mongoose.Types.ObjectId(productId);
+
+        const alreadyOrdered = await Order.aggregate([
+            {
+                $match: {
+                    orderBy: userObjectId,
+                    "orderedItem.product": productObjectId
+                }
+            },
+            {
+                $project: {
+                    _id: 1
+                }
+            }
+        ])
+        // console.log(alreadyOrdered);
+
+        if(alreadyOrdered.length === 0){
+            return res.status(400).json({message: "Sorry!, You haven't Purchased This Product"})
+        }
+
+        return res.status(200).json(alreadyOrdered);
+    } catch (error) {
+        next(error);
+    }
+}
+
 const getAllReviews = async(req, res, next) => {
     try {
         const {productId} = req.params;
@@ -73,4 +113,5 @@ const getAllReviews = async(req, res, next) => {
 export {
     addReview,
     getAllReviews,
+    checkOrdesForReview
 }

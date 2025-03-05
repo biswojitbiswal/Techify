@@ -5,7 +5,7 @@ import { useAuth } from '../../Store/Auth';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../config.js';
 import { Spinner, Button, Modal, Form } from 'react-bootstrap';
-
+import { useNavigate } from 'react-router-dom';
 
 
 function Review({ productId }) {
@@ -18,10 +18,40 @@ function Review({ productId }) {
         comment: '',
     });
 
-    const { authorization } = useAuth();
+    const { authorization, user } = useAuth();
+    const navigate = useNavigate()
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = async() => {
+        // console.log("clicked")
+        if(!user){
+            navigate("/signin");
+            return;
+        }
+        // console.log(productId)
+
+        try {
+            const response = await fetch(`${BASE_URL}/api/techify/review/check-order/${productId}`, {
+                method: "GET",
+                headers: {
+                    Authorization: authorization,
+                }
+            });
+    
+            const data = await response.json()
+            // console.log(data);
+    
+            if(response.ok && data.length > 0){
+                setShow(true);
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error("Error Occured!")
+            console.log(error);
+        }
+        
+    }
 
     const handleRating = (star) => {
         setReview((prevState) => ({
@@ -47,7 +77,7 @@ function Review({ productId }) {
             })
 
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
 
             if (response.ok) {
                 setAllReviews(data);
@@ -80,8 +110,11 @@ function Review({ productId }) {
                     comment: '',
                 })
                 handleClose()
+            } else {
+                toast.error(data.message)
             }
         } catch (error) {
+            toast.error("Error Occured!")
             console.log(error);
         }
     }

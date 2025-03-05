@@ -171,7 +171,7 @@ function ProShow() {
               {
                 user.role === 'Admin' && (
                   <div className='w-100 d-flex gap-3 justify-content-between  mb-4'>
-                    <Link to={`/admin/edit/${product._id}`} className='btn btn-primary fs-5'><i class="fa-solid fa-pen-to-square"></i>
+                    <Link to={`/admin/edit/${product._id}`} className='btn btn-primary fs-5'><i className="fa-solid fa-pen-to-square"></i>
                     </Link>
 
                     <Button variant="danger" onClick={(event) => {
@@ -183,7 +183,7 @@ function ProShow() {
               }
               {
                 user?.role === 'Moderator' && (
-                  <Link to={`/admin/edit/${product._id}`} className=''><i className="fa-solid fa-pencil"></i>
+                  <Link to={`/admin/edit/${product._id}`}><i className="fa-solid fa-pen-to-square"></i>
                   </Link>
                 )
               }

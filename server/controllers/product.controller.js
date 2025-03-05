@@ -259,6 +259,32 @@ const getRecentlyViewProduct = async(req, res, next) => {
   }
 }
 
+const handleRecentlyView = async(req, res, next) => {
+  try {
+    const userId = req.userId;
+        const { productId } = req.params;
+
+        if (!productId) return res.status(400).json({ message: "Product ID required" });
+
+        const user = await User.findById(userId);
+        
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        user.recentlyView = user.recentlyView.filter((id) => id.toString() !== productId);
+        user.recentlyView.unshift(productId);
+
+        if (user.recentlyView.length > 12) {
+            user.recentlyView.pop();
+        }
+
+        await user.save();
+
+        res.status(200).json({ message: "Added to recently viewed" });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export {
   getAllProducts,
   addToCart,
@@ -268,4 +294,5 @@ export {
   getProductById,
   getOrderItem,
   getRecentlyViewProduct,
+  handleRecentlyView
 };

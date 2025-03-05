@@ -91,7 +91,10 @@ function AdminReview() {
 
     return (
         <>
-            <section className="admin-user-table">
+            <section className="admin-user-table rounded-2">
+                <div className="table-caption rounded-top-2 bg-primary d-flex align-items-center py-3">
+                    <h3 className='fs-3 text-white ps-2'>All Reviews</h3>
+                </div>
                 <Table responsive="sm" bordered hover striped>
                     <thead>
                         <tr className='text-center'>
@@ -133,7 +136,7 @@ function AdminReview() {
                                 </tr>
                             )) : <tr>
                                 <td colSpan={7} className="text-center fs-3">
-                                    User Not Found
+                                    Reviews Not Found
                                 </td>
                             </tr>
                         }
