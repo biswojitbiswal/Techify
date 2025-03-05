@@ -17,7 +17,7 @@ function ProShow() {
 
 
   const { productId } = useParams()
-  const { authorization, refreshUser, isLoggedInuser, darkMode } = useAuth();
+  const { authorization, refreshUser, isLoggedInuser, user } = useAuth();
   const navigate = useNavigate();
 
 
@@ -41,7 +41,7 @@ function ProShow() {
     } catch (error) {
       console.log(error);
     }
-    finally{
+    finally {
       setLoading(false)
     }
   }
@@ -85,6 +85,30 @@ function ProShow() {
     setImageClick(id);
   }
 
+  const handleDelete = async (productId) => {
+      try {
+        const response = await fetch(`${BASE_URL}/api/techify/admin/product/delete/${productId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: authorization
+          }
+        })
+  
+        const data = await response.json();
+        // console.log(data);
+  
+        if (response.ok) {
+          toast.success("Product Removed");
+          refreshUser();
+          navigate(`/products`)
+        } else {
+          toast.error(data.extraDetails ? data.extraDetails : data.message);
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
   useEffect(() => {
     getProductById()
   }, [])
@@ -94,7 +118,7 @@ function ProShow() {
   return (
     <>
       <section id="prod-details">
-        <div className="prod-card" style={{ backgroundColor: '#f1f1f1' }}>
+        <div className="prod-card" style={{ backgroundColor: '#f1f1f1'}}>
           <div className="prod-look mb-2">
 
             {product.images && product.images.length > 0 && (
@@ -121,10 +145,10 @@ function ProShow() {
 
           </div>
 
-          <div className="details">
+          <div className="details" style={{position: "relative" }}>
             <p className='fs-4 text-secondary mb-1'>Techify</p>
             <h4 className="fs-3 text-primary-emphasis">{loading ? <Skeleton /> : product.title}</h4>
-            <h2 className='fs-2 text-primary'>₹{loading ? <Skeleton  /> : product.price}</h2>
+            <h2 className='fs-2 text-primary'>₹{loading ? <Skeleton /> : product.price}</h2>
             <p className="ratings mb-1 text-primary" style={{ marginLeft: "2rem" }}>
               {Array.from({ length: 5 }, (_, index) => (
                 <span key={index}>
@@ -141,6 +165,27 @@ function ProShow() {
                 product?.specification && Object.keys(product.specification).map(key => (
                   <div className='mb-2 d-flex' key={key}><p className='fs-5 mb-2 text-secondary'>{key}</p> : <p className='fs-5 ms-3 mb-2 text-primary-emphasis'>{product.specification[key]}</p></div>
                 ))
+              }
+            </div>
+            <div style={{position: "absolute", top: ".5rem", right: ".5rem"}}>
+              {
+                user.role === 'Admin' && (
+                  <div className='w-100 d-flex gap-3 justify-content-between  mb-4'>
+                    <Link to={`/admin/edit/${product._id}`} className='btn btn-primary fs-5'><i class="fa-solid fa-pen-to-square"></i>
+                    </Link>
+
+                    <Button variant="danger" onClick={(event) => {
+                      event.stopPropagation();
+                      handleDelete(product._id)
+                    }}><i className="fa-solid fa-trash fs-5"></i></Button>
+                  </div>
+                )
+              }
+              {
+                user?.role === 'Moderator' && (
+                  <Link to={`/admin/edit/${product._id}`} className=''><i className="fa-solid fa-pencil"></i>
+                  </Link>
+                )
               }
             </div>
 

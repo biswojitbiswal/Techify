@@ -56,7 +56,7 @@ function App() {
         <MyNavbar />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/products/:categoryId' element={<Product />} />
+          <Route path='/products/:categoryId?' element={<Product />} />
           <Route path='/product/:productId' element={<ProShow />} />
           <Route path='/order/buy-now' element={<ProtectedOrderNow />} />
           <Route path='/cart' element={<ProtectedCart />} />

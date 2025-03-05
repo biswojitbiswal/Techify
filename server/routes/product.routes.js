@@ -10,8 +10,8 @@ router.route("/cart/add/:productId").post(authVerify, addToCart);
 router.route("/cart/remove/:productId").patch(authVerify, removeItemCart);
 router.route("/cart/get-products/:userId").get(authVerify, getCartItem);
 router.route("/showcase").get(prosuctShowCase);
-router.route("/product/:productId").get(authVerify, addRecentlyView, getProductById);
+router.route("/product/:productId").get(addRecentlyView, getProductById);
 router.route("/order/buy-now").post(authVerify, getOrderItem);
-router.route("/recently-views").get(authVerify, getRecentlyViewProduct)
+router.route("/recently-views").get(authVerify, getRecentlyViewProduct);
 
 export default router

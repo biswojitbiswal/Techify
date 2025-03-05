@@ -25,25 +25,7 @@ function ProductListing({ products, handleDelete }) {
                                     </span>
                                 ))}
                             </p>
-                            {
-                                user.role === 'Admin' && (
-                                    <div className='edit-delete-buttons w-100 justify-content-between mb-4'>
-                                        <Link to={`/admin/edit/${product._id}`} className='product-edit'><i className="fa-solid fa-pencil"></i>
-                                        </Link>
-
-                                        <button variant="danger" className='product-dlt-btn text-danger' onClick={(event) => {
-                                            event.stopPropagation();
-                                            handleDelete(product._id)
-                                        }}><i className="fa-solid fa-trash ms-2"></i></button>
-                                    </div>
-                                )
-                            }
-                            {
-                                user?.role === 'Moderator' && (
-                                    <Link to={`/admin/edit/${product._id}`} className='product-edit edit-delete-buttons'><i className="fa-solid fa-pencil"></i>
-                                    </Link>
-                                )
-                            }
+                            
                             <button onClick={() => navigate(`/product/${product?._id}`)} className='cart-btn bg-warning'>Add To Cart</button>
                         </div>
                     </div>

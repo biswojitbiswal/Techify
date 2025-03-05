@@ -102,29 +102,7 @@ function Product() {
   }, [skip, sortOption, sortOrder, category, brand, searchTerm]);
 
 
-  const handleDelete = async (productId) => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/techify/admin/product/delete/${productId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: authorization
-        }
-      })
-
-      const data = await response.json();
-      // console.log(data);
-
-      if (response.ok) {
-        toast.success("Product Removed");
-        refreshUser();
-        setProducts((prevProducts) => prevProducts.filter(product => product._id !== data.product._id))
-      } else {
-        toast.error(data.extraDetails ? data.extraDetails : data.message);
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  
 
 
 
@@ -173,7 +151,7 @@ function Product() {
           </div>
         </div>
 
-        <ProductListing products={products} handleDelete={handleDelete} />
+        <ProductListing products={products} />
 
         {loading && <Spinner size='lg' variant='primary' />}
 

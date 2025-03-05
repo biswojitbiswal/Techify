@@ -304,7 +304,10 @@ const getBrandByCategory = async (req, res, next) => {
 
 const getAllusers = async (req, res, next) => {
   try {
-    const { searchTerm, role } = req.query;
+    let { searchTerm, role, skip = 0, limit = 5 } = req.query;
+
+    skip = parseInt(skip);
+    limit = parseInt(limit);
 
     let matchQuery = {};
 
@@ -319,14 +322,12 @@ const getAllusers = async (req, res, next) => {
         { phone: { $regex: searchTerm, $options: "i" } },
       ];
 
-      if(mongoose.Types.ObjectId.isValid(searchTerm)){
-        searchConditions.push({ _id: { $regex: searchTerm, $options: "i" }})
+      if (mongoose.Types.ObjectId.isValid(searchTerm)) {
+        searchConditions.push({ _id: new mongoose.Types.ObjectId(searchTerm) });
       }
-  
-      matchQuery.$or = searchConditions
-    }
 
-    
+      matchQuery.$or = searchConditions;
+    }
 
     const users = await User.aggregate([
       { $match: matchQuery },
@@ -340,7 +341,8 @@ const getAllusers = async (req, res, next) => {
           role: 1,
         },
       },
-      
+
+      { $sort: { createdAt: -1 } },
     ]);
 
     if (!users) {
@@ -917,6 +919,97 @@ const getOrderPieData = async (req, res, next) => {
   }
 };
 
+const getUsersAnalytic = async (req, res, next) => {
+  try {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const userData = await User.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalUsers: { $sum: 1 },
+          totalNewUser: {
+            $sum: {
+              $cond: [{ $gte: ["$createdAt", oneMonthAgo] }, 1, 0],
+            },
+          },
+          totalActiveUser: {
+            $sum: {
+              $cond: [{ $gte: ["$updatedAt", oneMonthAgo] }, 1, 0],
+            },
+          },
+        },
+      },
+    ]);
+
+    if (!userData) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+    return res.status(200).json(userData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUserLineChartData = async (req, res, next) => {
+  try {
+    const { timeRange } = req.params;
+
+    let startDate;
+    if (timeRange === "weekly") {
+      startDate = new Date();
+      startDate.setDate(startDate.getDate() - 7);
+    } else if (timeRange === "monthly") {
+      startDate = new Date();
+      startDate.setMonth(startDate.getMonth() - 1);
+    } else if (timeRange === "yearly") {
+      startDate = new Date();
+      startDate.setFullYear(startDate.getFullYear() - 1);
+    } else {
+      return res.status(400).json({ message: "Invalid time range" });
+    }
+
+    const userData = await User.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" },
+          },
+          totalUsers: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } },
+      {
+        $project: {
+          _id: 0,
+          x: {
+            $dateFromParts: {
+              year: "$_id.year",
+              month: "$_id.month",
+              day: "$_id.day",
+            },
+          },
+          y: "$totalUsers",
+        },
+      },
+    ]);
+
+    return res.status(200).json({ chartData: userData });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 export {
   addProducts,
   editProductDetails,
@@ -939,4 +1032,6 @@ export {
   getAllAnalyticsForOrders,
   getOrderDataLine,
   getOrderPieData,
+  getUsersAnalytic,
+  getUserLineChartData,
 };

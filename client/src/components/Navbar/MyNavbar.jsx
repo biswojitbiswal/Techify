@@ -77,7 +77,7 @@ function MyNavbar() {
                 <Nav.Item>
                   <Nav.Link
                     as={NavLink}
-                    to="/products/:categoryId"
+                    to="/products"
                     className='fs-5 text-primary'
                     onClick={handleCloseOffCanvas}
                   >

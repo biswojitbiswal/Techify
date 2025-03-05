@@ -1,30 +1,39 @@
-.admin-product-form,.admin-edit-form,.admin-publish-form,.admin-social-forms,.admin-edit-user,.admin-category-form{
+.admin-product-form,
+.admin-edit-form,
+.admin-publish-form,
+.admin-social-forms,
+.admin-edit-user,
+.admin-category-form {
     width: 50%;
     height: auto;
     margin: 5% auto;
-    border: 1px solid rgba(0, 0, 0, 0.1); /* Add a light border for visibility */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /* Add a light border for visibility */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 1rem;
 
 }
-.admin-social-links{
+
+.admin-social-links {
     min-height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
 .active {
     font-weight: bold;
     background-color: #007bff;
 
 }
-.admin-user-table{
-    padding: 3rem 5rem;
+
+.admin-user-table {
+    padding: 1rem 5rem;
     min-height: 85vh;
 }
 
-.order-container{
+.order-container {
     width: 95%;
     height: auto;
     /* background-color: #007bff; */
@@ -34,29 +43,35 @@
     color: #fff;
     text-align: left;
 }
-.order-container .table-caption{
+
+.order-container .table-caption {
     width: 100%;
     border-radius: .5rem .5rem 0rem 0rem;
     height: 70px;
 }
-.order-container .order-table{
+
+.order-container .order-table {
     text-align: center;
     padding: .5rem;
 }
-#admin-dashboard-dropdown.dropdown-toggle::after{
+
+#admin-dashboard-dropdown.dropdown-toggle::after {
     color: #007bff;
 }
-.nav-underline .nav-link.active, .nav-underline .show>.nav-link {
-    border-bottom-color: #007bff !important;
-}
-.nav-item:hover{
+
+.nav-underline .nav-link.active,
+.nav-underline .show>.nav-link {
     border-bottom-color: #007bff !important;
 }
 
-.custom-card:hover{
+.nav-item:hover {
+    border-bottom-color: #007bff !important;
+}
+
+.custom-card:hover {
     transform: scale(1.05);
-  transition: 0.3s ease-in-out;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    transition: 0.3s ease-in-out;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .chart-container {
@@ -66,18 +81,29 @@
     padding: .5rem;
     transition: transform 0.3s ease-in-out;
 }
+
 .chart-container:hover {
     transform: scale(1.02);
 }
 
+.custom-card {
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+}
 
-@media (max-width: 1096px){
-    .admin-product-form,.admin-edit-form,.admin-publish-form,.admin-social-forms,.admin-edit-user{
+
+@media (max-width: 1096px) {
+
+    .admin-product-form,
+    .admin-edit-form,
+    .admin-publish-form,
+    .admin-social-forms,
+    .admin-edit-user {
         width: 90%;
         padding: 1rem;
     }
-    .admin-user-table{
+
+    .admin-user-table {
         padding: .5rem;
     }
-    
+
 }

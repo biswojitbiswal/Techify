@@ -128,7 +128,7 @@ function AdminReview() {
                                     </td>
 
                                     {
-                                        user.role == 'Admin' && (<td style={{ width: "120px" }}><Button variant='danger' onClick={() => handleDeleteReview(review._id)}>Delete<span><i className="fa-solid fa-trash ms-2"></i></span></Button></td>)
+                                        user.role == 'Admin' && (<td style={{ width: "120px" }}><Button variant='danger' onClick={() => handleDeleteReview(review._id)}><i className="fa-solid fa-trash fs-5"></i></Button></td>)
                                     }
                                 </tr>
                             )) : <tr>

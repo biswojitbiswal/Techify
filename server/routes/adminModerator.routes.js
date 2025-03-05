@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { addProducts, editProductDetails, deleteProduct, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole, getAllOrders, orderStatusUpdate,deleteOrder, getProductById, addCategory, addBrand,  getBrandByCategory, getAllAnalyticsForOrders, getOrderDataLine, getOrderPieData} from "../controllers/admin.controller.js";
+import { addProducts, editProductDetails, deleteProduct, getAllusers, getUserById, editUserbyId, deleteUserById, getAllReview, handleStatus, deleteReviewById, AccessToRole, getAllOrders, orderStatusUpdate,deleteOrder, getProductById, addCategory, addBrand,  getBrandByCategory, getAllAnalyticsForOrders, getOrderDataLine, getOrderPieData, getUsersAnalytic, getUserLineChartData} from "../controllers/admin.controller.js";
 import authVerify from "../middleware/auth.middleware.js";
 import verifyRole from "../middleware/verifyRole.middleware.js";
 
@@ -65,5 +65,9 @@ router.route("/get-analytics").get(authVerify, verifyRole(["Admin"]), getAllAnal
 router.route("/get-linedata/:timeRange").get(authVerify, verifyRole(['Admin']), getOrderDataLine)
 
 router.route("/get-piedata/:timeRange").get(authVerify, verifyRole(['Admin']), getOrderPieData)
+router.route("/get-users-analytic").get(authVerify, verifyRole(['Admin']), getUsersAnalytic)
+
+router.route("/get-users-linechart/:timeRange").get(authVerify, verifyRole(['Admin']), getUserLineChartData);
+
 
 export default router

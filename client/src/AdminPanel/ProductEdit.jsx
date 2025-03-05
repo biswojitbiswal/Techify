@@ -84,7 +84,7 @@ function ProductEdit() {
     newImages.forEach((img) => form.append('images', img));
 
     try {
-      const response = await fetch(`${BASE_URL}/api/yoga/admin/edit/${productId}`, {
+      const response = await fetch(`${BASE_URL}/api/techify/admin/edit/${productId}`, {
         method: 'PATCH',
         headers: {
           Authorization: authorization,
@@ -97,7 +97,7 @@ function ProductEdit() {
       if (response.ok) {
         setFormData(data.editData);
         toast.success('Product Updated');
-        navigate('/product');
+        navigate(`/product/${productId}`);
       } else {
         toast.error(data.extraDetails ? data.extraDetails : data.message);
       }
