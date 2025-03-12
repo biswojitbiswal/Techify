@@ -10,6 +10,7 @@ function AdminOrder() {
     const [searchTerm, setSearchTerm] = useState("");
     const [sort, setSort] = useState("createdAt");
     const [sortOrder, setSortOrder] = useState('desc');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
     const [status, setStatus] = useState("");
     const [skip, setSkip] = useState(0);
     const limit = 5;
@@ -19,22 +20,24 @@ function AdminOrder() {
     const isFetching = useRef(false);
 
     const { authorization } = useAuth();
-    let timeoutRef = useRef(null);
 
+    const searchTimeoutRef = useRef(null);
 
     const handleSearch = (e) => {
-        setSearchTerm(e.target.value);
-        setSkip(0);
-        setOrders([]);
+        const value = e.target.value
+        setSearchTerm(value);
 
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current)
+        if (searchTimeoutRef.current) {
+            console.log("clear")
+            clearTimeout(searchTimeoutRef.current);
         }
 
-        timeoutRef.current = setTimeout(() => {
-            handleAllOrder()
-        }, 500);
-    }
+        searchTimeoutRef.current = setTimeout(() => {
+            setDebouncedSearchTerm(value);
+            setSkip(0);
+            setOrders([]);
+        }, 700);
+    };
 
 
     const handleStatus = (e) => {
@@ -77,7 +80,7 @@ function AdminOrder() {
 
     useEffect(() => {
         handleAllOrder();
-    }, [skip, status]);
+    }, [skip, status, debouncedSearchTerm]);
 
     const lastOrderRef = useCallback(node => {
         if (loading || !hasMore) return;

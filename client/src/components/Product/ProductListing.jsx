@@ -37,7 +37,7 @@ function ProductListing({ products }) {
         <div className="card-container mt-4 d-flex flex-wrap gap-5 justify-content-center">
             {
                 products?.map((product) => {
-                    return <div key={product._id} className="outer-card">
+                    return <div key={`${product._id}-${product.title}`} className="outer-card">
                         <div className="inner-card">
                             <h5 className='text-primary product-title'>{product.title}</h5>
                             <div className="product-image">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { Button, Form, InputGroup, Spinner } from 'react-bootstrap';
 import './Product.css'
 import { useParams } from 'react-router-dom'
@@ -9,124 +9,113 @@ import FilterBrand from './FilterBrand.jsx';
 import SortBtns from './SortBtns.jsx';
 import ProductListing from './ProductListing.jsx';
 import FilterCategory from './FilterCategory.jsx';
-
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 function Product() {
-  const {categoryId} = useParams();
-  const [products, setProducts] = useState([]);
+  const { categoryId } = useParams();
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
   const [category, setCategory] = useState(categoryId || "");
   const [brand, setBrand] = useState("");
-  const [skip, setSkip] = useState(0);
   const limit = 9;
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
-  const isFetching = useRef(false);
-  let timeOutId;
-
-
+  const searchTimeoutRef = useRef(null);
   const { authorization } = useAuth();
+
+  // Function to fetch products with pagination
+  const fetchProducts = async ({ pageParam = 0 }) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/api/techify/products/get?skip=${pageParam}&limit=${limit}&sortOption=${sortOption}&sortOrder=${sortOrder}&category=${category}&brand=${brand}&searchTerm=${debouncedSearchTerm}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: authorization
+          },
+        }
+      );
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch products");
+      }
+  
+      const products = data.Allproducts || [];
+  
+      return {
+        products,
+        nextPage: products.length === limit ? pageParam + limit : undefined
+      };
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message);
+      return {
+        products: [],
+        nextPage: undefined,
+      }
+    }
+  };
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ['products', { sortOption, sortOrder, category, brand, searchTerm: debouncedSearchTerm }],
+    queryFn: fetchProducts,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    staleTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+
+  
+  const products = data ? data.pages.flatMap(page => page.products) : [];
 
   const handleSort = (option) => {
     setSortOption(option);
     setSortOrder((prevOrder) => prevOrder === 'asc' ? 'desc' : 'asc');
-    setSkip(0);
-    setProducts([]);
-  }
+  };
 
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    setSkip(0);
-    setProducts([]);
-    if(timeOutId){
-      clearTimeout(timeOutId);
+
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
     }
 
-    timeOutId = setTimeout(() => {
-      productData();
-    }, 1000)
-  }
+    searchTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearchTerm(value);
+    }, 700);
+  };
 
   const handleFilterCategory = (e) => {
     setCategory(e.target.value);
-    setSkip(0);
-    setProducts([]);
-  }
+  };
 
   const handleFilterBrand = (e) => {
     setBrand(e.target.value);
-    setSkip(0);
-    setProducts([]);
-  }
-  // console.log(category)
-  const productData = useCallback(async () => {
-    if(isFetching.current) return;
-    isFetching.current = true;
-    setLoading(true);
-    // console.log("called")
-
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    try {
-      const response = await fetch(`${BASE_URL}/api/techify/products/get?skip=${skip}&limit=${limit}&sortOption=${sortOption}&sortOrder=${sortOrder}&category=${category}&brand=${brand}&searchTerm=${searchTerm}`, {
-        method: "GET",
-        headers: {
-          Authorization: authorization
-        },
-        signal,
-      })
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setProducts(prev => (skip === 0 ? data.Allproducts : [...prev, ...data.Allproducts]));
-        setHasMore(data.Allproducts.length === limit);
-      } else {
-        setHasMore(false);
-        toast.error("No more products found.");
-      }
-    } catch (error) {
-      if (error.name !== "AbortError") {
-        toast.error("Something went wrong. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-      isFetching.current = false;
-    }
-    return () => controller.abort();
-  }, [skip, sortOption, sortOrder, category, brand, searchTerm]);
-
-
+  };
 
   const lastProductRef = useCallback(node => {
-    if (loading || !hasMore) return;
+    if (isFetchingNextPage || !hasNextPage) return;
+
     if (observer.current) observer.current.disconnect();
+
     observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        setSkip(prevSkip => prevSkip + limit);
+      if (entries[0].isIntersecting && hasNextPage) {
+        fetchNextPage();
       }
     });
+
     if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
+  }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
 
-
-  useEffect(() => {
-    setSkip(0);
-    setProducts([]);
-    setHasMore(true);
-    productData();
-  }, [sortOption, sortOrder, category, brand]);
-
-  useEffect(() => {
-    if (skip > 0) {
-      productData();
-    }
-  }, [skip]);
   return (
     <>
       <section id="product-page">
@@ -150,9 +139,13 @@ function Product() {
 
         <ProductListing products={products} />
 
-        {loading && <Spinner size='lg' variant='primary' />}
+        {isLoading && (
+          <div className="text-center my-3">
+            <Spinner size='lg' variant='primary' />
+          </div>
+        )}
 
-        <div ref={lastProductRef}></div>
+        {hasNextPage && <div ref={lastProductRef}></div>}
       </section>
     </>
   )

@@ -180,13 +180,13 @@ function Review({ productId }) {
                             </Modal.Footer>
                         </Modal>
                     </div>
-                    <hr />
+                    <hr className='my-1' />
                     <div className="review-car-contaner">
                         {
                             loading ? <Spinner size='lg' variant='primary' /> : allReviews?.filter((review) => review.status === 'Approved').map((review) => {
                                 return (
                                     <div key={review._id} className="review-card px-2">
-                                        <p className='fs-4 text-primary-emphasis mb-2'>{review.comment}</p>
+                                        <p className='fs-5 text-primary-emphasis mb-1'>{review.comment}</p>
                                         <p className='mb-0'>
                                             {Array.from({ length: 5 }, (_, index) => (
                                                 <span key={index}>
@@ -194,9 +194,9 @@ function Review({ productId }) {
                                                 </span>
                                             ))}
                                         </p>
-                                        <p className='mb-0'><span className="fs-3">&rarr;</span>{review.reviewBy.name}</p>
-                                        <p className='mb-2'>{new Date(review.createdAt).toDateString()}</p>
-                                        <hr />
+                                        <p className='mb-0 text-body-tertiary'><span className="fs-3 text-secondary">&rarr;</span>{review.reviewBy.name}</p>
+                                        <p className='mb-2 text-body-tertiary'>{new Date(review.createdAt).toDateString()}</p>
+                                        <hr className='m-1' />
                                     </div>
                                 )
                             })
