@@ -9,6 +9,7 @@ import Review from '../Review/Review';
 import { BASE_URL } from '../../../config.js';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function ProShow() {
   const [product, setProduct] = useState({});
@@ -18,6 +19,7 @@ function ProShow() {
 
   const { productId } = useParams()
   const { authorization, refreshUser, isLoggedInuser, user } = useAuth();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
 
@@ -52,32 +54,41 @@ function ProShow() {
     </Spinner>
   }
 
+  const addToCartMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`${BASE_URL}/api/techify/products/cart/add/${productId}`, {
+        method: "POST",
+        headers: {
+          Authorization: authorization,
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.extradetails ? data.extradetails : data.message);
+      }
+
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Item Added Successfully");
+
+      queryClient.invalidateQueries(['cartItems', user._id, authorization]);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      console.log(error.message);
+    }
+  })
+
   const handleAddToCart = async () => {
     if (!isLoggedInuser) {
       navigate("/signin");
       return;
-    } else {
-      try {
-        const response = await fetch(`${BASE_URL}/api/techify/products/cart/add/${productId}`, {
-          method: "POST",
-          headers: {
-            Authorization: authorization,
-          }
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          toast.success("Item Added To Your Cart");
-          refreshUser();
-
-        } else {
-          toast.error(data.extradetails ? data.extradetails : data.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
     }
+
+    addToCartMutation.mutate();
   }
 
 
@@ -86,28 +97,28 @@ function ProShow() {
   }
 
   const handleDelete = async (productId) => {
-      try {
-        const response = await fetch(`${BASE_URL}/api/techify/admin/product/delete/${productId}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: authorization
-          }
-        })
-  
-        const data = await response.json();
-        // console.log(data);
-  
-        if (response.ok) {
-          toast.success("Product Removed");
-          refreshUser();
-          navigate(`/products`)
-        } else {
-          toast.error(data.extraDetails ? data.extraDetails : data.message);
+    try {
+      const response = await fetch(`${BASE_URL}/api/techify/admin/product/delete/${productId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: authorization
         }
-      } catch (error) {
-        console.log(error)
+      })
+
+      const data = await response.json();
+      // console.log(data);
+
+      if (response.ok) {
+        toast.success("Product Removed");
+        refreshUser();
+        navigate(`/products`)
+      } else {
+        toast.error(data.extraDetails ? data.extraDetails : data.message);
       }
+    } catch (error) {
+      console.log(error)
     }
+  }
 
   useEffect(() => {
     getProductById()
@@ -118,7 +129,7 @@ function ProShow() {
   return (
     <>
       <section id="prod-details">
-        <div className="prod-card" style={{ backgroundColor: '#f1f1f1'}}>
+        <div className="prod-card" style={{ backgroundColor: '#f1f1f1' }}>
           <div className="prod-look mb-2">
 
             {product.images && product.images.length > 0 && (
@@ -145,7 +156,7 @@ function ProShow() {
 
           </div>
 
-          <div className="details" style={{position: "relative" }}>
+          <div className="details" style={{ position: "relative" }}>
             <p className='fs-4 text-secondary mb-1'>Techify</p>
             <h4 className="fs-3 text-primary-emphasis">{loading ? <Skeleton /> : product.title}</h4>
             <h2 className='fs-2 text-primary'>₹{loading ? <Skeleton /> : product.price}</h2>
@@ -167,7 +178,7 @@ function ProShow() {
                 ))
               }
             </div>
-            <div style={{position: "absolute", top: ".5rem", right: ".5rem"}}>
+            <div style={{ position: "absolute", top: ".5rem", right: ".5rem" }}>
               {
                 user.role === 'Admin' && (
                   <div className='w-100 d-flex gap-3 justify-content-between  mb-4'>
@@ -183,7 +194,7 @@ function ProShow() {
               }
               {
                 user?.role === 'Moderator' && (
-                  <Link to={`/admin/edit/${product._id}`}  className='btn btn-primary'><i className="fa-solid fa-pen-to-square fs-5"></i>
+                  <Link to={`/admin/edit/${product._id}`} className='btn btn-primary'><i className="fa-solid fa-pen-to-square fs-5"></i>
                   </Link>
                 )
               }

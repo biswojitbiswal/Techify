@@ -1,6 +1,7 @@
 import React from 'react'
 import { useCategories } from '../../Store/CategoryStore'
 import { Link } from 'react-router-dom';
+import { Spinner } from 'react-bootstrap';
 
 
 function ShowCategory() {
@@ -15,7 +16,7 @@ function ShowCategory() {
             <img src={category.image} alt={category.name} className='category-img m-2'/>
             <p className='fs-5 fw-bold text-primary'>{category.name.charAt(0).toUpperCase() + category.name.substring(1)}</p>
           </Link>
-        }) : ""
+        }) : <Spinner variant='primary' size='lg' />
       }
     </div>
   )

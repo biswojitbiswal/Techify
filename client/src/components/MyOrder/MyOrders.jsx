@@ -7,9 +7,12 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 import OrderCancel from './OrderCancel.jsx'
+import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import { Spinner } from 'react-bootstrap';
 
 function MyOrder() {
-    const [myOrders, setMyOrders] = useState([]);
+    // const [myOrders, setMyOrders] = useState([]);
 
     const { authorization } = useAuth();
 
@@ -24,20 +27,21 @@ function MyOrder() {
                 }
             })
             const data = await response.json();
-            // console.log(response);
-            console.log(data);
 
-            if (response.ok) {
-                setMyOrders(data.orders.reverse())
-            }
+            return data.orders.reverse();
         } catch (error) {
             console.log(error);
         }
     }
 
-    useEffect(() => {
-        getMyOrders();
-    }, [])
+    const { data: myOrders = [], isLoading, error } = useQuery({
+        queryKey: ['myOrders'],
+        queryFn: getMyOrders,
+        staleTime: 30 * 60 * 1000,
+    })
+
+    if (isLoading) return <Spinner variant='primary' size='lg' />
+    if (error) return <p>Error Loading In Your Orders...</p>
 
 
     return (
@@ -79,9 +83,9 @@ function MyOrder() {
                                                 <p className='mb-2'>{address.contact}</p>
                                             </div>
                                         </div>
-                                        
+
                                         {item?.status === 'Canceled' ? <p className='text-danger'>Cancellation Reason: {item.cancellationReason}</p> : ""}
-                                        
+
 
                                         <hr className='m-2' />
                                         <div className="ordered-btn d-flex justify-content-between">
