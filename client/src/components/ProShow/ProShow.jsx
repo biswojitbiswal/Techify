@@ -49,9 +49,7 @@ function ProShow() {
   }
 
   if (!product) {
-    return <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
+    return <Spinner variant='primary' size='lg' />
   }
 
   const addToCartMutation = useMutation({
