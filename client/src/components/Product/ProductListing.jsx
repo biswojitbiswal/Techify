@@ -34,7 +34,7 @@ function ProductListing({ products }) {
     };
     
     return (
-        <div className="card-container mt-4 d-flex flex-wrap gap-5 justify-content-center">
+        <div className="card-container mt-4 mb-4 d-flex flex-wrap gap-5 justify-content-center">
             {
                 products?.map((product) => {
                     return <div key={`${product._id}-${product.title}`} className="outer-card">

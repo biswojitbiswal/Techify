@@ -15,7 +15,7 @@ function Cart() {
   // const [cartItems, setCartItems] = useState([]);
   const [selectItems, setSelectItems] = useState(new Set());
 
-  const { user, authorization, isLoggedInuser } = useAuth();
+  const { user, authorization, isLoggedInuser, refreshUser } = useAuth();
   const queryClient = useQueryClient();
 
   if (!isLoggedInuser) {
@@ -46,7 +46,7 @@ function Cart() {
   })
 
   useEffect(() => {
-    if (cartItems.length > 0 && selectItems.size === 0) {
+    if (cartItems.length > 0) {
       setSelectItems(new Set(cartItems.map(item => item._id)));
     }
   }, [cartItems, selectItems]);
@@ -85,6 +85,7 @@ function Cart() {
     },
     onSuccess: (itemId) => {
       toast.success("Item Removed");
+      refreshUser()
       queryClient.setQueryData(["cartItems", user._id, authorization], (oldCart = []) => 
         oldCart.filter((item) => item._id !== itemId)
       );

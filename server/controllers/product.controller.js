@@ -200,7 +200,7 @@ const getProductById = async (req, res, next) => {
   try {
     const { productId } = req.params;
 
-    const product = await Product.findById(productId).select("-reviews -category -brand")
+    const product = await Product.findById(productId).select("-reviews")
 
     if (!product) {
       return res.status(404).json({ message: "Product Not Found" });

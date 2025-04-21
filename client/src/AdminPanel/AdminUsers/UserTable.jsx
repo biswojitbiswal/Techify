@@ -144,7 +144,7 @@ function UserTable() {
                 <Form.Control type="search" value={searchTerm} onChange={handleSearch} className='w-75 py-2 border-primary' placeholder="Search Here" />
 
                 <Form.Select size='sm' className='w-25 py-2 border-primary' onChange={handleRole} value={role} aria-label="Default select example">
-                    <option value="">Select Order Status</option>
+                    <option value="">Select Role</option>
                     <option value="User">User</option>
                     <option value="Moderator">Moderator</option>
                     <option value="Admin">Admin</option>

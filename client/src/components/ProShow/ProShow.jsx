@@ -10,6 +10,7 @@ import { BASE_URL } from '../../../config.js';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ProdCategory from './ProdCategory.jsx';
 
 function ProShow() {
   const [product, setProduct] = useState({});
@@ -26,7 +27,6 @@ function ProShow() {
   const getProductById = async () => {
     setLoading(true)
     try {
-      // console.log(productId);
       const response = await fetch(`${BASE_URL}/api/techify/products/product/${productId}`, {
         method: "GET",
         headers: {
@@ -35,7 +35,7 @@ function ProShow() {
       })
 
       const data = await response.json();
-
+      // console.log(data);
       if (response.ok) {
         setProduct(data.item);
         setLoading(false)
@@ -62,7 +62,7 @@ function ProShow() {
       });
 
       const data = await response.json();
-
+      // console.log(data)
       if (!response.ok) {
         toast.error(data.extradetails ? data.extradetails : data.message);
       }
@@ -71,6 +71,7 @@ function ProShow() {
     },
     onSuccess: () => {
       toast.success("Item Added Successfully");
+      refreshUser()
 
       queryClient.invalidateQueries(['cartItems', user._id, authorization]);
     },
@@ -120,7 +121,7 @@ function ProShow() {
 
   useEffect(() => {
     getProductById()
-  }, [])
+  }, [productId])
 
 
 
@@ -208,7 +209,7 @@ function ProShow() {
       </section>
 
       <Review productId={product._id} />
-
+      {/* <ProdCategory categoryId={product.category} /> */}
 
     </>
   )

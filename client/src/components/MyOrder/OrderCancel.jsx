@@ -3,12 +3,15 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../config';
 import { useAuth } from '../../Store/Auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 function CancelOrderModal({ orderId, productId }) {
     const [show, setShow] = useState(false);
     const [reason, setReason] = useState("");
 
     const {authorization} = useAuth();
+
+    const queryClient = useQueryClient();
 
     const handleCancel = async () => {
         // console.log(productId)
@@ -26,6 +29,7 @@ function CancelOrderModal({ orderId, productId }) {
 
             if (response.ok) {
                 toast.success("Order canceled");
+                queryClient.invalidateQueries(['myOrders'])
                 setShow(false);
                 // onCancel();
             } else {
