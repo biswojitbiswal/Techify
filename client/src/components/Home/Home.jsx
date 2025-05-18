@@ -20,7 +20,7 @@ function Home() {
         <Carsoule />
       </section>
       <Social />
-    </>) : (<Spinner variant='primary' size='lg' />)
+    </>) : (<div className='home-spinner'><Spinner variant='primary' size='lg' /></div>)
 
 
   )
